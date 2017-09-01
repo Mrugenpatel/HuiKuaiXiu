@@ -12,6 +12,7 @@ NSString *const kHKXMineSupplierInqiryListPmModelnum = @"modelnum";
 NSString *const kHKXMineSupplierInqiryListPmBrand = @"brand";
 NSString *const kHKXMineSupplierInqiryListPmParameter = @"parameter";
 NSString *const kHKXMineSupplierInqiryListPmType = @"type";
+NSString *const kHKXMineSuppilerInqiryListPmPicture = @"picture";
 
 
 @interface HKXMineSupplierInqiryListPm ()
@@ -26,6 +27,7 @@ NSString *const kHKXMineSupplierInqiryListPmType = @"type";
 @synthesize brand = _brand;
 @synthesize parameter = _parameter;
 @synthesize type = _type;
+@synthesize picture = _picture;
 
 
 + (instancetype)modelObjectWithDictionary:(NSDictionary *)dict
@@ -44,6 +46,7 @@ NSString *const kHKXMineSupplierInqiryListPmType = @"type";
             self.brand = [self objectOrNilForKey:kHKXMineSupplierInqiryListPmBrand fromDictionary:dict];
             self.parameter = [self objectOrNilForKey:kHKXMineSupplierInqiryListPmParameter fromDictionary:dict];
             self.type = [self objectOrNilForKey:kHKXMineSupplierInqiryListPmType fromDictionary:dict];
+        self.picture = [self objectOrNilForKey:kHKXMineSuppilerInqiryListPmPicture fromDictionary:dict];
 
     }
     
@@ -58,6 +61,7 @@ NSString *const kHKXMineSupplierInqiryListPmType = @"type";
     [mutableDict setValue:self.brand forKey:kHKXMineSupplierInqiryListPmBrand];
     [mutableDict setValue:self.parameter forKey:kHKXMineSupplierInqiryListPmParameter];
     [mutableDict setValue:self.type forKey:kHKXMineSupplierInqiryListPmType];
+    [mutableDict setValue:self.picture forKey:kHKXMineSuppilerInqiryListPmPicture];
 
     return [NSDictionary dictionaryWithDictionary:mutableDict];
 }
@@ -85,6 +89,7 @@ NSString *const kHKXMineSupplierInqiryListPmType = @"type";
     self.brand = [aDecoder decodeObjectForKey:kHKXMineSupplierInqiryListPmBrand];
     self.parameter = [aDecoder decodeObjectForKey:kHKXMineSupplierInqiryListPmParameter];
     self.type = [aDecoder decodeObjectForKey:kHKXMineSupplierInqiryListPmType];
+    self.picture = [aDecoder decodeObjectForKey:kHKXMineSuppilerInqiryListPmPicture];
     return self;
 }
 
@@ -95,6 +100,7 @@ NSString *const kHKXMineSupplierInqiryListPmType = @"type";
     [aCoder encodeObject:_brand forKey:kHKXMineSupplierInqiryListPmBrand];
     [aCoder encodeObject:_parameter forKey:kHKXMineSupplierInqiryListPmParameter];
     [aCoder encodeObject:_type forKey:kHKXMineSupplierInqiryListPmType];
+    [aCoder encodeObject:_picture forKey:kHKXMineSuppilerInqiryListPmPicture];
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -107,6 +113,7 @@ NSString *const kHKXMineSupplierInqiryListPmType = @"type";
         copy.brand = [self.brand copyWithZone:zone];
         copy.parameter = [self.parameter copyWithZone:zone];
         copy.type = [self.type copyWithZone:zone];
+        copy.picture = [self.picture copyWithZone:zone];
     }
     
     return copy;

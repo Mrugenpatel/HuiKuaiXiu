@@ -29,12 +29,17 @@
 
 #import "HKXMineOwnerEquipmentListViewController.h"//我的设备列表
 
+#import "HKXMineReceiveAddressViewController.h"//收货地址列表
+
+
 
 #import "HKXHttpRequestManager.h"
 #import "HKXMineOwnerInfoModelDataModels.h"
 #import "HKXMineSupplierInfoModelDataModels.h"
 #import "HKXMineServeInfoModelDataModels.h"
 #import "HKXUserVertificationCodeResultModelDataModels.h"//修改头像结果
+
+
 
 #import "CustomSubmitView.h"
 
@@ -752,6 +757,13 @@
             partsAndEquipmentManagementVC.navigationItem.title = @"配件管理";
             partsAndEquipmentManagementVC.isParts = true;
             [self.navigationController pushViewController:partsAndEquipmentManagementVC animated:YES];
+        }
+//        收货地址
+        if (indexPath.row == 10)
+        {
+            HKXMineReceiveAddressViewController * addListVC = [[HKXMineReceiveAddressViewController alloc] init];
+            addListVC.navigationItem.title = @"收货地址";
+            [self.navigationController pushViewController:addListVC animated:YES];
         }
 //        购物车
         if (indexPath.row == 11)

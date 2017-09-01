@@ -9,10 +9,16 @@
 #import "HKXMineSupplierAskValueListViewController.h"
 #import "CommonMethod.h"
 
+#import "HKXHttpRequestManager.h"
+#import "HKXMineSupplierInqiryListModelDataModels.h"
+
+#import "UIImageView+WebCache.h"
 @interface HKXMineSupplierAskValueListViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _listTableView;//询价列表
 }
+
+@property (nonatomic , strong) NSMutableArray * inquiryArray;//询价列表
 @end
 
 @implementation HKXMineSupplierAskValueListViewController
@@ -25,6 +31,12 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self createUI];
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self configData];
 }
 #pragma mark - CreateUI
 - (void)createUI
@@ -42,10 +54,32 @@
 }
 
 #pragma mark - ConfigData
+- (void)configData
+{
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",userId] WithPageNo:@"1" WithPageSize:@"8" ToGetSupplierInquiryList:^(id data) {
+        HKXMineSupplierInqiryListModel * inquiryModel = data;
+        if (inquiryModel.success)
+        {
+            for (HKXMineSupplierInqiryListData * data in inquiryModel.data)
+            {
+                [self.inquiryArray addObject:data];
+            }
+             [_listTableView reloadData];
+        }
+        else
+        {
+            [self showHint:inquiryModel.message];
+        }
+    }];
+   
+}
 #pragma mark - Action
 - (void)phoneCallBtnClick:(UIButton *)btn
 {
-    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",@"1008611"];
+    NSInteger index = btn.tag - 3004;
+    HKXMineSupplierInqiryListData * data = self.inquiryArray[index];
+    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"tel:%@",data.inquiryTel];
     UIWebView * callWebview = [[UIWebView alloc] init];
     [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
     [self.view addSubview:callWebview];
@@ -56,7 +90,7 @@
 #pragma mark - Delegate & Data Source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return self.inquiryArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -73,6 +107,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
     }
     
+    HKXMineSupplierInqiryListData * data = self.inquiryArray[indexPath.row];
+    
     UIImageView * reLogoImage = [cell viewWithTag:3000];
     [reLogoImage removeFromSuperview];
     UILabel * reTitleLabel = [cell viewWithTag:3001];
@@ -81,51 +117,51 @@
     [reLabelLabel removeFromSuperview];
     UILabel * reNumberLabel = [cell viewWithTag:3003];
     [reNumberLabel removeFromSuperview];
-    //TODO:此处待修改button的tag值
-    UIButton * reEditBtn = [cell viewWithTag:3004];
-    [reEditBtn removeFromSuperview];
-    UILabel * rePhoneLabel = [cell viewWithTag:3005];
+    
+    UIButton * rePhoneNumBtn = [cell viewWithTag:3004];
+    [rePhoneNumBtn removeFromSuperview];
+    UILabel * rePhoneLabel = [cell viewWithTag:2999];
     [rePhoneLabel removeFromSuperview];
     
     UIImageView * logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(17 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
-            logoImageView.image = [UIImage imageNamed:@"滑动视图示例"];
-//    [logoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,equipmentModel.picture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+//            logoImageView.image = [UIImage imageNamed:@"滑动视图示例"];
+    [logoImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,data.pm.picture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
     logoImageView.tag = 3000;
     [cell addSubview:logoImageView];
     
     UILabel * titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoImageView.frame) + 16 * myDelegate.autoSizeScaleX, 21 * myDelegate.autoSizeScaleY, 184 * myDelegate.autoSizeScaleX, 13 * myDelegate.autoSizeScaleX)];
     titleLabel.tag = 3001;
     titleLabel.font = [UIFont systemFontOfSize:13 * myDelegate.autoSizeScaleX];
-            titleLabel.text = @"挖掘机 卡特彼勒（caterpillar）";
-//    titleLabel.text = [NSString stringWithFormat:@"%@",equipmentModel.type];
+//            titleLabel.text = @"挖掘机 卡特彼勒（caterpillar）";
+    titleLabel.text = [NSString stringWithFormat:@"%@",data.pm.brand];
     [cell addSubview:titleLabel];
     
     UILabel * labelLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoImageView.frame) + 16 * myDelegate.autoSizeScaleX, CGRectGetMaxY(titleLabel.frame) + 12 * myDelegate.autoSizeScaleY, 184 * myDelegate.autoSizeScaleX, 13 * myDelegate.autoSizeScaleX)];
     labelLabel.tag = 3002;
     labelLabel.font = [UIFont systemFontOfSize:13 * myDelegate.autoSizeScaleX];
-            labelLabel.text = @"XG806F";
-//    labelLabel.text = equipmentModel.modelnum;
+//            labelLabel.text = @"XG806F";
+    labelLabel.text = data.pm.modelnum;
     [cell addSubview:labelLabel];
     
     UILabel * numeberLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoImageView.frame) + 16 * myDelegate.autoSizeScaleX,CGRectGetMaxY(labelLabel.frame) + 12 * myDelegate.autoSizeScaleY, 184 * myDelegate.autoSizeScaleX, 13 * myDelegate.autoSizeScaleX)];
     numeberLabel.tag = 3003;
     numeberLabel.font = [UIFont systemFontOfSize:13 * myDelegate.autoSizeScaleX];
-            numeberLabel.text = @"询价人：网上";
-//    numeberLabel.text = equipmentModel.brand;
+//            numeberLabel.text = @"询价人：网上";
+    numeberLabel.text = [NSString stringWithFormat:@"询价人：%@",data.inquiryName];
     [cell addSubview:numeberLabel];
     
     UILabel * phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(logoImageView.frame) + 16 * myDelegate.autoSizeScaleX, CGRectGetMaxY(numeberLabel.frame) + 12 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"询价人电话：" WithFont:13 * myDelegate.autoSizeScaleX], 13 * myDelegate.autoSizeScaleX)];
-    phoneLabel.tag = 3005;
+    phoneLabel.tag = 2999;
     phoneLabel.text = @"询价人电话：";
     phoneLabel.font = [UIFont systemFontOfSize:13 * myDelegate.autoSizeScaleX];
     [cell addSubview:phoneLabel];
     
     
     UIButton * phoneNumBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    phoneNumBtn.tag = 3004;
+    phoneNumBtn.tag = 3004 + indexPath.row;
     phoneNumBtn.frame = CGRectMake(CGRectGetMaxX(phoneLabel.frame) , CGRectGetMaxY(numeberLabel.frame) + 12 *myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"18709876543" WithFont:12 * myDelegate.autoSizeScaleX], 16 * myDelegate.autoSizeScaleY);
 
-    [phoneNumBtn setTitle:@"18709876543" forState:UIControlStateNormal];
+    [phoneNumBtn setTitle:data.inquiryTel forState:UIControlStateNormal];
     
     phoneNumBtn.titleLabel.font = [UIFont systemFontOfSize:12 * myDelegate.autoSizeScaleX];
     [phoneNumBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateNormal];
@@ -135,8 +171,16 @@
     
     return cell;
 }
-#pragma mark - Setters & Getters
 
+#pragma mark - Setters & Getters
+- (NSMutableArray *)inquiryArray
+{
+    if (!_inquiryArray)
+    {
+        _inquiryArray = [NSMutableArray array];
+    }
+    return _inquiryArray;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

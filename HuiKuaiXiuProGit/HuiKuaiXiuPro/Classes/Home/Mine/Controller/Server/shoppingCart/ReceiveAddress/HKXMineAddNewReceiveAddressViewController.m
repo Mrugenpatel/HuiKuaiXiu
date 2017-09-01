@@ -11,6 +11,9 @@
 
 #import "HKXMineShoppingGoodsDetailViewController.h"//订单结算界面
 
+#import "HKXHttpRequestManager.h"
+#import "HKXMineServeCertificateProfileModel.h"//增加结果
+
 @interface HKXMineAddNewReceiveAddressViewController ()<UITextFieldDelegate>
 {
     UIView * _bottomView;//底层白色视图
@@ -39,22 +42,31 @@
     [self.view addSubview:_bottomView];
     
     NSArray * placeHolderArray = [NSArray arrayWithObjects:@"请输入收货人姓名",@"请输入收货人地址",@"请输入收货人联系电话", nil];
-    NSArray * leftTitleArray = [NSArray arrayWithObjects:@"收货人",@"收货地址",@"联系地址", nil];
-    NSArray * rightContentArray = [NSArray arrayWithObjects:@"李忠民",@"北京市大钟寺路",@"12345678912", nil];
-    for (int i = 0; i < leftTitleArray.count; i ++)
+    NSArray * rightContentArray = [NSArray array];
+    if (self.isNew == NO)
     {
-        UITextField * addressTF = [[UITextField alloc] initWithFrame:CGRectMake(10 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY * i, ScreenWidth - 20 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
-        addressTF.text = [NSString stringWithFormat:@"%@%@",leftTitleArray[i],rightContentArray[i]];
+            rightContentArray = [NSArray arrayWithObjects:self.addressData.consignees,self.addressData.consigneesAdd,self.addressData.consigneesTel, nil];
+    }
+
+    for (int i = 0; i < placeHolderArray.count; i ++)
+    {
+        UITextField * addressTF = [[UITextField alloc] initWithFrame:CGRectMake(10 * myDelegate.autoSizeScaleX, 50 * myDelegate.autoSizeScaleY * i + 10 * myDelegate.autoSizeScaleY, ScreenWidth - 20 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
+
         addressTF.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
-        addressTF.borderStyle = UITextBorderStyleLine;
+        addressTF.borderStyle = UITextBorderStyleRoundedRect;
         addressTF.placeholder = placeHolderArray[i];
         addressTF.delegate = self;
+        addressTF.tag = 8000 + i;
         addressTF.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10 * myDelegate.autoSizeScaleX, addressTF.frame.size.height)];
         addressTF.leftView.backgroundColor = [UIColor clearColor];
         addressTF.leftViewMode = UITextFieldViewModeAlways;
+        if (self.isNew == NO)
+        {
+            addressTF.text = [NSString stringWithFormat:@"%@",rightContentArray[i]];
+        }
         [_bottomView addSubview:addressTF];
         
-        if (i == leftTitleArray.count - 1)
+        if (i == placeHolderArray.count - 1)
         {
             UIButton * saveAndUseBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             saveAndUseBtn.frame = CGRectMake(50 * myDelegate.autoSizeScaleX, 333 * myDelegate.autoSizeScaleY + CGRectGetMaxY(addressTF.frame), ScreenWidth - 100 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
@@ -70,18 +82,44 @@
     }
 }
 #pragma mark - ConfigData
+- (void)loadData
+{
+    UITextField * userNameTf = [_bottomView viewWithTag:8000];
+    NSString * userName = [userNameTf.text isEqualToString:@""] ? (NSString *)[NSNull null] : userNameTf.text;
+    UITextField * userTelTf = [_bottomView viewWithTag:8001];
+    NSString * userTel = [userTelTf.text isEqualToString:@""] ? (NSString *)[NSNull null] : userTelTf.text;
+    UITextField * userAddTf = [_bottomView viewWithTag:8002];
+    NSString * userAdd = [userAddTf.text isEqualToString:@""] ? (NSString *)[NSNull null] : userAddTf.text;
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    if (self.isNew == YES)
+    {
+        [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",userId] WithUserName:userName WithUserTel:userTel WithUserAdd:userAdd ToGetAddNewAddResult:^(id data) {
+            HKXMineServeCertificateProfileModel * model = data;
+            [self showHint:model.message];
+            if (model.success)
+            {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }];
+    }
+    else
+    {
+        [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",self.addressData.addId] WithUserName:userName WithUserTel:userTel WithUserAdd:userAdd ToGetUpdateAddResult:^(id data) {
+            HKXMineServeCertificateProfileModel * model = data;
+            [self showHint:model.message];
+            if (model.success)
+            {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }];
+    }
+}
 #pragma mark - Action
 - (void)saveAndUseNewAddressBtnClick:(UIButton *)btn
 {
-    NSLog(@"保存并使用");
-    for (UIViewController * vc in self.navigationController.viewControllers)
-    {
-        if ([vc isKindOfClass:[HKXMineShoppingGoodsDetailViewController class]])
-        {
-            vc.navigationItem.title = @"确认订单";
-            [self.navigationController popToViewController:vc animated:YES];
-        }
-    }
+    
+    [self loadData];
+    
     
     
 }
