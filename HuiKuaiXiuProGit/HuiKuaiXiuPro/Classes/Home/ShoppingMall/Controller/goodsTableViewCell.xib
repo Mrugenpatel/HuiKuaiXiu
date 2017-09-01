@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="95" id="KGk-i7-Jjw" customClass="goodsTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="95"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="94.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="供应商加盟" translatesAutoresizingMaskIntoConstraints="NO" id="dva-ed-4g8">
+                        <rect key="frame" x="10" y="5" width="80" height="80"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="80" id="KKW-bQ-OBG"/>
+                            <constraint firstAttribute="width" constant="80" id="v2x-NE-Xxh"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="慧快修 工程机械专业压缩油 " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pCA-4f-kiC">
+                        <rect key="frame" x="100" y="5" width="220" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="uoO-Gp-3xF"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="¥455.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QtT-ur-JdO">
+                        <rect key="frame" x="100" y="30" width="220" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="r7C-pu-IFl"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="北京慧聪网" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vbi-CE-5fO">
+                        <rect key="frame" x="100" y="55" width="220" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="WyU-Bg-UKw"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="大钟寺东路9号景仪大厦" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kOW-jx-mk1">
+                        <rect key="frame" x="100" y="70" width="220" height="15"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="15" id="GhD-3M-mne"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                        <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="pCA-4f-kiC" firstAttribute="leading" secondItem="dva-ed-4g8" secondAttribute="trailing" constant="10" id="1nB-QI-oqd"/>
+                    <constraint firstAttribute="trailing" secondItem="vbi-CE-5fO" secondAttribute="trailing" id="2A4-tw-Jmb"/>
+                    <constraint firstItem="kOW-jx-mk1" firstAttribute="top" secondItem="vbi-CE-5fO" secondAttribute="bottom" id="6NQ-ty-wMQ"/>
+                    <constraint firstItem="dva-ed-4g8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="7Mf-GB-zUm"/>
+                    <constraint firstItem="vbi-CE-5fO" firstAttribute="leading" secondItem="dva-ed-4g8" secondAttribute="trailing" constant="10" id="C2U-Jj-2tt"/>
+                    <constraint firstItem="kOW-jx-mk1" firstAttribute="leading" secondItem="dva-ed-4g8" secondAttribute="trailing" constant="10" id="HXY-ZV-v6h"/>
+                    <constraint firstItem="QtT-ur-JdO" firstAttribute="top" secondItem="pCA-4f-kiC" secondAttribute="bottom" id="JMU-Cy-Wc4"/>
+                    <constraint firstAttribute="trailing" secondItem="pCA-4f-kiC" secondAttribute="trailing" id="Mq3-qM-fFQ"/>
+                    <constraint firstAttribute="trailing" secondItem="QtT-ur-JdO" secondAttribute="trailing" id="PNY-xf-G9z"/>
+                    <constraint firstItem="pCA-4f-kiC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="SzR-2r-oOM"/>
+                    <constraint firstItem="dva-ed-4g8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Wkj-xm-lA7"/>
+                    <constraint firstItem="QtT-ur-JdO" firstAttribute="leading" secondItem="dva-ed-4g8" secondAttribute="trailing" constant="10" id="Zp1-Jd-Dbz"/>
+                    <constraint firstAttribute="trailing" secondItem="kOW-jx-mk1" secondAttribute="trailing" id="wWF-C1-ioz"/>
+                    <constraint firstItem="vbi-CE-5fO" firstAttribute="top" secondItem="QtT-ur-JdO" secondAttribute="bottom" id="wlM-Ze-edQ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="goodsAddress" destination="kOW-jx-mk1" id="GNy-YE-5Nb"/>
+                <outlet property="goodsBrand" destination="pCA-4f-kiC" id="AgH-Qt-2T8"/>
+                <outlet property="goodsCompany" destination="vbi-CE-5fO" id="toL-Lr-tnS"/>
+                <outlet property="goodsImg" destination="dva-ed-4g8" id="4ce-JQ-ADx"/>
+                <outlet property="goodsPrice" destination="QtT-ur-JdO" id="hqQ-Zl-nYC"/>
+            </connections>
+            <point key="canvasLocation" x="-64" y="29.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="供应商加盟" width="120" height="99"/>
+    </resources>
+</document>
