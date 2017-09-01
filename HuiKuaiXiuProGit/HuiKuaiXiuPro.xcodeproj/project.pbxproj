@@ -189,6 +189,7 @@
 		EFC517B51F58EEB500830283 /* PartGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B01F58EEB400830283 /* PartGoodsModel.m */; };
 		EFC517B61F58EEB500830283 /* EquipmentGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B21F58EEB500830283 /* EquipmentGoodsModel.m */; };
 		EFC517B71F58EEB500830283 /* CompanyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B41F58EEB500830283 /* CompanyModel.m */; };
+		EFC517BA1F5945D600830283 /* addressBookHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B91F5945D600830283 /* addressBookHelper.m */; };
 		EFE7EA351F413BC500BFD10A /* HKXGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE7EA341F413BC500BFD10A /* HKXGuideViewController.m */; };
 		EFE8C5691F4FB3A8009493AE /* back-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFE8C5671F4FB3A8009493AE /* back-arrow@2x.png */; };
 		EFE8C56A1F4FB3A8009493AE /* back-arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFE8C5681F4FB3A8009493AE /* back-arrow@3x.png */; };
@@ -536,6 +537,8 @@
 		EFC517B21F58EEB500830283 /* EquipmentGoodsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquipmentGoodsModel.m; sourceTree = "<group>"; };
 		EFC517B31F58EEB500830283 /* CompanyModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompanyModel.h; sourceTree = "<group>"; };
 		EFC517B41F58EEB500830283 /* CompanyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyModel.m; sourceTree = "<group>"; };
+		EFC517B81F5945D600830283 /* addressBookHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressBookHelper.h; sourceTree = "<group>"; };
+		EFC517B91F5945D600830283 /* addressBookHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressBookHelper.m; sourceTree = "<group>"; };
 		EFE7EA331F413BC500BFD10A /* HKXGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXGuideViewController.h; sourceTree = "<group>"; };
 		EFE7EA341F413BC500BFD10A /* HKXGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXGuideViewController.m; sourceTree = "<group>"; };
 		EFE8C5671F4FB3A8009493AE /* back-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow@2x.png"; sourceTree = "<group>"; };
@@ -1594,6 +1597,8 @@
 				EFC517B21F58EEB500830283 /* EquipmentGoodsModel.m */,
 				EFC517B31F58EEB500830283 /* CompanyModel.h */,
 				EFC517B41F58EEB500830283 /* CompanyModel.m */,
+				EFC517B81F5945D600830283 /* addressBookHelper.h */,
+				EFC517B91F5945D600830283 /* addressBookHelper.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2146,6 +2151,7 @@
 				EFC517951F58EE2600830283 /* SeverMyByLeaseViewController.m in Sources */,
 				EF9E78E41F2B30D000FC40F8 /* goodsInfoTableViewCell.m in Sources */,
 				EFC517AE1F58EE7F00830283 /* goodsEquipmentDetailViewController.m in Sources */,
+				EFC517BA1F5945D600830283 /* addressBookHelper.m in Sources */,
 				9B9EE5CA1F25CB1A00A95247 /* AreaModel.m in Sources */,
 				9BA0B4901F049F600047E0E5 /* HKXMineViewController.m in Sources */,
 				9B8813B41F543AEE0009DB86 /* HKXMineSupplierAskValueListViewController.m in Sources */,

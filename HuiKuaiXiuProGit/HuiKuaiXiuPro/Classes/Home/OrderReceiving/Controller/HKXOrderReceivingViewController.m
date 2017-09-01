@@ -198,16 +198,12 @@
     
     for (UIButton * btn in searchView.subviews) {
         
-        if (btn.tag == 2) {
-            
-            btn.selected = NO;
-        }
+
         searchString = aStr;
         [_bottomTableView.mj_header beginRefreshing];
     }
     
 }
-
 
 
 

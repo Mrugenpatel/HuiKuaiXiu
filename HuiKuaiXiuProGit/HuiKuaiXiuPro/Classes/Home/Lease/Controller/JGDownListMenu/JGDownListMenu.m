@@ -118,10 +118,14 @@ static NSString * const JGDownListMenuCellId = @"JGDownListMenuCellId";
         [_bgView removeFromSuperview];
         
     }];
-    if ([self.mark isEqualToString:@"保修"] || [self.mark isEqualToString:@"商城列表"]) {
+    if ([self.mark isEqualToString:@"租赁"]) {
+        
+        
+    }else{
         
         [self removeFromSuperview];
     }
+    
 }
 
 #pragma mark - UITableViewDelegateAndUITableViewDataSource

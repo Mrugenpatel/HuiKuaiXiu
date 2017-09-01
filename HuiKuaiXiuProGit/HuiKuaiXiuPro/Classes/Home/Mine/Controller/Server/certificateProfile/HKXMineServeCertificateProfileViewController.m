@@ -132,7 +132,7 @@
 //    [backView addSubview:skillTF];
     
 //    证书
-    UILabel * certificateLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, CGRectGetMaxY(textView.frame) + 23 * myDelegate.autoSizeScaleY, majorServeLabelLength, 17 * myDelegate.autoSizeScaleX)];
+    UILabel * certificateLabel = [[UILabel alloc] init];
     certificateLabel.tag = 787877;
     certificateLabel.text = @"证书";
     certificateLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
@@ -175,14 +175,16 @@
            
             textView.text = model.data.profile;
             //textView.userInteractionEnabled = NO;
-            
+            float majorServeLabelLength = [CommonMethod getLabelLengthWithString:@"主修" WithFont:17 * myDelegate.autoSizeScaleX];
+            UILabel * lb = [backView viewWithTag:787877];
+            lb.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, CGRectGetMaxY(textView.frame) + 23 * myDelegate.autoSizeScaleY, majorServeLabelLength, 17 * myDelegate.autoSizeScaleX);
             [self.certificateProfileArray removeAllObjects];
             self.certificateProfileArray = (NSMutableArray *)model.data.credentials;
             
             
             float lengthh = [CommonMethod getLabelLengthWithString:@"主修" WithFont:17 * myDelegate.autoSizeScaleY];
             UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
-        
+            
             self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake((lengthh + (22 + 17) * myDelegate.autoSizeScaleX ) , CGRectGetMaxY(textView.frame) + 23 * myDelegate.autoSizeScaleY ,2 * 97 * myDelegate.autoSizeScaleX, 5 * 61 * myDelegate.autoSizeScaleY) collectionViewLayout:flowLayout];
             //设置代理
             self.collectionView.delegate = self;
@@ -197,6 +199,7 @@
                // [_tempArr addObject:[UIImage imageNamed:@"挖掘机"]];
                 [_tempArr addObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.certificateProfileArray[i]]]]]];
             }
+            
             return ;
             
             self.tempArr = [[NSMutableArray alloc] init];
@@ -240,6 +243,12 @@
     CGRect frame = lable.frame;
     frame.origin.y = CGRectGetMaxY(text.frame) + 23 * myDelegate.autoSizeScaleY;
     lable.frame = frame;
+    
+    
+    CGRect frame1 = _collectionView.frame;
+   
+    frame1.origin.y = CGRectGetMaxY(text.frame) + 23 * myDelegate.autoSizeScaleY;
+    _collectionView.frame = frame1;
 }
 
 - (void)choosePicture{

@@ -9,7 +9,7 @@
 #import "bottomPopView.h"
 
 #import "UIImageView+WebCache.h"
-
+#import "addressBookHelper.h"
 @interface bottomPopView () <UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>{
     
     UIView * bg ;
@@ -258,12 +258,14 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
 - (void)callClick:(UIButton *)btn{
     
     [bg removeFromSuperview];
-    
+    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",self.companyModel.username];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }
 //添加到通讯录
 - (void)addClick:(UIButton *)btn{
     
     [bg removeFromSuperview];
+    [self saveTeleToAddBook];
 }
 
 #pragma mark - 创建计数器
@@ -358,7 +360,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     if (_myfield == textField) //
     {
         if ([toBeString integerValue] > 5) { //如果输入框内容大于10则弹出警告
-            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"输入的数值不能超过10" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"输入的数值不能超过5" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             }];
             UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
@@ -372,6 +374,41 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     }
     return YES;
 }
+
+
+//拨打电话
+- (void)callTelephpne
+{
+    //NSString * mobileStr =[NSString stringWithFormat:@"tel:%@",self.dic[@"mobile"]];
+    //[[UIApplication sharedApplication] openURL:[NSURL URLWithString:mobileStr]];
+}
+//将电话保存到通讯录
+- (void)saveTeleToAddBook
+{
+    NSString *phone = self.companyModel.username;
+    
+    if ([addressBookHelper existPhone:phone] == ABHelperExistSpecificContact)
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"消息提示" message:[NSString stringWithFormat:@"手机号码：%@已存在通讯录",phone] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+    }
+    else
+    {
+        if ([addressBookHelper addContactName:self.companyModel.realName phoneNum:phone withLabel:@"电话"])
+        {
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"消息提示" message:@"添加到通讯录成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alert show];
+        };
+    }
+    
+}
+//点击复制按钮
+- (void)copyTelephone
+{
+    UIPasteboard * pasteboard = [UIPasteboard generalPasteboard];
+    //[pasteboard setString:self.dic[@"mobile"]];
+}
+
 - (UIViewController*)viewController {
     
     for (UIView* next = [self superview]; next; next = next.superview) {

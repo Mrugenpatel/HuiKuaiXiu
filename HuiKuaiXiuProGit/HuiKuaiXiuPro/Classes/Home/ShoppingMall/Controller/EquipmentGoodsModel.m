@@ -23,7 +23,7 @@
         _brand = [self NULLToNil:dict[@"brand"]];
         _modelnum = [self NULLToNil:dict[@"modelnum"]];
         _parameter = [self NULLToNil:dict[@"parameter"]];
-        _compname = dict[@"compname"];
+        _compname =[self NULLToNil:dict[@"compname"]];
         _bewrite = [self NULLToNil:dict[@"bewrite"]];
         
     }

@@ -229,6 +229,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [goodsTableView reloadData];
             }
             
             
@@ -270,6 +271,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [goodsTableView reloadData];
             }
             
             
@@ -318,6 +320,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [goodsTableView reloadData];
             }
             
             
@@ -357,6 +360,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [goodsTableView reloadData];
             }
             
             
@@ -428,6 +432,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [goodsTableView reloadData];
             }
             
             
@@ -463,6 +468,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [goodsTableView reloadData];
             }
             
             
@@ -556,12 +562,12 @@
             [provinceArr addObject:model];
         }
         proArr = [NSMutableArray arrayWithCapacity:0];
-        [proArr addObject:@"全部"];
+        [proArr addObject:@"全国"];
         for (ProvinceModel *model in provinceArr) {
             
             [proArr addObject:model.name];
         }
-        
+        self.classifyArr = proArr;
         
         CGRect rect = CGRectMake(0,topView.frame.origin.y + topView.frame.size.height ,checkListView.frame.size.width, ScreenHeight - CGRectGetMaxY(topView.frame) - 44);
         if (_list) {
@@ -570,6 +576,7 @@
         }
         _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:proArr rowHeight:40 view:btn];
         _list.delegate = self;
+        _list.mark = @"商城列表";
         [self.view addSubview:_list];
         
         btn.selected = !btn.selected;
@@ -623,6 +630,9 @@
         
         [_list hiddenList];
         arrowBtn1.selected = NO;
+        NSInteger  i = [aStr integerValue];
+        classifyString =_classifyArr[i];
+        [goodsTableView.mj_header beginRefreshing];
     }
     
     
@@ -692,6 +702,7 @@
         PartGoodsModel * model = self.goodsModelArr[indexPath.row];
         [cell.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture[0]]] placeholderImage:nil];
         cell.goodsPrice.text = [NSString stringWithFormat:@"¥%@",model.price];
+        cell.goodsPrice.textColor = [UIColor redColor];
         cell.goodsAddress.text = model.address;
         cell.goodsCompany.text = model.companyName;
         cell.goodsBrand.text = model.brand;
