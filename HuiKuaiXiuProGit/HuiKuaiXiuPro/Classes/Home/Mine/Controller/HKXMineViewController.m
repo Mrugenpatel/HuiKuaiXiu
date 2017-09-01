@@ -832,6 +832,20 @@
             askValueListVC.navigationItem.title = @"询价列表";
             [self.navigationController pushViewController:askValueListVC animated:YES];
         }
+        //        买入订单
+        if (indexPath.row == 13)
+        {
+            HKXMineBuyingListViewController * buyingListVC = [[HKXMineBuyingListViewController alloc] init];
+            buyingListVC.navigationItem.title = @"买入订单";
+            [self.navigationController pushViewController:buyingListVC animated:YES];
+        }
+        //        卖出订单
+        if (indexPath.row == 14)
+        {
+            HKXMineSaleListViewController * saleListVC = [[HKXMineSaleListViewController alloc] init];
+            saleListVC.navigationItem.title = @"卖出订单";
+            [self.navigationController pushViewController:saleListVC animated:YES];
+        }
     }
     if (_roleID == 0)
     {

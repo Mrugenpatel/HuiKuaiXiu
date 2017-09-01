@@ -10,12 +10,16 @@
 #import "CommonMethod.h"
 
 #import "HKXMineBuyingDetailViewController.h"//订单详情
+#import "HKXSupplierOrderStoreModel.h"
+#import "HKXSupplierOrderGoodsModel.h"
 
 @interface HKXMineBuyingListViewController ()<UICollectionViewDelegate , UICollectionViewDataSource>
 {
     UICollectionView * _buyingCollectionView;//买入订单
 }
 
+@property(nonatomic ,strong)NSMutableArray *storeArr;
+@property(nonatomic ,strong)NSMutableArray *goodsArr;
 @end
 
 @implementation HKXMineBuyingListViewController
@@ -31,6 +35,23 @@
 {
     [super viewWillAppear:animated];
     [self configData];
+}
+
+- (NSMutableArray *)storeArr{
+    
+    if (!_storeArr) {
+        
+        _storeArr = [NSMutableArray array];
+    }
+    return _storeArr;
+}
+- (NSMutableArray *)goodsArr{
+    
+    if (!_goodsArr) {
+        
+        _goodsArr = [NSMutableArray array];
+    }
+    return _goodsArr;
 }
 #pragma mark - CreateUI
 - (void)createUI
@@ -71,8 +92,9 @@
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            
-            
+            self.storeArr = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+            NSLog(@"aaaaa%@",self.storeArr);
+            [_buyingCollectionView reloadData];
             
         }else{
             
@@ -131,17 +153,22 @@
 //返回collectionView的区个数
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 6;
+    NSLog(@"sssssssssss%ld",self.storeArr.count);
+    return self.storeArr.count;
 }
 //返回collectionView的item的个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 1;
+    HKXSupplierOrderStoreModel * store = self.storeArr[section];
+    
+    return store.goodsArr.count;
 }
 //设置区头（区脚）
 - (UICollectionReusableView* )collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    HKXSupplierOrderStoreModel * store = self.storeArr[indexPath.section];
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         //在这设置区头
         UICollectionReusableView * headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header" forIndexPath:indexPath];
@@ -158,7 +185,7 @@
         
         
         UILabel * storeNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(17 * myDelegate.autoSizeScaleX, 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"凝碧液压店铺" WithFont:14 * myDelegate.autoSizeScaleX], 14 * myDelegate.autoSizeScaleX)];
-        storeNameLabel.text = @"凝碧液压店铺";
+        storeNameLabel.text = store.companyName;
         storeNameLabel.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
         storeNameLabel.tag = 80001;
         [headerView addSubview:storeNameLabel];
@@ -196,9 +223,8 @@
     static NSString* cellIdentifier = @"cell";
     UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    
-    
-    
+    HKXSupplierOrderStoreModel * store = self.storeArr[indexPath.section];
+    HKXSupplierOrderGoodsModel * goods = store.goodsArr[indexPath.row];
     UIImageView * reGoodsImage = [cell viewWithTag:90001];
     [reGoodsImage removeFromSuperview];
     UILabel * reGoodsNameLabel = [cell viewWithTag:90002];
@@ -225,7 +251,7 @@
     UILabel * goodsNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY)];
     goodsNameLabel.numberOfLines = 2;
     goodsNameLabel.tag = 90002;
-    goodsNameLabel.text = @"哈威V30D140液压泵哈威V30D140液压泵";
+    goodsNameLabel.text = goods.goodName;
     goodsNameLabel.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
     [cell addSubview:goodsNameLabel];
     

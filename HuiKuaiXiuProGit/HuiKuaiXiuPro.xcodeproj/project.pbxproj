@@ -190,6 +190,8 @@
 		EFC517B61F58EEB500830283 /* EquipmentGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B21F58EEB500830283 /* EquipmentGoodsModel.m */; };
 		EFC517B71F58EEB500830283 /* CompanyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B41F58EEB500830283 /* CompanyModel.m */; };
 		EFC517BA1F5945D600830283 /* addressBookHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B91F5945D600830283 /* addressBookHelper.m */; };
+		EFC517BE1F596BC500830283 /* HKXSupplierOrderStoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517BD1F596BC500830283 /* HKXSupplierOrderStoreModel.m */; };
+		EFC517C11F596BE100830283 /* HKXSupplierOrderGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */; };
 		EFE7EA351F413BC500BFD10A /* HKXGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE7EA341F413BC500BFD10A /* HKXGuideViewController.m */; };
 		EFE8C5691F4FB3A8009493AE /* back-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFE8C5671F4FB3A8009493AE /* back-arrow@2x.png */; };
 		EFE8C56A1F4FB3A8009493AE /* back-arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFE8C5681F4FB3A8009493AE /* back-arrow@3x.png */; };
@@ -539,6 +541,10 @@
 		EFC517B41F58EEB500830283 /* CompanyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyModel.m; sourceTree = "<group>"; };
 		EFC517B81F5945D600830283 /* addressBookHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressBookHelper.h; sourceTree = "<group>"; };
 		EFC517B91F5945D600830283 /* addressBookHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressBookHelper.m; sourceTree = "<group>"; };
+		EFC517BC1F596BC500830283 /* HKXSupplierOrderStoreModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierOrderStoreModel.h; sourceTree = "<group>"; };
+		EFC517BD1F596BC500830283 /* HKXSupplierOrderStoreModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierOrderStoreModel.m; sourceTree = "<group>"; };
+		EFC517BF1F596BE100830283 /* HKXSupplierOrderGoodsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierOrderGoodsModel.h; sourceTree = "<group>"; };
+		EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierOrderGoodsModel.m; sourceTree = "<group>"; };
 		EFE7EA331F413BC500BFD10A /* HKXGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXGuideViewController.h; sourceTree = "<group>"; };
 		EFE7EA341F413BC500BFD10A /* HKXGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXGuideViewController.m; sourceTree = "<group>"; };
 		EFE8C5671F4FB3A8009493AE /* back-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow@2x.png"; sourceTree = "<group>"; };
@@ -624,6 +630,7 @@
 				9B34B81F1F4FB50700A39B3A /* buyingDetail */,
 				9B34B8201F4FB52200A39B3A /* HKXMineBuyingListViewController.h */,
 				9B34B8211F4FB52200A39B3A /* HKXMineBuyingListViewController.m */,
+				EFC517BB1F596B5D00830283 /* Model */,
 			);
 			path = buyingList;
 			sourceTree = "<group>";
@@ -1923,6 +1930,17 @@
 			name = MyLease;
 			sourceTree = "<group>";
 		};
+		EFC517BB1F596B5D00830283 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				EFC517BC1F596BC500830283 /* HKXSupplierOrderStoreModel.h */,
+				EFC517BD1F596BC500830283 /* HKXSupplierOrderStoreModel.m */,
+				EFC517BF1F596BE100830283 /* HKXSupplierOrderGoodsModel.h */,
+				EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		EFE7EA2F1F413B5E00BFD10A /* Guide */ = {
 			isa = PBXGroup;
 			children = (
@@ -2147,6 +2165,7 @@
 				9BBB400D1EEE7BCF00637D61 /* HuiKuaiXiuPro.xcdatamodeld in Sources */,
 				9B34B8221F4FB52200A39B3A /* HKXMineBuyingListViewController.m in Sources */,
 				9B78E1331F05FC8400ADBC23 /* HKXResetPswViewController.m in Sources */,
+				EFC517C11F596BE100830283 /* HKXSupplierOrderGoodsModel.m in Sources */,
 				EF9E78AE1F2B304B00FC40F8 /* alertView.m in Sources */,
 				EFC517951F58EE2600830283 /* SeverMyByLeaseViewController.m in Sources */,
 				EF9E78E41F2B30D000FC40F8 /* goodsInfoTableViewCell.m in Sources */,
@@ -2204,6 +2223,7 @@
 				9B8AA5DA1F16040200E5F662 /* HKXSupplierReleaseEquipmentViewController.m in Sources */,
 				9B99437E1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostModel.m in Sources */,
 				9BBB40011EEE7BCE00637D61 /* main.m in Sources */,
+				EFC517BE1F596BC500830283 /* HKXSupplierOrderStoreModel.m in Sources */,
 				9B7C14ED1F21FB2200CCD7CD /* HKXUserLocationData.m in Sources */,
 				9B99437D1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostData.m in Sources */,
 				9B8706EB1F1DB5700043BB0C /* HKXOrderDetailViewController.m in Sources */,
