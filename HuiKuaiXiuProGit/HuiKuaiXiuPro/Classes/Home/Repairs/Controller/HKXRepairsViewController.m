@@ -12,7 +12,7 @@
 #import "HKXRepairsOrderTimeViewController.h"
 #import "HKXRepairMapViewController.h"
 
- #import <SDWebImage/UIButton+WebCache.h>
+#import <SDWebImage/UIButton+WebCache.h>
 #import "JGDownListMenu.h"
 
 #import <CoreLocation/CoreLocation.h>
@@ -58,7 +58,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-
+    
     
     [self createUI];
     if([CLLocationManager locationServicesEnabled])
@@ -86,7 +86,7 @@
         NSLog(@"请开启定位功能！");
         [self showHint:@"请开启定位功能"];
     }
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -115,7 +115,7 @@
         
         _bottomView.contentSize = CGSizeMake(ScreenWidth, ScreenHeight - 30 * myDelegate.autoSizeScaleY - 60 + 140);
     }
-
+    
     self.navigationController.navigationBarHidden = NO;
     
 }
@@ -132,7 +132,7 @@
     _bottomView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_bottomView];
     
-//    文本框
+    //    文本框
     NSArray * placeHolderContentArray = @[@"设备品牌/型号",@"设备所在地",@"联系人",@"联系人电话",@"设备工作小时",@"设备故障简要描述"];
     for (int i = 0; i < placeHolderContentArray.count; i ++)
     {
@@ -178,7 +178,7 @@
         }
         if (i == 4)
         {
-//            故障
+            //            故障
             contentTF.keyboardType = UIKeyboardTypeNumberPad;
             float troubleLabelLength = [CommonMethod getLabelLengthWithString:@"故障" WithFont:17 * myDelegate.autoSizeScaleX];
             UILabel * troubleLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, CGRectGetMaxY(contentTF.frame) + 22 * myDelegate.autoSizeScaleY, troubleLabelLength, 17 * myDelegate.autoSizeScaleX)];
@@ -195,7 +195,7 @@
                 UIButton * serveSpecBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMaxX(troubleLabel.frame) + 16 * myDelegate.autoSizeScaleX + X * (38 * myDelegate.autoSizeScaleX + serveSpecLabelLength), CGRectGetMaxY(contentTF.frame) + 22 * myDelegate.autoSizeScaleY + Y * 49 * myDelegate.autoSizeScaleY, 12 * myDelegate.autoSizeScaleX, 12 * myDelegate.autoSizeScaleX)];
                 [serveSpecBtn setImage:[UIImage imageNamed:@"复选框-未选中"] forState:UIControlStateNormal];
                 [serveSpecBtn setImage:[UIImage imageNamed:@"复选框_已选择"] forState:UIControlStateSelected];
-
+                
                 serveSpecBtn.selected = NO;
                 serveSpecBtn.tag = 30000 + j;
                 [serveSpecBtn addTarget:self action:@selector(selectTroubleBtnClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -231,7 +231,7 @@
             textView.backgroundColor = [UIColor whiteColor];
             textView.text = @"";
             [_bottomView addSubview:textView];
-//            上传详情
+            //            上传详情
             
             UIView * view = [[UIView alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, CGRectGetMaxY(textView.frame) + 23 * myDelegate.autoSizeScaleY, ScreenWidth, ScreenHeight)];
             view.tag = 787878;
@@ -260,7 +260,7 @@
             addImage.frame = CGRectMake(37.5 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY, 22 * myDelegate.autoSizeScaleX, 22 * myDelegate.autoSizeScaleX);
             [detailBtn addSubview:addImage];
             
-//            维修时间
+            //            维修时间
             NSArray * btnTitleArray = @[@"预约维修",@"立即维修"];
             NSArray * btnBGColorArray = @[@"#e06e15",@"#ffa304"];
             for (int i = 0; i < 2; i ++)
@@ -283,7 +283,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView{
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-
+    
     UIView * view = [_bottomView viewWithTag:787878];
     
     CGRect frame = view.frame;
@@ -377,7 +377,7 @@
             self.brandArr = dicts[@"data"];
             UITextField * tf = [self.view viewWithTag:20000];
             [self.brandArr addObject:@{@"brandType":@"添加设备"}];
-            CGRect rect = CGRectMake(ScreenWidth - 100, tf.frame.origin.y + tf.frame.size.height, 80, self.brandArr.count * 40);
+            CGRect rect = CGRectMake(ScreenWidth - 100, tf.frame.origin.y + tf.frame.size.height, 80, ScreenHeight - tf.frame.origin.y - tf.frame.size.height - 44 - 64 - 40);
             _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
             _list.mark = @"保修";
             _list.delegate = self;
@@ -412,14 +412,19 @@
 //自动定位
 - (void)chooseAddress:(UIButton *)btn{
     
-    
-    
     if([CLLocationManager locationServicesEnabled])
     {
         
         orderMapViewController * map = [[orderMapViewController alloc] init];
-        map.returnAdressBlock = ^(NSString *adress) {
+        if (lat.length != 0 && lon.length != 0) {
             
+            CLLocation *location = [[CLLocation alloc] initWithLatitude:[lat floatValue] longitude:[lon floatValue]];
+            map.latitude = location.coordinate.latitude;
+            map.longitude = location.coordinate.longitude;
+        }
+        
+           map.returnAdressBlock = ^(NSString *adress) {
+               
             NSArray * arr = [adress componentsSeparatedByString:@","];
             lat = arr[0];
             lon = arr[1];
@@ -432,20 +437,20 @@
         [self.navigationController pushViewController:map animated:YES];
         // 启动位置更新
         // 开启位置更新需要与服务器进行轮询所以会比较耗电，在不需要时用stopUpdatingLocation方法关闭;
-//        _locationManager = [[CLLocationManager alloc] init];
-//        //设置定位的精度
-//        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
-//        _locationManager.distanceFilter = 10.0f;
-//        _locationManager.delegate = self;
-//        if ([[[UIDevice currentDevice] systemVersion] floatValue] > 8.0)
-//        {
-//            [_locationManager requestAlwaysAuthorization];
-//            [_locationManager requestWhenInUseAuthorization];
-//        }
-//        
-//        //开始实时定位
-//        [_locationManager startUpdatingLocation];
-//        [self.view showActivityWithText:@"定位中"];
+        //        _locationManager = [[CLLocationManager alloc] init];
+        //        //设置定位的精度
+        //        [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        //        _locationManager.distanceFilter = 10.0f;
+        //        _locationManager.delegate = self;
+        //        if ([[[UIDevice currentDevice] systemVersion] floatValue] > 8.0)
+        //        {
+        //            [_locationManager requestAlwaysAuthorization];
+        //            [_locationManager requestWhenInUseAuthorization];
+        //        }
+        //
+        //        //开始实时定位
+        //        [_locationManager startUpdatingLocation];
+        //        [self.view showActivityWithText:@"定位中"];
     }else {
         NSLog(@"请开启定位功能！");
         [self showHint:@"请开启定位功能"];
@@ -456,7 +461,7 @@
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
     
-     CLGeocoder * _geocoder = [[CLGeocoder alloc] init];;
+    CLGeocoder * _geocoder = [[CLGeocoder alloc] init];;
     
     //NSLog(@"%lu",(unsigned long)locations.count);
     CLLocation * location = locations.lastObject;
@@ -464,7 +469,7 @@
     CLLocationDegrees latitude = location.coordinate.latitude;
     // 经度
     CLLocationDegrees longitude = location.coordinate.longitude;
-   // NSLog(@"%@",[NSString stringWithFormat:@"%lf", location.coordinate.longitude]);
+    // NSLog(@"%@",[NSString stringWithFormat:@"%lf", location.coordinate.longitude]);
     //    NSLog(@"经度：%f,纬度：%f,海拔：%f,航向：%f,行走速度：%f", location.coordinate.longitude, location.coordinate.latitude,location.altitude,location.course,location.speed);
     
     [_geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
@@ -478,17 +483,17 @@
                 city = placemark.administrativeArea;
             }
             // 位置名
-//          NSLog(@"name,%@",placemark.name);
-//           // 街道
-//          NSLog(@"thoroughfare,%@",placemark.thoroughfare);
-//           // 子街道
-//           NSLog(@"subThoroughfare,%@",placemark.subThoroughfare);
-//          // 市
-//          NSLog(@"locality,%@",placemark.locality);
-//              // 区
-//          NSLog(@"subLocality,%@",placemark.subLocality);
-//            // 国家
-//         NSLog(@"country,%@",placemark.country);
+            //          NSLog(@"name,%@",placemark.name);
+            //           // 街道
+            //          NSLog(@"thoroughfare,%@",placemark.thoroughfare);
+            //           // 子街道
+            //           NSLog(@"subThoroughfare,%@",placemark.subThoroughfare);
+            //          // 市
+            //          NSLog(@"locality,%@",placemark.locality);
+            //              // 区
+            //          NSLog(@"subLocality,%@",placemark.subLocality);
+            //            // 国家
+            //         NSLog(@"country,%@",placemark.country);
             UITextField * tf = [self.view viewWithTag:20001];
             tf.text = [NSString stringWithFormat:@"%@%@%@",placemark.administrativeArea,placemark.locality,placemark.name];
             ownerAddress =[NSString stringWithFormat:@"%@%@",placemark.locality,placemark.name];
@@ -518,17 +523,26 @@
     if ([aStr isEqualToString:[NSString stringWithFormat:@"%ld",self.brandArr.count -1]]) {
         
         HKXOwnerMoreInfoViewController * ower = [[HKXOwnerMoreInfoViewController alloc] init];
-         brandButton.selected = NO;
+        brandButton.selected = NO;
         ower.mark = @"报修";
         ower.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:ower animated:YES];
         
     }else{
-        UITextField * tf = [self.view viewWithTag:20000];
         brandButton.selected = NO;
         NSInteger i = [aStr integerValue];
-        tf.text = self.brandArr[i][@"brandType"];
+        UITextField * brandTf = [self.view viewWithTag:20000];
+        brandTf.text = self.brandArr[i][@"brandType"];
         _modleid =self.brandArr[i][@"modelId"];
+        UITextField * realName = [self.view viewWithTag:20002];
+        realName.text = self.brandArr[i][@"realName"];
+        
+        UITextField * telphone = [self.view viewWithTag:20003];
+        telphone.text = self.brandArr[i][@"telphone"];
+        
+        UITextField * workHours = [self.view viewWithTag:20004];
+        workHours.text = self.brandArr[i][@"workHours"];
+        
     }
     
 }
@@ -687,31 +701,64 @@
         orderVC.lon = lon;
         orderVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:orderVC animated:YES];
+        
+        
+        hydraulicPressureBtn.selected = NO;
+   
+        machineryPartBtn.selected = NO;
+      
+        engineBtn.selected = NO;
+     
+        circuitBtn.selected = NO;
+      
+        maintenanceBtn.selected = NO;
+        
+      
+        brandModel.text = @"";
+      
+        address.text = @"";
+      
+        contact.text = @"";
+     
+        telephone.text = @"";
+      
+        workHours.text = @"";
+        
+        faultInfo.text = @"";
+        
+        _modleid = @"";
+        equipmentImg = nil;
+        ownerAddress = @"";
+        lat = nil;
+        lon = nil;
+        UIButton * btn = [self.view viewWithTag:8990];
+        [btn setImage:[UIImage imageNamed:@"添加"] forState:UIControlStateNormal];
+        
     }
     else
     {
         NSLog(@"立即维修");
         [self immediateRepair];
-       
+        
     }
     self.hidesBottomBarWhenPushed = NO;
 }
 
 - (void)immediateRepair{
     
-//    设备品牌/型号：brandModel
-//    设备ID：mId
-//    设备所在地：address
-//    联系人：contact
-//    联系电话：telephone
-//    设备工作小时数：workHours
-//    故障类型：faultType
-//    故障描述：faultInfo
-//    图片详情：faultInfo
-//    机主id：uId
-//    预约时间：appointmentTime
-//    经度：lon
-//    纬度：lat
+    //    设备品牌/型号：brandModel
+    //    设备ID：mId
+    //    设备所在地：address
+    //    联系人：contact
+    //    联系电话：telephone
+    //    设备工作小时数：workHours
+    //    故障类型：faultType
+    //    故障描述：faultInfo
+    //    图片详情：faultInfo
+    //    机主id：uId
+    //    预约时间：appointmentTime
+    //    经度：lon
+    //    纬度：lat
     UITextField * brandModel = [self.view viewWithTag:20000];
     UITextField * address = [self.view viewWithTag:20001];
     UITextField * contact = [self.view viewWithTag:20002];
@@ -801,7 +848,7 @@
     NSString *picture = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
     NSString * imageDataString = [NSString stringWithFormat:@"data:image/%@;base64,%@",[self contentTypeForImageData:data],picture];
     NSString * faultType = [faultTypeArr componentsJoinedByString:@","];
-//    NSString * faultType = [NSString stringWithFormat:@"%@%@%@%@%@",hydraulicPressure,machineryPart,engine,circuit,maintenance];
+    //    NSString * faultType = [NSString stringWithFormat:@"%@%@%@%@%@",hydraulicPressure,machineryPart,engine,circuit,maintenance];
     
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
@@ -850,7 +897,8 @@
             _modleid = @"";
             equipmentImg = nil;
             ownerAddress = @"";
-            
+            lat = nil;
+            lon = nil;
             UIButton * btn = [self.view viewWithTag:8990];
             [btn setImage:[UIImage imageNamed:@"添加"] forState:UIControlStateNormal];
             
@@ -1058,7 +1106,7 @@
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];
-
+    
 }
 
 #pragma mark - Private Method
@@ -1074,13 +1122,13 @@
 #pragma mark - Setters & Getters
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

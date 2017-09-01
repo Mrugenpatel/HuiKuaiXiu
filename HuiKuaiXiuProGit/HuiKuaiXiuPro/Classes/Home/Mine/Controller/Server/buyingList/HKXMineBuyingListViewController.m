@@ -57,6 +57,37 @@
 - (void)configData
 {
     
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    double uId = [defaults doubleForKey:@"userDataId"];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
+                           @"8",@"pageSize",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectBuy.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+    
+    }];
+
+    
+    
 }
 #pragma mark - Action
 #pragma mark - Private Method

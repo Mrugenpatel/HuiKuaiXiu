@@ -86,6 +86,7 @@
     {
         CGRect rect = CGRectMake(ScreenWidth - 90, 60, 80, self.array.count * 40);
         _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.array rowHeight:40 view:RButton];
+        _list.mark = @"租赁";
         _list.delegate = self;
     }
     return _list;

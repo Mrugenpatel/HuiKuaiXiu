@@ -14,7 +14,7 @@
 #import "bottomPopView.h"
 #import "UIImageView+WebCache.h"
 
-@interface goodsPartDetailViewController ()<UITableViewDelegate,UITableViewDataSource,bottomPopViewDelegate>{
+@interface goodsPartDetailViewController ()<UITableViewDelegate,UITableViewDataSource,bottomPopViewDelegate,UIScrollViewDelegate>{
     
     UIButton * goodsInformation;//产品信息
     UIButton * goodsDetail;//产品详情
@@ -27,6 +27,12 @@
     UIButton * buyBtn;//购买
     bottomPopView * popView;//弹出视图
     NSString * count;
+    
+    UIScrollView     * _landscapeTopScrollView;//上层横向滑动视图
+    UIPageControl    * _pageControl;
+    NSTimer          * _timer;
+    int                _speed;
+    int                _page;
 }
 
 @end
@@ -42,7 +48,7 @@
 
 - (void)createUI{
     
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor  = [UIColor whiteColor];
     AppDelegate * delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     UIView * titleView = [[UIView alloc] initWithFrame:CGRectMake(ScreenWidth / 2 - 110, 0, 220 * delegate.autoSizeScaleX, 44* delegate.autoSizeScaleY)];
@@ -73,11 +79,9 @@
     lineLb.backgroundColor = [UIColor redColor];
     [titleView addSubview:lineLb];
     
-    goodsImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64 * delegate.autoSizeScaleY, ScreenWidth, 220 * delegate.autoSizeScaleY)];
-    [goodsImgView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.partModel.picture[0]]]];
-    [self.view addSubview:goodsImgView];
+    [self createLandscapeTopScrollView];
     
-    goodsName = [[UILabel alloc] initWithFrame:CGRectMake(20, goodsImgView.frame.origin.y + goodsImgView.frame.size.height, ScreenWidth - 40, 50 * delegate.autoSizeScaleY)];
+    goodsName = [[UILabel alloc] initWithFrame:CGRectMake(20, _landscapeTopScrollView.frame.origin.y + _landscapeTopScrollView.frame.size.height, ScreenWidth - 40, 50 * delegate.autoSizeScaleY)];
     goodsName.text = self.partModel.brand;
     goodsName.numberOfLines = 0;
     goodsName.lineBreakMode = NSLineBreakByWordWrapping;
@@ -121,12 +125,122 @@
     
 }
 
+/**
+ 布局上层滑动视图
+ */
+- (void)createLandscapeTopScrollView
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    _landscapeTopScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 200 * myDelegate.autoSizeScaleY)];
+    _landscapeTopScrollView.backgroundColor = [UIColor whiteColor];
+    _landscapeTopScrollView.contentSize = CGSizeMake(ScreenWidth * 4, 0);
+    
+    _landscapeTopScrollView.pagingEnabled = YES;
+    if (self.partModel.picture.count < 2) {
+        
+        _landscapeTopScrollView.pagingEnabled = NO;
+    }
+    _landscapeTopScrollView.bounces = NO;
+    _landscapeTopScrollView.showsHorizontalScrollIndicator = NO;
+    _landscapeTopScrollView.delegate = self;
+    [self.view addSubview:_landscapeTopScrollView];
+    
+    for (int i = 0; i < self.partModel.picture.count; i ++)
+    {
+        UIImageView * demoImage = [[UIImageView alloc] initWithFrame:CGRectMake(ScreenWidth * i,0,ScreenWidth,200 * myDelegate.autoSizeScaleY)];
+        demoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.partModel.picture[i]]]]];
+        demoImage.backgroundColor = [UIColor blueColor];
+        demoImage.userInteractionEnabled = YES;
+        
+        [_landscapeTopScrollView addSubview:demoImage];
+    }
+        //添加定时器
+    _timer = [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    
+    //    添加pageControl
+    _pageControl = [[UIPageControl alloc] init];
+    _pageControl.center = CGPointMake(ScreenWidth / 2, 64 + 170 * myDelegate.autoSizeScaleY);
+    _pageControl.bounds = CGRectMake(0, 0, 100, 80);
+    _pageControl.numberOfPages = self.partModel.picture.count;
+    _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
+    _pageControl.currentPageIndicatorTintColor = [UIColor redColor];
+    [_pageControl addTarget:self action:@selector(changeImageSlide) forControlEvents:UIControlEventValueChanged];
+    if (self.partModel.picture.count  > 1) {
+        
+        [self.view addSubview:_pageControl];
+    }
+    
+}
+/**
+ 定时器
+ */
+- (void)onTimer
+{
+    _pageControl.currentPage = _pageControl.currentPage + _speed;
+    [_landscapeTopScrollView setContentOffset:CGPointMake(_pageControl.currentPage * ScreenWidth, 0) animated:YES];
+    if (_pageControl.currentPage == 0)
+    {
+        _speed = 1;
+    }
+    else if (_pageControl.currentPage == self.partModel.picture.count - 1)
+    {
+        _speed = -1;
+    }
+}
+
+/**
+ 滑动视图滑动
+ */
+- (void)changeImageSlide
+{
+    [_landscapeTopScrollView setContentOffset:CGPointMake(ScreenWidth * _pageControl.currentPage, 0) animated:YES];
+}
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView == _landscapeTopScrollView)
+    {
+        _pageControl.currentPage =_landscapeTopScrollView.contentOffset.x / ScreenWidth;
+        if (_pageControl.currentPage == 0)
+        {
+            _speed = 1;
+        }
+        else if(_pageControl.currentPage == self.partModel.picture.count - 1)
+        {
+            _speed = -1;
+        }
+    }
+}
+
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if (_timer != nil  && scrollView == _landscapeTopScrollView)
+    {
+        [_timer invalidate];
+        _timer=nil;
+    }
+}
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (_timer == nil && scrollView == _landscapeTopScrollView)
+    {
+        _timer=[NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
+        
+        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+}
+
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
     self.navigationController.navigationBarHidden = NO;
-    
+    _speed = 1;
+    _page  = 0;
 }
 //产品信息
 - (void)informationClick:(UIButton *)btn{

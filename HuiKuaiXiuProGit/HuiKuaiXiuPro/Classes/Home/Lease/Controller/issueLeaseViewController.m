@@ -201,14 +201,6 @@
 
 }
 
--(JGDownListMenu *)list
-{
-    if (!_list)
-    {
-        
-    }
-    return _list;
-}
 
 -(void)dropDownListParame:(NSString *)aStr
 {
@@ -217,7 +209,6 @@
     brandTf.text = self.brandArr[i][@"brandType"];
     _modleid =self.brandArr[i][@"modelId"];
     NSLog(@"选中设备");
-    
     
 }
 
