@@ -281,4 +281,51 @@
  @param complete 供应商的询价列表
  */
 + (void)sendRequestWithUserId:(NSString *)userId WithPageNo:(NSString *)pageNo WithPageSize:(NSString *)pageSize ToGetSupplierInquiryList:(void (^)(id data))complete;
+
+/**
+ 根据用户id查询该用户默认收货地址是否存在
+
+ @param userId 用户id
+ @param complete 该用户默认收货地址是否存在
+ */
++ (void)sendRequestWithUserId:(NSString *)userId ToGetMineDefaultAddressExistResult:(void (^)(id data))complete;
+
+/**
+ 根据用户id增加该用户的收货地址
+
+ @param userId 用户id
+ @param userName 收货人姓名
+ @param userTel 收货人电话
+ @param userAdd 收货人地址
+ @param complete 增加地址的结果
+ */
++ (void)sendRequestWithUserId:(NSString *)userId WithUserName:(NSString *)userName WithUserTel:(NSString *)userTel WithUserAdd:(NSString *)userAdd ToGetAddNewAddResult:(void (^)(id data))complete;
+
+/**
+ 根据用户id获得该用户所有收货地址
+
+ @param userId 用户id
+ @param complete 该用户所有收货地址
+ */
++ (void)sendRequestWithUserId:(NSString *)userId ToGetMineAllConsigneeAddressListResult:(void (^)(id data))complete;
+
+/**
+ 根据地址id修改该用户的收货地址
+ 
+ @param userId 地址id
+ @param userName 收货人姓名
+ @param userTel 收货人电话
+ @param userAdd 收货人地址
+ @param complete 增加地址的结果
+ */
++ (void)sendRequestWithUserId:(NSString *)userId WithUserName:(NSString *)userName WithUserTel:(NSString *)userTel WithUserAdd:(NSString *)userAdd ToGetUpdateAddResult:(void (^)(id data))complete;
+
+/**
+ 根据收货地址id和用户id获得修改默认收货地址的结果
+
+ @param addId 收货地址id
+ @param userId 用户id
+ @param complete 修改默认收货地址的结果
+ */
++ (void)sendRequestWithAddId:(NSString *)addId WithUserId:(NSString *)userId ToGetMineUpdateDefaultAddressResult:(void (^)(id data))complete;
 @end

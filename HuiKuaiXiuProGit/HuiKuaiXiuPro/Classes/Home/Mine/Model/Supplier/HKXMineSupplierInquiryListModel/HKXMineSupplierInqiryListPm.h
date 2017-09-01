@@ -15,6 +15,7 @@
 @property (nonatomic, copy) NSString *brand;//设备品牌
 @property (nonatomic, copy) NSString *parameter;//设备参数
 @property (nonatomic, copy) NSString *type;//设备分类
+@property (nonatomic, copy) NSString *picture;//设备图片
 
 + (instancetype)modelObjectWithDictionary:(NSDictionary *)dict;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

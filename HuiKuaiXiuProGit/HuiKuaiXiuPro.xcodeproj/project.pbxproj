@@ -108,6 +108,10 @@
 		9BD2C2691F09D6900035E6CB /* HKXBasicInfoRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD2C2681F09D6900035E6CB /* HKXBasicInfoRegisterViewController.m */; };
 		9BD2C2951F0A16D20035E6CB /* CustomDropDownBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD2C2941F0A16D20035E6CB /* CustomDropDownBtn.m */; };
 		9BD2C2981F0A2A990035E6CB /* HKXOwnerMoreInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD2C2971F0A2A990035E6CB /* HKXOwnerMoreInfoViewController.m */; };
+		9BF70BFD1F5947EB002FCD59 /* HKXMineDefaultAddressExistData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70BF91F5947EB002FCD59 /* HKXMineDefaultAddressExistData.m */; };
+		9BF70BFE1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70BFB1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.m */; };
+		9BF70C051F596F26002FCD59 /* HKXMineAddressListData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C011F596F26002FCD59 /* HKXMineAddressListData.m */; };
+		9BF70C061F596F26002FCD59 /* HKXMineAddressListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C031F596F26002FCD59 /* HKXMineAddressListModel.m */; };
 		CEA104D873E0E7F52E648939 /* libPods-HuiKuaiXiuPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0592FDD7DDF70CF0F4F743BD /* libPods-HuiKuaiXiuPro.a */; };
 		EF390AC11F4D5644008F65A8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF390AC01F4D5644008F65A8 /* QuartzCore.framework */; };
 		EF3DA81E1F53F0C7006D5B8B /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EF3DA81C1F53F0C7006D5B8B /* AlipaySDK.bundle */; };
@@ -414,6 +418,16 @@
 		9BD2C2941F0A16D20035E6CB /* CustomDropDownBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDropDownBtn.m; sourceTree = "<group>"; };
 		9BD2C2961F0A2A990035E6CB /* HKXOwnerMoreInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXOwnerMoreInfoViewController.h; sourceTree = "<group>"; };
 		9BD2C2971F0A2A990035E6CB /* HKXOwnerMoreInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXOwnerMoreInfoViewController.m; sourceTree = "<group>"; };
+		9BF70BF81F5947EB002FCD59 /* HKXMineDefaultAddressExistData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineDefaultAddressExistData.h; sourceTree = "<group>"; };
+		9BF70BF91F5947EB002FCD59 /* HKXMineDefaultAddressExistData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineDefaultAddressExistData.m; sourceTree = "<group>"; };
+		9BF70BFA1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineDefaultAddressExistModel.h; sourceTree = "<group>"; };
+		9BF70BFB1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineDefaultAddressExistModel.m; sourceTree = "<group>"; };
+		9BF70BFC1F5947EB002FCD59 /* HKXMineDefaultAddressExistModelDataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineDefaultAddressExistModelDataModels.h; sourceTree = "<group>"; };
+		9BF70C001F596F26002FCD59 /* HKXMineAddressListData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineAddressListData.h; sourceTree = "<group>"; };
+		9BF70C011F596F26002FCD59 /* HKXMineAddressListData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineAddressListData.m; sourceTree = "<group>"; };
+		9BF70C021F596F26002FCD59 /* HKXMineAddressListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineAddressListModel.h; sourceTree = "<group>"; };
+		9BF70C031F596F26002FCD59 /* HKXMineAddressListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineAddressListModel.m; sourceTree = "<group>"; };
+		9BF70C041F596F26002FCD59 /* HKXMineAddressListModelDataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineAddressListModelDataModels.h; sourceTree = "<group>"; };
 		EF390AC01F4D5644008F65A8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		EF3DA81C1F53F0C7006D5B8B /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		EF3DA81D1F53F0C7006D5B8B /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -1444,6 +1458,8 @@
 		9BA0B4771F049C8D0047E0E5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9BF70BFF1F596F26002FCD59 /* HKXMineAddressListModel */,
+				9BF70BF71F5947EB002FCD59 /* HKXMineDefaultAddressExistModel */,
 				9B8954181F57B91C0019C799 /* HKXMineShoppingCartUpdateCartNumberModel */,
 				9B74CC701F56B6C2002FE4F9 /* HKXMineShoppingCartListModel */,
 				9B7EAE531F41396000F09C4D /* Server */,
@@ -1712,6 +1728,30 @@
 				9BBB40001EEE7BCE00637D61 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9BF70BF71F5947EB002FCD59 /* HKXMineDefaultAddressExistModel */ = {
+			isa = PBXGroup;
+			children = (
+				9BF70BF81F5947EB002FCD59 /* HKXMineDefaultAddressExistData.h */,
+				9BF70BF91F5947EB002FCD59 /* HKXMineDefaultAddressExistData.m */,
+				9BF70BFA1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.h */,
+				9BF70BFB1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.m */,
+				9BF70BFC1F5947EB002FCD59 /* HKXMineDefaultAddressExistModelDataModels.h */,
+			);
+			path = HKXMineDefaultAddressExistModel;
+			sourceTree = "<group>";
+		};
+		9BF70BFF1F596F26002FCD59 /* HKXMineAddressListModel */ = {
+			isa = PBXGroup;
+			children = (
+				9BF70C001F596F26002FCD59 /* HKXMineAddressListData.h */,
+				9BF70C011F596F26002FCD59 /* HKXMineAddressListData.m */,
+				9BF70C021F596F26002FCD59 /* HKXMineAddressListModel.h */,
+				9BF70C031F596F26002FCD59 /* HKXMineAddressListModel.m */,
+				9BF70C041F596F26002FCD59 /* HKXMineAddressListModelDataModels.h */,
+			);
+			path = HKXMineAddressListModel;
 			sourceTree = "<group>";
 		};
 		EF390ACF1F4D6508008F65A8 /* UIViewExtention */ = {
@@ -2102,6 +2142,7 @@
 				EFB305541F4C21BA005EA0AA /* HKXNavigationController.m in Sources */,
 				9B740CA91F4E68C500E32A8E /* HKXMineMyWalletAddViewController.m in Sources */,
 				9B898F0B1F3AF21400B67EFB /* HKXMineOwnerRepairListModel.m in Sources */,
+				9BF70C061F596F26002FCD59 /* HKXMineAddressListModel.m in Sources */,
 				EFC517B51F58EEB500830283 /* PartGoodsModel.m in Sources */,
 				EFC5179D1F58EE4F00830283 /* OwerMyleaseViewController.m in Sources */,
 				EF9E78CD1F2B305B00FC40F8 /* requireLeaseDetailViewController.m in Sources */,
@@ -2138,6 +2179,7 @@
 				EFC517991F58EE3E00830283 /* SupplierMyByLeaseViewController.m in Sources */,
 				EF9E78D01F2B305B00FC40F8 /* leaseTableViewCell.m in Sources */,
 				9B48FFE31F288348006DBE95 /* HKXMineServeCertificateProfileViewController.m in Sources */,
+				9BF70BFE1F5947EB002FCD59 /* HKXMineDefaultAddressExistModel.m in Sources */,
 				9B789CED1F0B3B57000F33BA /* HKXRegisterData.m in Sources */,
 				9BBB400D1EEE7BCF00637D61 /* HuiKuaiXiuPro.xcdatamodeld in Sources */,
 				9B34B8221F4FB52200A39B3A /* HKXMineBuyingListViewController.m in Sources */,
@@ -2182,6 +2224,7 @@
 				EF6E94621F31A45500A837AD /* README.mdown in Sources */,
 				9B740CC01F4EE06800E32A8E /* HKXMineReceiveAddressViewController.m in Sources */,
 				9B9EE5CC1F25CB1A00A95247 /* CityModel.m in Sources */,
+				9BF70C051F596F26002FCD59 /* HKXMineAddressListData.m in Sources */,
 				9B852D3D1F27149600779C18 /* HKXSupplierCompanyInfoModel.m in Sources */,
 				9B99437F1F3D7CB60034AC88 /* HKXMineRepairDetailData.m in Sources */,
 				9BB7B7C21F1CB14A00F46A48 /* HKXRepairsOrderTimeViewController.m in Sources */,
@@ -2202,6 +2245,7 @@
 				9B99437D1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostData.m in Sources */,
 				9B8706EB1F1DB5700043BB0C /* HKXOrderDetailViewController.m in Sources */,
 				9BD2C2691F09D6900035E6CB /* HKXBasicInfoRegisterViewController.m in Sources */,
+				9BF70BFD1F5947EB002FCD59 /* HKXMineDefaultAddressExistData.m in Sources */,
 				9BA0B48A1F049F360047E0E5 /* HKXHomePageViewController.m in Sources */,
 				9B8954291F57F2130019C799 /* HKXMineSupplierInqiryListModel.m in Sources */,
 				9B382C0A1F29DC1100ECA17F /* HKXSupplierPartsManagementModel.m in Sources */,

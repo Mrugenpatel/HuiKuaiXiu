@@ -31,6 +31,8 @@
 #import "HKXMineShoppingCartUpdateCartNumberModelDataModels.h"//个人中心购物车商品增加/减少model
 
 #import "HKXMineSupplierInqiryListModelDataModels.h"//个人中心供应商询价列表
+#import "HKXMineDefaultAddressExistModelDataModels.h"//个人中心默认收货地址查询
+#import "HKXMineAddressListModelDataModels.h"//个人中心所有收货地址
 
 @implementation HKXHttpRequestManager
 
@@ -795,6 +797,133 @@
                            nil];
     [manager POST:[NSString stringWithFormat:@"%@inquiry/InquiryBySupplierId.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         HKXMineSupplierInqiryListModel * model = [HKXMineSupplierInqiryListModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 根据用户id查询该用户默认收货地址是否存在
+ 
+ @param userId 用户id
+ @param complete 该用户默认收货地址是否存在
+ */
++ (void)sendRequestWithUserId:(NSString *)userId ToGetMineDefaultAddressExistResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           userId,@"uId",
+                           
+                           nil];
+    [manager POST:[NSString stringWithFormat:@"%@useradd/selectdefault.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineDefaultAddressExistModel * model = [HKXMineDefaultAddressExistModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 根据用户id增加该用户的收货地址
+ 
+ @param userId 用户id
+ @param userName 收货人姓名
+ @param userTel 收货人电话
+ @param userAdd 收货人地址
+ @param complete 增加地址的结果
+ */
++ (void)sendRequestWithUserId:(NSString *)userId WithUserName:(NSString *)userName WithUserTel:(NSString *)userTel WithUserAdd:(NSString *)userAdd ToGetAddNewAddResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           userId,@"uId",
+                           userName,@"consignees",
+                           userAdd,@"consigneesAdd",
+                           userTel,@"consigneesTel",
+                           nil];
+    [manager POST:[NSString stringWithFormat:@"%@useradd/add.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 根据用户id获得该用户所有收货地址
+ 
+ @param userId 用户id
+ @param complete 该用户所有收货地址
+ */
++ (void)sendRequestWithUserId:(NSString *)userId ToGetMineAllConsigneeAddressListResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           userId,@"uId",
+                           
+                           nil];
+    [manager POST:[NSString stringWithFormat:@"%@useradd/selectList.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineAddressListModel * model = [HKXMineAddressListModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+/**
+ 根据用户id修改该用户的收货地址
+ 
+ @param userId 用户id
+ @param userName 收货人姓名
+ @param userTel 收货人电话
+ @param userAdd 收货人地址
+ @param complete 增加地址的结果
+ */
++ (void)sendRequestWithUserId:(NSString *)userId WithUserName:(NSString *)userName WithUserTel:(NSString *)userTel WithUserAdd:(NSString *)userAdd ToGetUpdateAddResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           userId,@"addId",
+                           userName,@"consignees",
+                           userAdd,@"consigneesAdd",
+                           userTel,@"consigneesTel",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@useradd/updateAdd.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 根据收货地址id和用户id获得修改默认收货地址的结果
+ 
+ @param addId 收货地址id
+ @param userId 用户id
+ @param complete 修改默认收货地址的结果
+ */
++ (void)sendRequestWithAddId:(NSString *)addId WithUserId:(NSString *)userId ToGetMineUpdateDefaultAddressResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           addId,@"addId",
+                           userId,@"uId",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@useradd/updatedefault.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
         
         complete(model);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
