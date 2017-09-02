@@ -8,7 +8,7 @@
 #import "HKXMineShoppingCartListShopcartList.h"
 
 
-NSString *const kHKXMineShoppingCartListShopcartListBuymid = @"buymid";
+//NSString *const kHKXMineShoppingCartListShopcartListBuymid = @"buymid";
 NSString *const kHKXMineShoppingCartListShopcartListCarid = @"carid";
 NSString *const kHKXMineShoppingCartListShopcartListMid = @"mid";
 NSString *const kHKXMineShoppingCartListShopcartListPrice = @"price";
@@ -17,8 +17,9 @@ NSString *const kHKXMineShoppingCartListShopcartListModel = @"model";
 NSString *const kHKXMineShoppingCartListShopcartListPicture = @"picture";
 NSString *const kHKXMineShoppingCartListShopcartListBuynumber = @"buynumber";
 NSString *const kHKXMineShoppingCartListShopcartListTotalprice = @"totalprice";
-NSString *const kHKXMineShoppingCartListShopcartListCompanyname = @"companyname";
+//NSString *const kHKXMineShoppingCartListShopcartListCompanyname = @"companyname";
 NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
+NSString *const kHKXMineShoppingCartListShopcartListCompanyid = @"companyid";
 
 
 @interface HKXMineShoppingCartListShopcartList ()
@@ -29,7 +30,7 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
 
 @implementation HKXMineShoppingCartListShopcartList
 
-@synthesize buymid = _buymid;
+//@synthesize buymid = _buymid;
 @synthesize carid = _carid;
 @synthesize mid = _mid;
 @synthesize price = _price;
@@ -38,8 +39,9 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
 @synthesize picture = _picture;
 @synthesize buynumber = _buynumber;
 @synthesize totalprice = _totalprice;
-@synthesize companyname = _companyname;
+//@synthesize companyname = _companyname;
 @synthesize pid = _pid;
+@synthesize companyid = _companyid;
 
 
 + (instancetype)modelObjectWithDictionary:(NSDictionary *)dict
@@ -54,7 +56,7 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
     // This check serves to make sure that a non-NSDictionary object
     // passed into the model class doesn't break the parsing.
     if(self && [dict isKindOfClass:[NSDictionary class]]) {
-            self.buymid = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListBuymid fromDictionary:dict] doubleValue];
+//            self.buymid = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListBuymid fromDictionary:dict] doubleValue];
             self.carid = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListCarid fromDictionary:dict] doubleValue];
             self.mid = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListMid fromDictionary:dict] doubleValue];
             self.price = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListPrice fromDictionary:dict] doubleValue];
@@ -63,8 +65,9 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
             self.picture = [self objectOrNilForKey:kHKXMineShoppingCartListShopcartListPicture fromDictionary:dict];
             self.buynumber = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListBuynumber fromDictionary:dict] doubleValue];
             self.totalprice = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListTotalprice fromDictionary:dict] doubleValue];
-            self.companyname = [self objectOrNilForKey:kHKXMineShoppingCartListShopcartListCompanyname fromDictionary:dict];
+//            self.companyname = [self objectOrNilForKey:kHKXMineShoppingCartListShopcartListCompanyname fromDictionary:dict];
             self.pid = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListPid fromDictionary:dict] doubleValue];
+        self.companyid = [[self objectOrNilForKey:kHKXMineShoppingCartListShopcartListCompanyid fromDictionary:dict] longValue];
 
     }
     
@@ -75,7 +78,7 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
 - (NSDictionary *)dictionaryRepresentation
 {
     NSMutableDictionary *mutableDict = [NSMutableDictionary dictionary];
-    [mutableDict setValue:[NSNumber numberWithDouble:self.buymid] forKey:kHKXMineShoppingCartListShopcartListBuymid];
+//    [mutableDict setValue:[NSNumber numberWithDouble:self.buymid] forKey:kHKXMineShoppingCartListShopcartListBuymid];
     [mutableDict setValue:[NSNumber numberWithDouble:self.carid] forKey:kHKXMineShoppingCartListShopcartListCarid];
     [mutableDict setValue:[NSNumber numberWithDouble:self.mid] forKey:kHKXMineShoppingCartListShopcartListMid];
     [mutableDict setValue:[NSNumber numberWithDouble:self.price] forKey:kHKXMineShoppingCartListShopcartListPrice];
@@ -84,8 +87,9 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
     [mutableDict setValue:self.picture forKey:kHKXMineShoppingCartListShopcartListPicture];
     [mutableDict setValue:[NSNumber numberWithDouble:self.buynumber] forKey:kHKXMineShoppingCartListShopcartListBuynumber];
     [mutableDict setValue:[NSNumber numberWithDouble:self.totalprice] forKey:kHKXMineShoppingCartListShopcartListTotalprice];
-    [mutableDict setValue:self.companyname forKey:kHKXMineShoppingCartListShopcartListCompanyname];
+//    [mutableDict setValue:self.companyname forKey:kHKXMineShoppingCartListShopcartListCompanyname];
     [mutableDict setValue:[NSNumber numberWithDouble:self.pid] forKey:kHKXMineShoppingCartListShopcartListPid];
+    [mutableDict setValue:[NSNumber numberWithLong:self.companyid] forKey:kHKXMineShoppingCartListShopcartListCompanyid];
 
     return [NSDictionary dictionaryWithDictionary:mutableDict];
 }
@@ -109,7 +113,7 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
 {
     self = [super init];
 
-    self.buymid = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListBuymid];
+//    self.buymid = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListBuymid];
     self.carid = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListCarid];
     self.mid = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListMid];
     self.price = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListPrice];
@@ -118,9 +122,9 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
     self.picture = [aDecoder decodeObjectForKey:kHKXMineShoppingCartListShopcartListPicture];
     self.buynumber = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListBuynumber];
     self.totalprice = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListTotalprice];
-    self.companyname = [aDecoder decodeObjectForKey:kHKXMineShoppingCartListShopcartListCompanyname];
+//    self.companyname = [aDecoder decodeObjectForKey:kHKXMineShoppingCartListShopcartListCompanyname];
     self.pid = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListPid];
-    
+    self.companyid = [aDecoder decodeDoubleForKey:kHKXMineShoppingCartListShopcartListCompanyid];
     self.isSelected = [aDecoder decodeBoolForKey:@"isSelected"];
     
     return self;
@@ -129,7 +133,7 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
 
-    [aCoder encodeDouble:_buymid forKey:kHKXMineShoppingCartListShopcartListBuymid];
+//    [aCoder encodeDouble:_buymid forKey:kHKXMineShoppingCartListShopcartListBuymid];
     [aCoder encodeDouble:_carid forKey:kHKXMineShoppingCartListShopcartListCarid];
     [aCoder encodeDouble:_mid forKey:kHKXMineShoppingCartListShopcartListMid];
     [aCoder encodeDouble:_price forKey:kHKXMineShoppingCartListShopcartListPrice];
@@ -138,8 +142,9 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
     [aCoder encodeObject:_picture forKey:kHKXMineShoppingCartListShopcartListPicture];
     [aCoder encodeDouble:_buynumber forKey:kHKXMineShoppingCartListShopcartListBuynumber];
     [aCoder encodeDouble:_totalprice forKey:kHKXMineShoppingCartListShopcartListTotalprice];
-    [aCoder encodeObject:_companyname forKey:kHKXMineShoppingCartListShopcartListCompanyname];
+//    [aCoder encodeObject:_companyname forKey:kHKXMineShoppingCartListShopcartListCompanyname];
     [aCoder encodeDouble:_pid forKey:kHKXMineShoppingCartListShopcartListPid];
+    [aCoder encodeDouble:_companyid forKey:kHKXMineShoppingCartListShopcartListCompanyid];
     [aCoder encodeBool:_isSelected forKey:@"isSelected"];
 }
 
@@ -149,7 +154,7 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
     
     if (copy) {
 
-        copy.buymid = self.buymid;
+//        copy.buymid = self.buymid;
         copy.carid = self.carid;
         copy.mid = self.mid;
         copy.price = self.price;
@@ -158,8 +163,9 @@ NSString *const kHKXMineShoppingCartListShopcartListPid = @"pid";
         copy.picture = [self.picture copyWithZone:zone];
         copy.buynumber = self.buynumber;
         copy.totalprice = self.totalprice;
-        copy.companyname = [self.companyname copyWithZone:zone];
+//        copy.companyname = [self.companyname copyWithZone:zone];
         copy.pid = self.pid;
+        copy.companyid = self.companyid;
     }
     
     return copy;

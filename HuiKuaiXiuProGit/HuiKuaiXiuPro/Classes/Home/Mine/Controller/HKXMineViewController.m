@@ -797,6 +797,14 @@
 //    供应商
     if (_roleID == 2)
     {
+//        我的钱包
+        if (indexPath.row == 6)
+        {
+            HKXMineMyWalletViewController * myWalletVC = [[HKXMineMyWalletViewController alloc] init];
+            myWalletVC.navigationItem.title = @"我的钱包";
+            myWalletVC.isCard = false;
+            [self.navigationController pushViewController:myWalletVC animated:YES];
+        }
 //        发布配件
         if (indexPath.row == 7)
         {
@@ -831,7 +839,7 @@
             }
         }
         //        求租
-        if (indexPath.row == 9)
+        if (indexPath.row == 15)
         {
             SupplierMyByLeaseViewController * SupplierMyByLeaseVC = [[SupplierMyByLeaseViewController alloc] init];
             
@@ -858,6 +866,20 @@
             saleListVC.navigationItem.title = @"卖出订单";
             [self.navigationController pushViewController:saleListVC animated:YES];
         }
+//        收货地址
+        if (indexPath.row == 11)
+        {
+            HKXMineReceiveAddressViewController * addListVC = [[HKXMineReceiveAddressViewController alloc] init];
+            addListVC.navigationItem.title = @"收货地址";
+            [self.navigationController pushViewController:addListVC animated:YES];
+        }
+//        购物车
+        if (indexPath.row == 12)
+        {
+            HKXMineShoppingCartViewController * shoppingCartVC = [[HKXMineShoppingCartViewController alloc] init];
+            shoppingCartVC.navigationItem.title = @"购物车";
+            [self.navigationController pushViewController:shoppingCartVC animated:YES];
+        }
     }
     if (_roleID == 0)
     {
@@ -875,12 +897,35 @@
             equipmentListVC.navigationItem.title = @"设备列表";
             [self.navigationController pushViewController:equipmentListVC animated:YES];
         }
+//        收货地址
+        if (indexPath.row == 7)
+        {
+            HKXMineReceiveAddressViewController * addListVC = [[HKXMineReceiveAddressViewController alloc] init];
+            addListVC.navigationItem.title = @"收货地址";
+            [self.navigationController pushViewController:addListVC animated:YES];
+        }
+//        购物车
+        if (indexPath.row == 8)
+        {
+            HKXMineShoppingCartViewController * shoppingCartVC = [[HKXMineShoppingCartViewController alloc] init];
+            shoppingCartVC.navigationItem.title = @"购物车";
+            [self.navigationController pushViewController:shoppingCartVC animated:YES];
+        }
+//        买入订单
+        if (indexPath.row == 9)
+        {
+            HKXMineBuyingListViewController * buyingListVC = [[HKXMineBuyingListViewController alloc] init];
+            buyingListVC.navigationItem.title = @"买入订单";
+            [self.navigationController pushViewController:buyingListVC animated:YES];
+        }
+//        我的租赁
         if (indexPath.row == 10)
         {
             OwerMyleaseViewController * OwerMyleaseVC = [[OwerMyleaseViewController alloc] init];
             
             [self.navigationController pushViewController:OwerMyleaseVC animated:YES];
         }
+        
     }
     self.hidesBottomBarWhenPushed = NO;
 }

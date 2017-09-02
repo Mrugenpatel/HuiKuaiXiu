@@ -930,4 +930,26 @@
         NSLog(@"error = %@",error.description);
     }];
 }
+/**
+ 根据购物车商品id获得删除该商品的结果
+ 
+ @param goodsId 商品id
+ @param complete 删除结果
+ */
++ (void)sendRequestWithGoodsId:(NSString * )goodsId ToGetMineDeleteCartGoodsResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           goodsId,@"carid",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@shopcart/syndelecpById.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
 @end

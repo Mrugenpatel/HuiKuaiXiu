@@ -78,6 +78,8 @@
 		9B8AA5D71F1603D000E5F662 /* HKXSupplierReleasePartsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8AA5D61F1603D000E5F662 /* HKXSupplierReleasePartsViewController.m */; };
 		9B8AA5DA1F16040200E5F662 /* HKXSupplierReleaseEquipmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8AA5D91F16040200E5F662 /* HKXSupplierReleaseEquipmentViewController.m */; };
 		9B8AA5DD1F16042200E5F662 /* HKXSupplierPartsAndEquipmentManagmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B8AA5DC1F16042200E5F662 /* HKXSupplierPartsAndEquipmentManagmentViewController.m */; };
+		9B9300531F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9300521F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.m */; };
+		9B9300561F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9300551F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.m */; };
 		9B9703E41F0231540074D94A /* CommonMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9703E31F0231530074D94A /* CommonMethod.m */; };
 		9B99437D1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9943731F3D7CB60034AC88 /* HKXMIneOwnerRepairCostData.m */; };
 		9B99437E1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9943751F3D7CB60034AC88 /* HKXMIneOwnerRepairCostModel.m */; };
@@ -363,6 +365,10 @@
 		9B8AA5D91F16040200E5F662 /* HKXSupplierReleaseEquipmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierReleaseEquipmentViewController.m; sourceTree = "<group>"; };
 		9B8AA5DB1F16042200E5F662 /* HKXSupplierPartsAndEquipmentManagmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierPartsAndEquipmentManagmentViewController.h; sourceTree = "<group>"; };
 		9B8AA5DC1F16042200E5F662 /* HKXSupplierPartsAndEquipmentManagmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierPartsAndEquipmentManagmentViewController.m; sourceTree = "<group>"; };
+		9B9300511F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXCsutomShoppingCartCollectionReusableView.h; sourceTree = "<group>"; };
+		9B9300521F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXCsutomShoppingCartCollectionReusableView.m; sourceTree = "<group>"; };
+		9B9300541F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXCustomShoppingCartCollectionViewCell.h; sourceTree = "<group>"; };
+		9B9300551F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXCustomShoppingCartCollectionViewCell.m; sourceTree = "<group>"; };
 		9B9703E21F0231530074D94A /* CommonMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonMethod.h; sourceTree = "<group>"; };
 		9B9703E31F0231530074D94A /* CommonMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonMethod.m; sourceTree = "<group>"; };
 		9B9703E51F02331A0074D94A /* HuiKuaiXiuProPrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HuiKuaiXiuProPrefixHeader.pch; sourceTree = "<group>"; };
@@ -728,6 +734,7 @@
 		9B740CB21F4E7A9D00E32A8E /* shoppingCart */ = {
 			isa = PBXGroup;
 			children = (
+				9B93004B1F5A493D00E4E7C0 /* CustomShoppingCartView */,
 				9B740CB91F4EC43A00E32A8E /* ReceiveAddress */,
 				9B740CBA1F4EC43A00E32A8E /* shoppingGoodsDetail */,
 				9B740CB31F4E7AAE00E32A8E /* HKXMineShoppingCartViewController.h */,
@@ -1205,6 +1212,33 @@
 				9B8AA5D61F1603D000E5F662 /* HKXSupplierReleasePartsViewController.m */,
 			);
 			path = releaseParts;
+			sourceTree = "<group>";
+		};
+		9B93004B1F5A493D00E4E7C0 /* CustomShoppingCartView */ = {
+			isa = PBXGroup;
+			children = (
+				9B93004C1F5A498100E4E7C0 /* CustomShoppingCartCell */,
+				9B93004D1F5A498100E4E7C0 /* CustomShoppingCartHeaderView */,
+			);
+			path = CustomShoppingCartView;
+			sourceTree = "<group>";
+		};
+		9B93004C1F5A498100E4E7C0 /* CustomShoppingCartCell */ = {
+			isa = PBXGroup;
+			children = (
+				9B9300541F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.h */,
+				9B9300551F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.m */,
+			);
+			path = CustomShoppingCartCell;
+			sourceTree = "<group>";
+		};
+		9B93004D1F5A498100E4E7C0 /* CustomShoppingCartHeaderView */ = {
+			isa = PBXGroup;
+			children = (
+				9B9300511F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.h */,
+				9B9300521F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.m */,
+			);
+			path = CustomShoppingCartHeaderView;
 			sourceTree = "<group>";
 		};
 		9B9703D31F0205870074D94A /* Classes */ = {
@@ -2151,6 +2185,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B7C14E61F21E05200CCD7CD /* HKXUserVertificationCodeResultModel.m in Sources */,
+				9B9300561F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.m in Sources */,
 				9B8813B71F5446230009DB86 /* HKXMineOwnerEquipmentListViewController.m in Sources */,
 				9B8AA5DD1F16042200E5F662 /* HKXSupplierPartsAndEquipmentManagmentViewController.m in Sources */,
 				9B6D7BF31F0CE12B008FDA57 /* HKXServerMoreInfoViewController.m in Sources */,
@@ -2275,6 +2310,7 @@
 				9BA0B48A1F049F360047E0E5 /* HKXHomePageViewController.m in Sources */,
 				9B8954291F57F2130019C799 /* HKXMineSupplierInqiryListModel.m in Sources */,
 				9B382C0A1F29DC1100ECA17F /* HKXSupplierPartsManagementModel.m in Sources */,
+				9B9300531F5A4DDF00E4E7C0 /* HKXCsutomShoppingCartCollectionReusableView.m in Sources */,
 				9B9EE5CD1F25CB1A00A95247 /* ProvinceModel.m in Sources */,
 				9B7EAE5B1F41396000F09C4D /* HKXMineServerOrderListModel.m in Sources */,
 				9B852D511F27483000779C18 /* HKXMineOwnerInfoModel.m in Sources */,

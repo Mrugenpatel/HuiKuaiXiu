@@ -328,4 +328,12 @@
  @param complete 修改默认收货地址的结果
  */
 + (void)sendRequestWithAddId:(NSString *)addId WithUserId:(NSString *)userId ToGetMineUpdateDefaultAddressResult:(void (^)(id data))complete;
+
+/**
+ 根据购物车商品id获得删除该商品的结果
+
+ @param goodsId 商品id
+ @param complete 删除结果
+ */
++ (void)sendRequestWithGoodsId:(NSString * )goodsId ToGetMineDeleteCartGoodsResult:(void (^)(id data))complete;
 @end
