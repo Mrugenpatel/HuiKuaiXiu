@@ -180,6 +180,8 @@
 		EF9E78E71F2B30D000FC40F8 /* goodsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF9E78E11F2B30D000FC40F8 /* goodsTableViewCell.xib */; };
 		EFB305541F4C21BA005EA0AA /* HKXNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB305531F4C21BA005EA0AA /* HKXNavigationController.m */; };
 		EFBD90DC1F394A70000D12B9 /* HKXMineOwnerRepairListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFBD90D91F394A70000D12B9 /* HKXMineOwnerRepairListViewController.m */; };
+		EFC0ACED1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACEC1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m */; };
+		EFC0ACF01F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACEF1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m */; };
 		EFC517951F58EE2600830283 /* SeverMyByLeaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517941F58EE2600830283 /* SeverMyByLeaseViewController.m */; };
 		EFC517991F58EE3E00830283 /* SupplierMyByLeaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517981F58EE3E00830283 /* SupplierMyByLeaseViewController.m */; };
 		EFC5179D1F58EE4F00830283 /* OwerMyleaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC5179C1F58EE4F00830283 /* OwerMyleaseViewController.m */; };
@@ -531,6 +533,10 @@
 		EFB305531F4C21BA005EA0AA /* HKXNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXNavigationController.m; sourceTree = "<group>"; };
 		EFBD90D81F394A70000D12B9 /* HKXMineOwnerRepairListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineOwnerRepairListViewController.h; sourceTree = "<group>"; };
 		EFBD90D91F394A70000D12B9 /* HKXMineOwnerRepairListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineOwnerRepairListViewController.m; sourceTree = "<group>"; };
+		EFC0ACEB1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierSaleListHeaderView.h; sourceTree = "<group>"; };
+		EFC0ACEC1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierSaleListHeaderView.m; sourceTree = "<group>"; };
+		EFC0ACEE1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierSaleListFooterView.h; sourceTree = "<group>"; };
+		EFC0ACEF1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierSaleListFooterView.m; sourceTree = "<group>"; };
 		EFC517931F58EE2600830283 /* SeverMyByLeaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeverMyByLeaseViewController.h; sourceTree = "<group>"; };
 		EFC517941F58EE2600830283 /* SeverMyByLeaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeverMyByLeaseViewController.m; sourceTree = "<group>"; };
 		EFC517971F58EE3E00830283 /* SupplierMyByLeaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupplierMyByLeaseViewController.h; sourceTree = "<group>"; };
@@ -644,7 +650,6 @@
 				9B34B81F1F4FB50700A39B3A /* buyingDetail */,
 				9B34B8201F4FB52200A39B3A /* HKXMineBuyingListViewController.h */,
 				9B34B8211F4FB52200A39B3A /* HKXMineBuyingListViewController.m */,
-				EFC517BB1F596B5D00830283 /* Model */,
 			);
 			path = buyingList;
 			sourceTree = "<group>";
@@ -663,8 +668,11 @@
 			children = (
 				9B34B8271F4FF48800A39B3A /* HKXMineSaleListViewController.h */,
 				9B34B8281F4FF48800A39B3A /* HKXMineSaleListViewController.m */,
+				EFC0ACEA1F5CE5B800A4D576 /* View */,
+				EFC517BB1F596B5D00830283 /* Model */,
 			);
-			path = saleList;
+			name = saleList;
+			path = ../Server/saleList;
 			sourceTree = "<group>";
 		};
 		9B382C031F29DC1100ECA17F /* HKXSupplierPartsManagementModel */ = {
@@ -1144,6 +1152,7 @@
 		9B8AA5CE1F16030D00E5F662 /* supplier */ = {
 			isa = PBXGroup;
 			children = (
+				9B34B8261F4FF41C00A39B3A /* saleList */,
 				EFC517961F58EE2B00830283 /* MyLease */,
 				9B8813B11F543A780009DB86 /* askValue */,
 				9B8AA5D21F16039E00E5F662 /* PartsManagment */,
@@ -1157,7 +1166,6 @@
 			isa = PBXGroup;
 			children = (
 				EFC517921F58EE1100830283 /* MyLease */,
-				9B34B8261F4FF41C00A39B3A /* saleList */,
 				9B34B81E1F4FB50700A39B3A /* buyingList */,
 				9B740CB21F4E7A9D00E32A8E /* shoppingCart */,
 				9B740CA31F4E687C00E32A8E /* myWallet */,
@@ -1943,6 +1951,17 @@
 			path = RepairList;
 			sourceTree = "<group>";
 		};
+		EFC0ACEA1F5CE5B800A4D576 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				EFC0ACEB1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.h */,
+				EFC0ACEC1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m */,
+				EFC0ACEE1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.h */,
+				EFC0ACEF1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		EFC517921F58EE1100830283 /* MyLease */ = {
 			isa = PBXGroup;
 			children = (
@@ -1979,6 +1998,7 @@
 				EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */,
 			);
 			name = Model;
+			path = ../buyingList;
 			sourceTree = "<group>";
 		};
 		EFE7EA2F1F413B5E00BFD10A /* Guide */ = {
@@ -2158,6 +2178,7 @@
 				9B9943831F3D87B60034AC88 /* HKXMinePayViewController.m in Sources */,
 				EF9E78B31F2B304B00FC40F8 /* myview.m in Sources */,
 				9B8954281F57F2130019C799 /* HKXMineSupplierInqiryListData.m in Sources */,
+				EFC0ACED1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m in Sources */,
 				9B74CC781F56B6C2002FE4F9 /* HKXMineShoppingCartListData.m in Sources */,
 				9B74CC7A1F56B6C2002FE4F9 /* HKXMineShoppingCartListShopcartList.m in Sources */,
 				9B8706F21F1DE28F0043BB0C /* HKXRepairMapViewController.m in Sources */,
@@ -2233,6 +2254,7 @@
 				9B78E13A1F06308400ADBC23 /* CustomSubmitView.m in Sources */,
 				9B852D521F27483000779C18 /* HKXMineServeInfoData.m in Sources */,
 				EF9E78B01F2B304B00FC40F8 /* JGDownListMenu.m in Sources */,
+				EFC0ACF01F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m in Sources */,
 				9B7C14E51F21E05200CCD7CD /* HKXUserVertificationCodeData.m in Sources */,
 				EF400D911F3AD8CE0050D36A /* MBProgressHUD+NH.m in Sources */,
 				EF9E78CA1F2B305B00FC40F8 /* issueLeaseViewController.m in Sources */,

@@ -71,7 +71,7 @@
     
     [_buyingCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     [_buyingCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
-    
+    [_buyingCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footer"];
     
 }
 #pragma mark - ConfigData
@@ -93,7 +93,6 @@
         if ([dicts[@"success"] boolValue] == YES) {
             
             self.storeArr = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
-            NSLog(@"aaaaa%@",self.storeArr);
             [_buyingCollectionView reloadData];
             
         }else{
@@ -107,9 +106,7 @@
         [self.view hideActivity];
     
     }];
-
-    
-    
+ 
 }
 #pragma mark - Action
 #pragma mark - Private Method
@@ -119,14 +116,9 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    if (indexPath.section % 3 == 0)
-    {
-        return CGSizeMake(ScreenWidth, 125 * myDelegate.autoSizeScaleY);
-    }
-    else
-    {
-        return CGSizeMake(ScreenWidth, 185 * myDelegate.autoSizeScaleY);
-    }
+
+    return CGSizeMake(ScreenWidth, 125 * myDelegate.autoSizeScaleY);
+    
 }
 //设置整个区的UIEdgeInsets
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -149,11 +141,29 @@
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     return CGSizeMake(ScreenWidth, 30 * myDelegate.autoSizeScaleY);
 }
+//设置区脚大小
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
+   
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    HKXSupplierOrderStoreModel * store = self.storeArr[section];
+    //卖家待发货
+    if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"10"]){
+        
+    return CGSizeMake(0, 0);
+        
+    }else{
+        
+    return CGSizeMake(ScreenWidth, 45 * myDelegate.autoSizeScaleY);
+        
+    }
+}
+
 #pragma mark UICollectionViewDataSource
 //返回collectionView的区个数
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    NSLog(@"sssssssssss%ld",self.storeArr.count);
     return self.storeArr.count;
 }
 //返回collectionView的item的个数
@@ -169,6 +179,7 @@
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     HKXSupplierOrderStoreModel * store = self.storeArr[indexPath.section];
+     UICollectionReusableView *reusableView = nil;
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         //在这设置区头
         UICollectionReusableView * headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header" forIndexPath:indexPath];
@@ -181,9 +192,7 @@
         [reStoreNameLabel removeFromSuperview];
         
         headerView.backgroundColor = [UIColor colorWithRed:235 / 255.0 green:235 / 255.0 blue:235 / 255.0 alpha:1];
-        
-        
-        
+
         UILabel * storeNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(17 * myDelegate.autoSizeScaleX, 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"凝碧液压店铺" WithFont:14 * myDelegate.autoSizeScaleX], 14 * myDelegate.autoSizeScaleX)];
         storeNameLabel.text = store.companyName;
         storeNameLabel.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
@@ -193,27 +202,100 @@
         UIButton * deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         deleteBtn.tag = 80002;
         deleteBtn.frame = CGRectMake(250 * myDelegate.autoSizeScaleX, 5 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"卖家待发货gdgfdgdg" WithFont:14 * myDelegate.autoSizeScaleX], 20 * myDelegate.autoSizeScaleY);
-        if (indexPath.section % 3 == 0)
-        {
-            [deleteBtn setTitle:@"卖家待发货" forState:UIControlStateNormal];
-        }
-        else
-        {
-            [deleteBtn setTitle:@"卖家已发货" forState:UIControlStateNormal];
-        }
+        
+        [deleteBtn setTitle:store.orderMessage forState:UIControlStateNormal];
         [deleteBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         
         [headerView addSubview:deleteBtn];
         
-        return headerView;
+         reusableView = headerView;
     }else if([kind isEqualToString:UICollectionElementKindSectionFooter])
     {
         //在这设置区脚
-        return nil;
-    }else
-    {
-        return nil;
+        UICollectionReusableView * footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footer" forIndexPath:indexPath];
+        footerView.tag = indexPath.section;
+        UIButton * reDeleteBtn1 = [footerView viewWithTag:90006];
+        [reDeleteBtn1 removeFromSuperview];
+        UIButton * reDeleteBtn2 = [footerView viewWithTag:90007];
+        [reDeleteBtn2 removeFromSuperview];
+            //        防重用
+        for (int i = 0; i < 2; i ++){
+                
+            UIButton * actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            actionBtn.frame = CGRectMake(138 * myDelegate.autoSizeScaleX + (127 * i) * myDelegate.autoSizeScaleX, 0, 100 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
+            actionBtn.layer.cornerRadius = 2;
+            actionBtn.clipsToBounds = YES;
+            actionBtn.tag = 90006 + i;
+            [actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            actionBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#d59423"];
+            [actionBtn addTarget:self action:@selector(actionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            //卖家待发货
+            if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"10"]){
+                
+                
+                
+            } //交易成功
+            else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"0"]){
+                    
+                    if (i == 0 ) {
+                        
+                        [actionBtn setTitle:@"删除订单" forState:UIControlStateNormal];
+                    }else{
+                        
+                        [actionBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+                    }
+                    
+                }//待付款
+                else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
+                    if (i == 0 ) {
+                        
+                        actionBtn.hidden = YES;
+                    }else{
+                        
+                        [actionBtn setTitle:@"取消定单" forState:UIControlStateNormal];
+                    }
+                    
+                }//卖家已发货
+                else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"2"]){
+                    
+                    if (i == 0 ) {
+                        
+                        [actionBtn setTitle:@"确认收货" forState:UIControlStateNormal];
+                    }else{
+                        
+                        [actionBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+                    }
+                    
+                }//交易成功
+                else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"3"]){
+                    
+                    if (i == 0 ) {
+                        
+                        [actionBtn setTitle:@"删除订单" forState:UIControlStateNormal];
+                    }else{
+                        
+                        [actionBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+                    }
+                }//已取消
+                else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"-1"]){
+                    
+                    if (i == 0 ) {
+                        
+                         actionBtn.hidden = YES;
+                    }else{
+                        
+                        [actionBtn setTitle:@"删除订单" forState:UIControlStateNormal];
+                    }
+                }
+                [footerView addSubview:actionBtn];
+                reusableView = footerView;
+            }
+ 
+        //}
+
     }
+    
+    return reusableView;
 }
 
 //设置每个item的内容
@@ -257,7 +339,7 @@
     
     UILabel * goodsTypeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(goodsNameLabel.frame) + 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 14 * myDelegate.autoSizeScaleX)];
     goodsTypeLabel.tag = 90003;
-    goodsTypeLabel.text = @"产品型号：XXXXXXX";
+    goodsTypeLabel.text = goods.goodModel;
     goodsTypeLabel.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
     goodsTypeLabel.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
     [cell addSubview:goodsTypeLabel];
@@ -265,60 +347,19 @@
     UILabel * priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(goodsTypeLabel.frame) + 13 * myDelegate.autoSizeScaleY, 110 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX)];
     priceLabel.tag = 90004;
     priceLabel.textColor = [UIColor redColor];
-    priceLabel.text = [NSString stringWithFormat:@"¥%.2f",1200.00];
+    priceLabel.text = [NSString stringWithFormat:@"¥%@",goods.goodPrice];
     priceLabel.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
     [cell addSubview:priceLabel];
     
     UILabel * goodsNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 164 * myDelegate.autoSizeScaleX, 82 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"数量：2" WithFont:14 * myDelegate.autoSizeScaleX], 14 * myDelegate.autoSizeScaleX)];
     goodsNumLabel.tag = 90005;
-    goodsNumLabel.text = @"数量：2";
+    goodsNumLabel.text = [NSString stringWithFormat:@"数量:%@",goods.buyNumber];
     goodsNumLabel.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
     [cell addSubview:goodsNumLabel];
-    
-    if (indexPath.section % 3 != 0)
-    {
-        for (int i = 0; i < 2; i ++)
-        {
-            UIButton * actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            actionBtn.frame = CGRectMake(138 * myDelegate.autoSizeScaleX + (127 * i) * myDelegate.autoSizeScaleX, 125 * myDelegate.autoSizeScaleY, 100 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
-            actionBtn.layer.cornerRadius = 2;
-            actionBtn.clipsToBounds = YES;
-            actionBtn.tag = 90006 + i;
-//            [actionBtn setBackgroundColor:[UIColor redColor]];
-            if (i == 1)
-            {
-                [actionBtn setTitle:@"再来一单" forState:UIControlStateNormal];
-                [actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                actionBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa304"];
-            }
-            else
-            {
-                if (indexPath.section % 3 == 1)
-                {
-                    
-                    [actionBtn setTitle:@"确认收货" forState:UIControlStateNormal];
-                    [actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                    actionBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#d59423"];
-                }
-                else
-                {
-                    if (indexPath.section % 3 == 2)
-                    {
-                        
-                        [actionBtn setTitle:@"删除订单" forState:UIControlStateNormal];
-                        [actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                        actionBtn.backgroundColor = [UIColor redColor];
-                    }
-                }
-            }
-//
-            [cell addSubview:actionBtn];
-        }
-    }
-    
-    
+
     return cell;
 }
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"%ld区 %ld个",indexPath.section,indexPath.row);
@@ -326,6 +367,174 @@
     buyingDetailVC.navigationItem.title = @"订单详情";
     [self.navigationController pushViewController:buyingDetailVC animated:YES];
 }
+
+- (void)actionBtnClick:(UIButton *)actionBtn{
+    
+    
+    UIView * view = [actionBtn superview];
+    
+    HKXSupplierOrderStoreModel * store = self.storeArr[view.tag];
+    if (actionBtn.tag == 90006) {
+       
+        //交易成功
+        if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"0"]){
+            
+            //删除订单
+            [self delaeteOrderWithOrderId:store.orderId];
+            
+        }//待付款
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
+            
+            
+            
+        }//卖家已发货
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"2"]){
+            
+           //确认收货
+            [self confirmTakeGoodsWithOrderId:store.orderId];
+                       
+        }//交易成功
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"3"]){
+            
+            //删除订单
+             [self delaeteOrderWithOrderId:store.orderId];
+            
+        }//已取消
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"-1"]){
+            
+            
+        
+        }
+        
+    }else if(actionBtn.tag == 90007){
+        
+        //交易成功
+        if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"0"]){
+            
+            //再来一单
+            
+        }//待付款
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
+            
+            //取消订单
+            [self cancelOrderWithOrderId:store.orderId];
+            
+        }//卖家已发货
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"2"]){
+            
+            //再来一单
+            
+        }//交易成功
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"3"]){
+            
+            //再来一单
+            
+        }//已取消
+        else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"-1"]){
+            
+            //删除订单
+            [self delaeteOrderWithOrderId:store.orderId];
+            
+        }
+
+    }
+   
+    
+}
+
+- (void)cancelOrderWithOrderId:(NSString *)orderId{
+    
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
+
+
+- (void)confirmTakeGoodsWithOrderId:(NSString *)orderId{
+    
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
+
+- (void)delaeteOrderWithOrderId:(NSString *)orderId{
+    
+
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
 #pragma mark - Setters & Getters
 
 - (void)didReceiveMemoryWarning {

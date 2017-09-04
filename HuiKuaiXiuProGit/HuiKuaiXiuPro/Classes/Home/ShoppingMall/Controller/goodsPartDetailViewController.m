@@ -429,7 +429,10 @@
 //加入购物车
 - (void)addShoppingCar{
     
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:self.partModel.mId,@"mid",self.partModel.pId,@"pid",[NSNumber numberWithInt:[count intValue]],@"buynumber",nil];
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    double uId = [defaults doubleForKey:@"userDataId"];
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"mid",self.partModel.pId,@"pid",[NSNumber numberWithInt:[count intValue]],@"buynumber",nil];
     NSLog(@"%@",dict);
     
     [self.view showActivity];
