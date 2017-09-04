@@ -952,4 +952,87 @@
         NSLog(@"error = %@",error.description);
     }];
 }
+
+/**
+ 获得购物车下单结果
+ 
+ @param cartId 商品id
+ @param companyId 商铺id
+ @param userId userid
+ @param receiveName 收货人姓名
+ @param receiveTel 收货人电话
+ @param receiveAdd 收货人地址
+ @param complete 下单结果
+ */
++ (void)sendRequestWithCartId:(NSString *)cartId WithCompanyId:(NSString *)companyId WithUserID:(NSString *)userId WithReceiveName:(NSString *)receiveName WithReceiveTel:(NSString *)receiveTel WithReceiveAdd:(NSString *)receiveAdd ToGetOrderResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           cartId,@"cartId",
+                           companyId,@"companyId",
+                           userId,@"uId",
+                           receiveName,@"addName",
+                           receiveTel,@"addTel",
+                           receiveAdd,@"add",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@userOrder/add.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 供应商上下架配件商品接口
+ 
+ @param goodsId 配件id
+ @param goodsStatus 配件状态
+ @param complete 上下架结果
+ */
++ (void)sendRequestWithGoodsId:(NSString *)goodsId WithGoodsStatus:(NSString *)goodsStatus ToGetUpdateReckResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           goodsId,@"pId",
+                           goodsStatus,@"status",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@supplierbase/updateRack.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 供应商上下架整机商品接口
+ 
+ @param equipmentId 整机id
+ @param equipmentStatus 整机状态
+ @param complete 上下架结果
+ */
++ (void)sendRequestWithEquipmentID:(NSString *)equipmentId WithEquipmentStatus:(NSString *)equipmentStatus ToGetUpdateEquipmentReckResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           equipmentId,@"pmaId",
+                           equipmentStatus,@"status",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@supplier/updateRack.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
 @end

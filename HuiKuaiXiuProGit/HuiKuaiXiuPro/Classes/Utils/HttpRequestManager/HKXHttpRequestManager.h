@@ -337,5 +337,35 @@
  */
 + (void)sendRequestWithGoodsId:(NSString * )goodsId ToGetMineDeleteCartGoodsResult:(void (^)(id data))complete;
 
+/**
+ 获得购物车下单结果
+
+ @param cartId 商品id
+ @param companyId 商铺id
+ @param userId userid
+ @param receiveName 收货人姓名
+ @param receiveTel 收货人电话
+ @param receiveAdd 收货人地址
+ @param complete 下单结果
+ */
++ (void)sendRequestWithCartId:(NSString *)cartId WithCompanyId:(NSString *)companyId WithUserID:(NSString *)userId WithReceiveName:(NSString *)receiveName WithReceiveTel:(NSString *)receiveTel WithReceiveAdd:(NSString *)receiveAdd ToGetOrderResult:(void (^)(id data))complete;
+
+/**
+ 供应商上下架配件商品接口
+
+ @param goodsId 配件id
+ @param goodsStatus 配件状态
+ @param complete 上下架结果
+ */
++ (void)sendRequestWithGoodsId:(NSString *)goodsId WithGoodsStatus:(NSString *)goodsStatus ToGetUpdateReckResult:(void (^)(id data))complete;
+
+/**
+ 供应商上下架整机商品接口
+
+ @param equipmentId 整机id
+ @param equipmentStatus 整机状态
+ @param complete 上下架结果
+ */
++ (void)sendRequestWithEquipmentID:(NSString *)equipmentId WithEquipmentStatus:(NSString *)equipmentStatus ToGetUpdateEquipmentReckResult:(void (^)(id data))complete;
 
 @end

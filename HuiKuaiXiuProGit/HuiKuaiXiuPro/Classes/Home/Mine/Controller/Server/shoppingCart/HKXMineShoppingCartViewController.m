@@ -45,13 +45,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.automaticallyAdjustsScrollViewInsets = YES;
     [self createUI];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
+    [self.selectGoodsArray removeAllObjects];
     [self configData];
+    [self createUI];
 }
 #pragma mark - CreateUI
 - (void)createUI
@@ -62,7 +65,7 @@
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc] init];
     flowLayOut.scrollDirection = UICollectionViewScrollDirectionVertical;
     
-    _shoppingCartCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0 , ScreenWidth, ScreenHeight  - 50 * myDelegate.autoSizeScaleY) collectionViewLayout:flowLayOut];
+    _shoppingCartCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64 , ScreenWidth, ScreenHeight  - 50 * myDelegate.autoSizeScaleY - 64) collectionViewLayout:flowLayOut];
     _shoppingCartCollectionView.backgroundColor = [UIColor whiteColor];
     _shoppingCartCollectionView.delegate = self;
     _shoppingCartCollectionView.dataSource = self;
@@ -92,7 +95,7 @@
     allSelectLabel.textColor = [CommonMethod getUsualColorWithString:@"#333333"];
     [_totalPriceView addSubview:allSelectLabel];
     
-    NSString * totalPrice = [NSString stringWithFormat:@"合计：¥0"];
+    NSString * totalPrice = [NSString stringWithFormat:@"合计：¥0.00"];
     UILabel * totalPriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(allSelectLabel.frame) + 80 * myDelegate.autoSizeScaleX, 8 * myDelegate.autoSizeScaleY, 140 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX)];
     totalPriceLabel.textColor = [CommonMethod getUsualColorWithString:@"#333333"];
     totalPriceLabel.text = totalPrice;
@@ -145,10 +148,24 @@
  */
 - (void)submitBtnClick:(UIButton *)btn
 {
+    double totalPrice = 0;
+    for (HKXMineShoppingCartListShopcartList * goodsModel in self.selectGoodsArray)
+    {
+        totalPrice = totalPrice + goodsModel.totalprice;
+    }
+    if (totalPrice == 0)
+    {
+        [self showHint:@"您未选中任何商品"];
+    }
+    else
+    {
+        HKXMineShoppingGoodsDetailViewController * detailVC = [[HKXMineShoppingGoodsDetailViewController alloc] init];
+        detailVC.navigationItem.title = @"确认订单";
+        detailVC.totalCount = [NSString stringWithFormat:@"%.2f",totalPrice];
+        detailVC.selectGoodsArray = self.selectGoodsArray;
+        [self.navigationController pushViewController:detailVC animated:YES];
+    }
     
-    HKXMineShoppingGoodsDetailViewController * detailVC = [[HKXMineShoppingGoodsDetailViewController alloc] init];
-    detailVC.navigationItem.title = @"确认订单";
-    [self.navigationController pushViewController:detailVC animated:YES];
 }
 /**
  点击全选按钮选中购物车中所有商品
@@ -285,13 +302,13 @@
         HKXMineShoppingCartListData * shopData = self.shopArray[cell.tag - 90000];
         for (HKXMineShoppingCartListShopcartList * goodsModel in shopData.shopcartList)
         {
-            if (goodsModel.isSelected == YES)
+            if (goodsModel.isSelected == NO)
             {
-                shopData.isSelected = YES;
+                shopData.isSelected = NO;
             }
             else
             {
-                shopData.isSelected = NO;
+                shopData.isSelected = YES;
             }
         }
     }
@@ -449,6 +466,7 @@
     NSLog(@"%ld区 %ld个",indexPath.section,indexPath.row);
 }
 #pragma mark - Setters & Getters
+
 - (NSMutableArray *)shopArray
 {
     if (!_shopArray)
