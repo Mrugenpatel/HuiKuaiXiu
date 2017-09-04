@@ -17,19 +17,23 @@
 
 #import "UIImageView+WebCache.h"
 
-@interface HKXMineShoppingCartViewController ()<UICollectionViewDelegate , UICollectionViewDataSource , UICollectionViewDelegateFlowLayout>
+#import "HKXCsutomShoppingCartCollectionReusableView.h"
+#import "HKXCustomShoppingCartCollectionViewCell.h"
+
+#import "CustomAlertView.h"
+
+#import "HKXMineServeCertificateProfileModel.h"//删除商品结果
+
+@interface HKXMineShoppingCartViewController ()<UICollectionViewDelegate , UICollectionViewDataSource , UICollectionViewDelegateFlowLayout ,HKXMineCustomShoppingCartCollectionViewCellDelegate , HKXCsutomShoppingCartCollectionReusableViewDelegate>
 {
     UICollectionView * _shoppingCartCollectionView;//购物车
     UIView           * _totalPriceView;//总价view
 }
 
+@property (nonatomic , strong) NSMutableArray * shopArray;//所有商铺数组
+@property (nonatomic , strong) NSMutableArray * selectGoodsArray;//所有选中商品数组
 
-@property (nonatomic , strong) NSMutableArray * allGoodsStautsArray;//所有商品数组
-@property (nonatomic , strong) NSMutableArray * allStoreStatusArray;//所有商铺数组
-@property (nonatomic , strong) NSMutableArray * storeBtnArray;//商铺选中按钮数组
-@property (nonatomic , strong) NSMutableArray * goodsBtnArray;//商品选中按钮数组
-@property (nonatomic , strong) NSMutableArray * selectedGoodsArray;//选中商品数组
-@property (nonatomic , strong) NSMutableArray * stepperArray;//数量加减器数组
+@property (nonatomic , assign)BOOL isSelectedAll;//是否全选
 
 @end
 
@@ -54,7 +58,6 @@
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.view.backgroundColor = [UIColor whiteColor];
-    NSLog(@"000000");
     
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc] init];
     flowLayOut.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -66,8 +69,8 @@
     _shoppingCartCollectionView.contentInset = UIEdgeInsetsMake(7 * myDelegate.autoSizeScaleY, 0, 0, 0);
     [self.view addSubview:_shoppingCartCollectionView];
     
-    [_shoppingCartCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-    [_shoppingCartCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
+    [_shoppingCartCollectionView registerClass:[HKXCustomShoppingCartCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    [_shoppingCartCollectionView registerClass:[HKXCsutomShoppingCartCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
     
     _totalPriceView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_shoppingCartCollectionView.frame) + 1 * myDelegate.autoSizeScaleY, ScreenWidth, 49 * myDelegate.autoSizeScaleY)];
     _totalPriceView.layer.borderColor = [UIColor colorWithRed:235 / 255.0 green:235 / 255.0 blue:235 / 255.0 alpha:1].CGColor;
@@ -89,14 +92,15 @@
     allSelectLabel.textColor = [CommonMethod getUsualColorWithString:@"#333333"];
     [_totalPriceView addSubview:allSelectLabel];
     
-    NSString * totalPrice = [NSString stringWithFormat:@"合计：¥%.1f",1220.0];
-    UILabel * totalPriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(allSelectLabel.frame) + 91 * myDelegate.autoSizeScaleX, 8 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:totalPrice WithFont:15 * myDelegate.autoSizeScaleX], 15 * myDelegate.autoSizeScaleX)];
+    NSString * totalPrice = [NSString stringWithFormat:@"合计：¥0"];
+    UILabel * totalPriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(allSelectLabel.frame) + 80 * myDelegate.autoSizeScaleX, 8 * myDelegate.autoSizeScaleY, 140 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX)];
     totalPriceLabel.textColor = [CommonMethod getUsualColorWithString:@"#333333"];
     totalPriceLabel.text = totalPrice;
+    totalPriceLabel.tag = 40001;
     totalPriceLabel.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
     [_totalPriceView addSubview:totalPriceLabel];
     
-    UILabel * transportFeiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(allSelectLabel.frame) + 91 * myDelegate.autoSizeScaleX, CGRectGetMaxY(totalPriceLabel.frame) + 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"不含运费" WithFont:13 * myDelegate.autoSizeScaleX], 13 * myDelegate.autoSizeScaleX)];
+    UILabel * transportFeiLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(allSelectLabel.frame) + 80 * myDelegate.autoSizeScaleX, CGRectGetMaxY(totalPriceLabel.frame) + 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"不含运费" WithFont:13 * myDelegate.autoSizeScaleX], 13 * myDelegate.autoSizeScaleX)];
     transportFeiLabel.text = @"不含运费";
     transportFeiLabel.font = [UIFont systemFontOfSize:13 * myDelegate.autoSizeScaleX];
     transportFeiLabel.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
@@ -118,23 +122,10 @@
         HKXMineShoppingCartListModel * model = data;
         if (model.success)
         {
-            for (int i = 0; i < model.data.count; i++ )
+            [self.shopArray removeAllObjects];
+            for (HKXMineShoppingCartListData * shopModel in model.data)
             {
-                HKXMineShoppingCartListData * storeModel = model.data[i];
-                [self.allStoreStatusArray addObject:storeModel];
-                
-                NSMutableArray * storeArray = [NSMutableArray array];
-                for (HKXMineShoppingCartListShopcartList * goodsModel in storeModel.shopcartList)
-                {
-                    [storeArray addObject:goodsModel];
-                }
-                [self.allGoodsStautsArray addObject:storeArray];
-                
-                NSMutableArray * eachGoodsBtnArray = [NSMutableArray array];
-                [self.goodsBtnArray addObject:eachGoodsBtnArray];
-                
-                NSMutableArray * eachStepperArray = [NSMutableArray array];
-                [self.stepperArray addObject:eachStepperArray];
+                [self.shopArray addObject:shopModel];
             }
             [_shoppingCartCollectionView reloadData];
         }
@@ -166,128 +157,210 @@
  */
 - (void)selectAllGoodsBtnClick:(UIButton *)btn
 {
-    btn.selected = !btn.selected;
     NSLog(@"选中所有商品");
+    
+//    全选之前清空数据
+    [self.selectGoodsArray removeAllObjects];
     if (btn.selected == YES)
     {
-//        改变商铺按钮选中状态
-        for (HKXMineShoppingCartListData * storeData in self.allStoreStatusArray)
+        btn.selected = NO;
+        self.isSelectedAll = NO;
+        for (HKXMineShoppingCartListData * shopData in self.shopArray)
         {
-            storeData.isSelected = YES;
-        }
-//        改变商品选中状态
-        for (NSMutableArray * arr in self.allGoodsStautsArray)
-        {
-            for (HKXMineShoppingCartListShopcartList * goodsModel in arr)
+            shopData.isSelected = NO;
+            for (HKXMineShoppingCartListShopcartList * goodsModel in shopData.shopcartList)
             {
-                goodsModel.isSelected = YES;
+                goodsModel.isSelected = NO;
             }
         }
     }
     else
     {
-        //        改变商铺按钮选中状态
-        for (HKXMineShoppingCartListData * storeData in self.allStoreStatusArray)
+        btn.selected = YES;
+        self.isSelectedAll = YES;
+        for (HKXMineShoppingCartListData * shopData in self.shopArray)
         {
-            storeData.isSelected = NO;
-        }
-        //        改变商品选中状态
-        for (NSMutableArray * arr in self.allGoodsStautsArray)
-        {
-            for (HKXMineShoppingCartListShopcartList * goodsModel in arr)
-            {
-                goodsModel.isSelected = NO;
-            }
-        }
-    }
-    [_shoppingCartCollectionView reloadData];
-}
-
-/**
- 选中该店铺所有商品或者删除所有商品
-
- @param btn btn
- */
-- (void)selectThisStoreAllGoodsBtnClick:(UIButton *)btn
-{
-    btn.selected = !btn.selected;
-    if (btn.tag == 80000)
-    {
-        NSLog(@"选中该店铺所有商品");
-        if (btn.selected == YES)
-        {
-            NSInteger index = [self.storeBtnArray indexOfObject:btn];
-            NSMutableArray * goodsStatusArray = self.allGoodsStautsArray[index];
-            
-            for (HKXMineShoppingCartListShopcartList * goodsModel in goodsStatusArray)
+            shopData.isSelected = YES;
+            for (HKXMineShoppingCartListShopcartList * goodsModel in shopData.shopcartList)
             {
                 goodsModel.isSelected = YES;
+                [self.selectGoodsArray addObject:goodsModel];
             }
         }
-        else
-        {
-            NSInteger index = [self.storeBtnArray indexOfObject:btn];
-            NSMutableArray * goodsStatusArray = self.allGoodsStautsArray[index];
-            
-            for (HKXMineShoppingCartListShopcartList * goodsModel in goodsStatusArray)
-            {
-                goodsModel.isSelected = NO;
-            }
-        }
-        
     }
-    if (btn.tag == 80002)
-    {
-        NSLog(@"删除该店铺所有商品");
-    }
+    [self getTotalPrice];
     [_shoppingCartCollectionView reloadData];
 }
 
-/**
- 点击按钮选中该商品
-
- @param btn btn
- */
-- (void)selectGoodsBtnClick:(UIButton *)btn
+#pragma mark - Private Method
+- (void)dismissClick
 {
-    btn.selected = !btn.selected;
-    
-    HKXMineShoppingCartListData * storeData = self.allStoreStatusArray[btn.tag - 50000];
-    
-    for (HKXMineShoppingCartListShopcartList * goodsModel in self.allGoodsStautsArray[btn.tag - 50000])
+    CustomAlertView * alert = [self.view viewWithTag:688];
+    [alert removeFromSuperview];
+}
+- (void)checkShopState
+{
+    NSInteger totalSelect = 0;
+    for (HKXMineShoppingCartListData * shopData in self.shopArray)
     {
-        if ([self.selectedGoodsArray containsObject:goodsModel] == YES)
+        if (shopData.isSelected == YES)
         {
-            storeData.isSelected = YES;
+            totalSelect ++;
         }
     }
-    [_shoppingCartCollectionView reloadData];
+    if (totalSelect == self.shopArray.count)
+    {
+        self.isSelectedAll = YES;
+        UIButton * selectAllBtn = [_totalPriceView viewWithTag:40000];
+        selectAllBtn.selected = YES;
+    }
+    else
+    {
+        self.isSelectedAll = NO;
+    }
+    [self getTotalPrice];
+    
 }
+/**
+ 求总金额
+ */
+- (void)getTotalPrice
+{
+    double totalPrice = 0;
+    for (HKXMineShoppingCartListShopcartList * goodsModel in self.selectGoodsArray)
+    {
+        totalPrice = totalPrice + goodsModel.totalprice;
+    }
+    NSLog(@"---%.2f",totalPrice);
+    UILabel * totalPriceLabel = [_totalPriceView viewWithTag:40001];
+    totalPriceLabel.text = [NSString stringWithFormat:@"合计：¥%.2f",totalPrice];
+}
+#pragma mark - Delegate & Data Source
 
 /**
- 数量选择器
+ 改变购物车数量
 
- @param stepper 数量选择器
+ @param cell 商品所在cell
+ @param count 商品的数量
  */
-- (void)stepperAction:(UIStepper *)stepper
+- (void)changeTheGoodsCount:(HKXCustomShoppingCartCollectionViewCell *)cell Count:(NSInteger)count
 {
-    NSLog(@"----%ld",(long)stepper.value);
-    NSMutableArray * eachStepperArray = self.stepperArray[stepper.tag - 70005];
-    NSInteger index = [eachStepperArray indexOfObject:stepper];
-    NSMutableArray * eachGoodsArray = self.allGoodsStautsArray[stepper.tag - 70005];
-    HKXMineShoppingCartListShopcartList * goodsModel = eachGoodsArray[index];
-    [HKXHttpRequestManager sendRequestWithCartId:[NSString stringWithFormat:@"%ld",(long)goodsModel.carid] WithBuyNumber:[NSString stringWithFormat:@"%ld",(long)stepper.value] ToGetUpdateShoppingCartNumberResult:^(id data) {
+    NSLog(@"****%ld",count);
+    [HKXHttpRequestManager sendRequestWithCartId:[NSString stringWithFormat:@"%ld",(long)cell.goodsModel.carid] WithBuyNumber:[NSString stringWithFormat:@"%ld",count] ToGetUpdateShoppingCartNumberResult:^(id data) {
         HKXMineShoppingCartUpdateCartNumberModel * model = data;
         if (model.success)
         {
-            [eachGoodsArray replaceObjectAtIndex:index withObject:model];
-            NSLog(@"%@",model);
+            cell.goodsModel.totalprice = cell.goodsModel.price * count;
+            cell.goodsModel.buynumber = (int)count;
+            [_shoppingCartCollectionView reloadData];
+            [self getTotalPrice];
+        }
+        else
+        {
+            [self showHint:model.message];
         }
     }];
+}
+
+/**
+ 选中某个商品
+
+ @param cell 商品在的cell
+ */
+- (void)clickWhichLeftBtn:(HKXCustomShoppingCartCollectionViewCell *)cell
+{
+    HKXMineShoppingCartListShopcartList * goodsModel = cell.goodsModel;
+    if (goodsModel.isSelected == YES)
+    {
+        goodsModel.isSelected = NO;
+        [self.selectGoodsArray removeObject:goodsModel];
+        HKXMineShoppingCartListData * shopData = self.shopArray[cell.tag - 90000];
+        shopData.isSelected = NO;
+    }
+    else
+    {
+        goodsModel.isSelected = YES;
+        [self.selectGoodsArray addObject:goodsModel];
+        
+        HKXMineShoppingCartListData * shopData = self.shopArray[cell.tag - 90000];
+        for (HKXMineShoppingCartListShopcartList * goodsModel in shopData.shopcartList)
+        {
+            if (goodsModel.isSelected == YES)
+            {
+                shopData.isSelected = YES;
+            }
+            else
+            {
+                shopData.isSelected = NO;
+            }
+        }
+    }
+    [self checkShopState];
+    [self getTotalPrice];
     [_shoppingCartCollectionView reloadData];
 }
-#pragma mark - Private Method
-#pragma mark - Delegate & Data Source
+
+/**
+ 选中某个商铺的商品
+
+ @param index 商铺的index
+ */
+- (void)clickedWhichHeaderView:(NSInteger)index
+{
+    NSLog(@"----%ld",index);
+    HKXMineShoppingCartListData * shopData = self.shopArray[index - 80000];
+    if (shopData.isSelected)
+    {
+        shopData.isSelected = NO;
+        for (HKXMineShoppingCartListShopcartList * goodsModel in shopData.shopcartList)
+        {
+            goodsModel.isSelected = NO;
+            [self.selectGoodsArray removeObject:goodsModel];
+        }
+    }
+    else
+    {
+        shopData.isSelected = YES;
+        for (HKXMineShoppingCartListShopcartList * goodsModel in shopData.shopcartList)
+        {
+            if (goodsModel.isSelected == NO)
+            {
+                goodsModel.isSelected = YES;
+                [self.selectGoodsArray addObject:goodsModel];
+            }
+        }
+    }
+    [self checkShopState];
+    [self getTotalPrice];
+    [_shoppingCartCollectionView reloadData];
+}
+
+/**
+ 长按cell一秒以上出现删除该商品的提示框
+
+ @param cell 要删除的商品
+ */
+- (void)longPressToDeleteThisGoods:(HKXCustomShoppingCartCollectionViewCell *)cell
+{
+     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    CustomAlertView * alert = [CustomAlertView alertViewWithTitle:@"提示" content:@"确定删除该商品？" cancel:@"取消" sure:@"确定" cancelBtnClick:^{
+        [self dismissClick];
+    } sureBtnClick:^{
+        NSLog(@"调用删除单件商品请求");
+        [self dismissClick];
+        [HKXHttpRequestManager sendRequestWithGoodsId:[NSString stringWithFormat:@"%ld",(long)cell.goodsModel.carid] ToGetMineDeleteCartGoodsResult:^(id data) {
+            HKXMineServeCertificateProfileModel * model = data;
+            [self showHint:model.message];
+            if (model.success)
+            {
+                [self configData];
+            }
+        }];
+        
+    } WithAlertHeight:210 * myDelegate.autoSizeScaleY];
+    alert.tag = 688;
+    [self.view addSubview:alert];
+}
 #pragma mark UICollectionViewDelegateFlowLayout
 //设置每个item的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -320,60 +393,29 @@
 //返回collectionView的区个数
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return self.allStoreStatusArray.count;
+    return self.shopArray.count;
 }
 //返回collectionView的item的个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSMutableArray * goodsArray = self.allGoodsStautsArray[section];
+    HKXMineShoppingCartListData * shopData = self.shopArray[section];
     
-    return goodsArray.count;
+    return shopData.shopcartList.count;
 }
 //设置区头（区脚）
 - (UICollectionReusableView* )collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+//    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         //在这设置区头
-        UICollectionReusableView * headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header" forIndexPath:indexPath];
-        
-//        防重用
-        UIButton * reSelectBtn = [headerView viewWithTag:80000];
-        [reSelectBtn removeFromSuperview];
-        UIButton * reDeleteBtn = [headerView viewWithTag:80002];
-        [reDeleteBtn removeFromSuperview];
-        UILabel * reStoreNameLabel = [headerView viewWithTag:80001];
-        [reStoreNameLabel removeFromSuperview];
-        
-        headerView.backgroundColor = [UIColor colorWithRed:235 / 255.0 green:235 / 255.0 blue:235 / 255.0 alpha:1];
-        
-        HKXMineShoppingCartListData * headerModel = self.allStoreStatusArray[indexPath.section];
-        
-        
-        UIButton * storeSelectBtn = [[UIButton alloc] initWithFrame:CGRectMake(10 * myDelegate.autoSizeScaleX, 9 * myDelegate.autoSizeScaleY, 12 * myDelegate.autoSizeScaleX, 12 * myDelegate.autoSizeScaleX)];
-        
-        storeSelectBtn.tag = 80000;
-        [storeSelectBtn addTarget:self action:@selector(selectThisStoreAllGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [storeSelectBtn setImage:[UIImage imageNamed:@"复选框-未选中"] forState:UIControlStateNormal];
-        [storeSelectBtn setImage:[UIImage imageNamed:@"复选框_已选择"] forState:UIControlStateSelected];
-        storeSelectBtn.selected = headerModel.isSelected;
-        [self.storeBtnArray insertObject:storeSelectBtn atIndex:indexPath.section];
-        [headerView addSubview:storeSelectBtn];
-        
-        UILabel * storeNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(storeSelectBtn.frame) + 10 * myDelegate.autoSizeScaleX, 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:headerModel.companyname WithFont:14 * myDelegate.autoSizeScaleX], 14 * myDelegate.autoSizeScaleX)];
-        storeNameLabel.text = headerModel.companyname;
-        storeNameLabel.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
-        storeNameLabel.tag = 80001;
-        [headerView addSubview:storeNameLabel];
-        
-        UIButton * deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        deleteBtn.tag = 80002;
-        deleteBtn.frame = CGRectMake(320 * myDelegate.autoSizeScaleX, 5 * myDelegate.autoSizeScaleY, 52 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY);
-        [deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
-        [deleteBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [deleteBtn addTarget:self action:@selector(selectThisStoreAllGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [headerView addSubview:deleteBtn];
-        
+        HKXCsutomShoppingCartCollectionReusableView * headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header" forIndexPath:indexPath];
+
+        HKXMineShoppingCartListData * headerModel = self.shopArray[indexPath.section];
+
+        headerView.delegate = self;
+        headerView.tag = 80000 + indexPath.section;
+        [headerView loadDataWithShopData:headerModel];
+
         return headerView;
     }else if([kind isEqualToString:UICollectionElementKindSectionFooter])
     {
@@ -388,97 +430,17 @@
 //设置每个item的内容
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     static NSString* cellIdentifier = @"cell";
-    UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+
+    HKXCustomShoppingCartCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.delegate = self;
+    cell.tag = indexPath.section + 90000;
+    HKXMineShoppingCartListData * shopModel = self.shopArray[indexPath.section];
+    HKXMineShoppingCartListShopcartList * goodsModel = shopModel.shopcartList[indexPath.row];
     
-    NSMutableArray * storeGoodsStatusArray = self.allGoodsStautsArray[indexPath.section];
-    HKXMineShoppingCartListShopcartList * goodsModel = storeGoodsStatusArray[indexPath.row];
-    if (goodsModel.isSelected == YES)
-    {
-        [self.selectedGoodsArray addObject:goodsModel];
-    }
+    [cell loadDataWithShopModel:goodsModel];
     
-    NSMutableArray * eachStoreBtnArray = self.goodsBtnArray[indexPath.section];
-    NSMutableArray * eachStepperArray = self.stepperArray[indexPath.section];
-    
-    for (int i = 50000; i < 50001 + indexPath.section; i ++)
-    {
-        UIButton * reSelectBtn = [cell viewWithTag:i];
-        [reSelectBtn removeFromSuperview];
-    }
-    UIImageView * reGoodsImage = [cell viewWithTag:90001];
-    [reGoodsImage removeFromSuperview];
-    UILabel * reGoodsNameLabel = [cell viewWithTag:90002];
-    [reGoodsNameLabel removeFromSuperview];
-    UILabel * reGoodsTypeLabel = [cell viewWithTag:90003];
-    [reGoodsTypeLabel removeFromSuperview];
-    UILabel * rePriceLabel = [cell viewWithTag:90004];
-    [rePriceLabel removeFromSuperview];
-    for (int i = 70005; i < 70006 + indexPath.section; i ++)
-    {
-        UIStepper * reStepper = [cell viewWithTag:i];
-        [reStepper removeFromSuperview];
-    }
-    
-    UILabel * reGoodsNumLabel = [cell viewWithTag:90006];
-    [reGoodsNumLabel removeFromSuperview];
-    
-    UIButton * selectBtn = [[UIButton alloc] initWithFrame:CGRectMake(10 * myDelegate.autoSizeScaleX, 57 * myDelegate.autoSizeScaleY, 12 * myDelegate.autoSizeScaleX, 12 * myDelegate.autoSizeScaleX)];
-    selectBtn.tag = 50000 + indexPath.section;
-    [selectBtn addTarget:self action:@selector(selectGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [selectBtn setImage:[UIImage imageNamed:@"复选框-未选中"] forState:UIControlStateNormal];
-    [selectBtn setImage:[UIImage imageNamed:@"复选框_已选择"] forState:UIControlStateSelected];
-    selectBtn.selected = goodsModel.isSelected;
-    [eachStoreBtnArray insertObject:selectBtn atIndex:indexPath.row];
-    [cell addSubview:selectBtn];
-    
-    UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(selectBtn.frame) + 8 *myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
-    goodsImg.tag = 90001;
-//    goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
-    [goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goodsModel.picture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
-    [cell addSubview:goodsImg];
-    
-    UILabel * goodsNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY)];
-    goodsNameLabel.numberOfLines = 2;
-    goodsNameLabel.tag = 90002;
-    goodsNameLabel.text = goodsModel.goodsname;
-    goodsNameLabel.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
-    [cell addSubview:goodsNameLabel];
-    
-    UILabel * goodsTypeLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(goodsNameLabel.frame) + 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 14 * myDelegate.autoSizeScaleX)];
-    goodsTypeLabel.tag = 90003;
-    goodsTypeLabel.text = goodsModel.model;
-    goodsTypeLabel.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
-    goodsTypeLabel.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
-    [cell addSubview:goodsTypeLabel];
-    
-    UILabel * priceLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(goodsTypeLabel.frame) + 13 * myDelegate.autoSizeScaleY, 110 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX)];
-    priceLabel.tag = 90004;
-    priceLabel.textColor = [UIColor redColor];
-    priceLabel.text = [NSString stringWithFormat:@"¥%.2f",goodsModel.totalprice];
-    priceLabel.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
-    [cell addSubview:priceLabel];
-    
-    UIStepper * stepper = [[UIStepper alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 139 * myDelegate.autoSizeScaleX, 86 * myDelegate.autoSizeScaleY, 50 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleY)];
-    stepper.tag = 70005 + indexPath.section;
-    stepper.value = 1;
-    stepper.minimumValue = 1;
-    stepper.maximumValue = 5;
-    stepper.stepValue = 1;
-    stepper.continuous = YES;
-    stepper.wraps = YES;
-    [eachStepperArray insertObject:stepper atIndex:indexPath.row];
-    [stepper addTarget:self action:@selector(stepperAction:) forControlEvents:UIControlEventValueChanged];
-    [cell addSubview:stepper];
-    
-    UILabel * goodsNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 110 * myDelegate.autoSizeScaleX, CGRectGetMaxY(goodsTypeLabel.frame) + 13 * myDelegate.autoSizeScaleY, 110 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX)];
-    goodsNumLabel.tag = 90006;
-    goodsNumLabel.textColor = [UIColor blueColor];
-    goodsNumLabel.text = [NSString stringWithFormat:@"X %d",goodsModel.buynumber];
-    goodsNumLabel.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
-    [cell addSubview:goodsNumLabel];
-    
+
     
     return cell;
 }
@@ -487,54 +449,21 @@
     NSLog(@"%ld区 %ld个",indexPath.section,indexPath.row);
 }
 #pragma mark - Setters & Getters
-
-- (NSMutableArray *)allGoodsStautsArray
+- (NSMutableArray *)shopArray
 {
-    if (!_allGoodsStautsArray)
+    if (!_shopArray)
     {
-        _allGoodsStautsArray = [NSMutableArray array];
+        _shopArray = [NSMutableArray array];
     }
-    return _allGoodsStautsArray;
+    return _shopArray;
 }
-- (NSMutableArray *)allStoreStatusArray
+- (NSMutableArray *)selectGoodsArray
 {
-    if (!_allStoreStatusArray)
+    if (!_selectGoodsArray)
     {
-        _allStoreStatusArray = [NSMutableArray array];
+        _selectGoodsArray = [NSMutableArray array];
     }
-    return _allStoreStatusArray;
-}
-- (NSMutableArray *)storeBtnArray
-{
-    if (!_storeBtnArray)
-    {
-        _storeBtnArray = [NSMutableArray array];
-    }
-    return _storeBtnArray;
-}
-- (NSMutableArray *)goodsBtnArray
-{
-    if (!_goodsBtnArray)
-    {
-        _goodsBtnArray = [NSMutableArray array];
-    }
-    return _goodsBtnArray;
-}
-- (NSMutableArray *)selectedGoodsArray
-{
-    if (!_selectedGoodsArray)
-    {
-        _selectedGoodsArray = [NSMutableArray array];
-    }
-    return _selectedGoodsArray;
-}
-- (NSMutableArray *)stepperArray
-{
-    if (_stepperArray)
-    {
-        _stepperArray = [NSMutableArray array];
-    }
-    return _stepperArray;
+    return _selectGoodsArray;
 }
 
 - (void)didReceiveMemoryWarning {
