@@ -315,7 +315,7 @@
  @param userId 地址id
  @param userName 收货人姓名
  @param userTel 收货人电话
- @param userAdd 收货人地址
+ @param userAdd 收货人地址 
  @param complete 增加地址的结果
  */
 + (void)sendRequestWithUserId:(NSString *)userId WithUserName:(NSString *)userName WithUserTel:(NSString *)userTel WithUserAdd:(NSString *)userAdd ToGetUpdateAddResult:(void (^)(id data))complete;
@@ -336,4 +336,6 @@
  @param complete 删除结果
  */
 + (void)sendRequestWithGoodsId:(NSString * )goodsId ToGetMineDeleteCartGoodsResult:(void (^)(id data))complete;
+
+
 @end

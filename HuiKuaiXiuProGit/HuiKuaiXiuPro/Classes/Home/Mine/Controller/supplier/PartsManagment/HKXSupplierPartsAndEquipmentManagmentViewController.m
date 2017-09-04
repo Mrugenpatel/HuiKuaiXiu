@@ -108,7 +108,40 @@
 #pragma mark - Action
 - (void)putawayOrSoldOutGoodsBtnClick:(UIButton *)btn
 {
-    btn.selected = !btn.selected;
+    NSInteger indexPath = btn.tag - 70000;
+    
+    if (btn.selected == NO)
+    {
+//        点击按钮上架,此时商品为下架状态
+        btn.selected = YES;
+        if (self.isParts)
+        {
+//            上架配件
+            HKXSupplierPartsManagementData * data = self.infoArray[indexPath];
+            
+        }
+        else
+        {
+//            上架设备
+            HKXSupplierEquipmentManagementData * data = self.infoArray[indexPath];
+        }
+    }
+    else
+    {
+//        点击按钮下架，此时商品为上架状态
+        btn.selected = NO;
+        if (self.isParts)
+        {
+            //            下架配件
+            HKXSupplierPartsManagementData * data = self.infoArray[indexPath];
+            
+        }
+        else
+        {
+            //            下架设备
+            HKXSupplierEquipmentManagementData * data = self.infoArray[indexPath];
+        }
+    }
 }
 - (void)editOrDeleteBtnClick:(UIButton *)btn
 {
@@ -233,6 +266,12 @@
     UIButton * reDeleteBtn = [cell viewWithTag:3005];
     [reDeleteBtn removeFromSuperview];
     
+    for (int i = 70000 ; i < 70001 + indexPath.row; i ++)
+    {
+        UIButton * reUpBtn = [cell viewWithTag:i];
+        [reUpBtn removeFromSuperview];
+    }
+    
     if (self.isParts)
     {
         HKXSupplierPartsManagementData * data = self.selectArray[indexPath.row];
@@ -263,24 +302,9 @@
 //        numeberLabel.text = @"XG806F";
         numeberLabel.text = [NSString stringWithFormat:@"%ld",data.number];
         [cell addSubview:numeberLabel];
-        
-//        UIButton * putAwayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        putAwayBtn.tag = 3004;
-//        putAwayBtn.frame = CGRectMake(CGRectGetMaxX(logoImageView.frame) + 119 * myDelegate.autoSizeScaleX, 87 * myDelegate.autoSizeScaleY, 50 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY);
-//        putAwayBtn.layer.cornerRadius = 2;
-////        putAwayBtn.clipsToBounds = YES;
-//        putAwayBtn.layer.borderColor = [CommonMethod getUsualColorWithString:@"#e06e15"].CGColor;
-//        putAwayBtn.backgroundColor = [UIColor whiteColor];
-//        [putAwayBtn setTitle:@"上架" forState:UIControlStateNormal];
-//        [putAwayBtn setTitle:@"下架" forState:UIControlStateSelected];
-//        putAwayBtn.titleLabel.font = [UIFont systemFontOfSize:11 * myDelegate.autoSizeScaleX];
-//        [putAwayBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateNormal];
-//        [putAwayBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateSelected];
-//        putAwayBtn.selected = NO;
-//        [putAwayBtn addTarget:self action:@selector(putawayOrSoldOutGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-//        [cell addSubview:putAwayBtn];
+
         UIButton * putAwayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        putAwayBtn.tag = 3004;
+        putAwayBtn.tag = 70000 + indexPath.row;
         putAwayBtn.frame = CGRectMake(CGRectGetMaxX(logoImageView.frame) + 119 * myDelegate.autoSizeScaleX, 87 * myDelegate.autoSizeScaleY, 50 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY);
         putAwayBtn.layer.cornerRadius = 2;
         //        putAwayBtn.clipsToBounds = YES;
@@ -344,7 +368,7 @@
         [cell addSubview:numeberLabel];
         
         UIButton * putAwayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        putAwayBtn.tag = 3004;
+        putAwayBtn.tag = 70000 + indexPath.row;
         putAwayBtn.frame = CGRectMake(CGRectGetMaxX(logoImageView.frame) + 119 * myDelegate.autoSizeScaleX, 87 * myDelegate.autoSizeScaleY, 50 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY);
         putAwayBtn.layer.cornerRadius = 2;
 //        putAwayBtn.clipsToBounds = YES;
