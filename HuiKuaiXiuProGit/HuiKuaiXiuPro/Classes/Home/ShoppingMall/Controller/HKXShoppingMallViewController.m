@@ -705,7 +705,7 @@
         cell.goodsPrice.textColor = [UIColor redColor];
         cell.goodsAddress.text = model.address;
         cell.goodsCompany.text = model.companyName;
-        cell.goodsBrand.text = model.brand;
+        cell.goodsBrand.text = model.basename;
         return cell;
         
     }else if (equipmentBtn.selected){
