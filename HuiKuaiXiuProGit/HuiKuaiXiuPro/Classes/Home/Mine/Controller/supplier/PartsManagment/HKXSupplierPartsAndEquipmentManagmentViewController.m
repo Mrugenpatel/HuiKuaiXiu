@@ -118,12 +118,23 @@
         {
 //            上架配件
             HKXSupplierPartsManagementData * data = self.infoArray[indexPath];
-            
+            data.status = 1;
+            [HKXHttpRequestManager sendRequestWithGoodsId:[NSString stringWithFormat:@"%d",data.pId] WithGoodsStatus:@"0" ToGetUpdateReckResult:^(id data) {
+                HKXMineServeCertificateProfileModel * model = data;
+                [self showHint:model.message];
+                [_bottomTableView reloadData];
+            }];
         }
         else
         {
 //            上架设备
             HKXSupplierEquipmentManagementData * data = self.infoArray[indexPath];
+            data.state = 1;
+            [HKXHttpRequestManager sendRequestWithEquipmentID:[NSString stringWithFormat:@"%d",data.pmaId] WithEquipmentStatus:@"0" ToGetUpdateEquipmentReckResult:^(id data) {
+                HKXMineServeCertificateProfileModel * model = data;
+                [self showHint:model.message];
+                [_bottomTableView reloadData];
+            }];
         }
     }
     else
@@ -134,12 +145,23 @@
         {
             //            下架配件
             HKXSupplierPartsManagementData * data = self.infoArray[indexPath];
-            
+            data.status = 0;
+            [HKXHttpRequestManager sendRequestWithGoodsId:[NSString stringWithFormat:@"%d",data.pId] WithGoodsStatus:@"1" ToGetUpdateReckResult:^(id data) {
+                HKXMineServeCertificateProfileModel * model = data;
+                [self showHint:model.message];
+                [_bottomTableView reloadData];
+            }];
         }
         else
         {
             //            下架设备
             HKXSupplierEquipmentManagementData * data = self.infoArray[indexPath];
+            data.state = 0;
+            [HKXHttpRequestManager sendRequestWithEquipmentID:[NSString stringWithFormat:@"%d",data.pmaId] WithEquipmentStatus:@"1" ToGetUpdateEquipmentReckResult:^(id data) {
+                HKXMineServeCertificateProfileModel * model = data;
+                [self showHint:model.message];
+                [_bottomTableView reloadData];
+            }];
         }
     }
 }
@@ -316,7 +338,15 @@
         putAwayBtn.titleLabel.font = [UIFont systemFontOfSize:11 * myDelegate.autoSizeScaleX];
         [putAwayBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateNormal];
         [putAwayBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateSelected];
-        putAwayBtn.selected = NO;
+        if (data.status == 0)
+        {
+//            上架状态
+            putAwayBtn.selected = NO;
+        }
+        else
+        {
+            putAwayBtn.selected = YES;
+        }
         [putAwayBtn addTarget:self action:@selector(putawayOrSoldOutGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:putAwayBtn];
         
@@ -380,7 +410,15 @@
         putAwayBtn.titleLabel.font = [UIFont systemFontOfSize:11 * myDelegate.autoSizeScaleX];
         [putAwayBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateNormal];
         [putAwayBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateSelected];
-        putAwayBtn.selected = NO;
+        if (equipmentModel.state == 0)
+        {
+            //            上架状态
+            putAwayBtn.selected = NO;
+        }
+        else
+        {
+            putAwayBtn.selected = YES;
+        }
         [putAwayBtn addTarget:self action:@selector(putawayOrSoldOutGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:putAwayBtn];
         

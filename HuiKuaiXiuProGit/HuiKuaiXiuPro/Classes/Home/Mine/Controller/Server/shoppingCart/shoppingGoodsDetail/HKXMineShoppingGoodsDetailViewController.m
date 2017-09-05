@@ -12,11 +12,21 @@
 #import "HKXMinePayViewController.h"//支付界面
 #import "HKXMineReceiveAddressViewController.h"//增加新地址界面
 
+#import "HKXHttpRequestManager.h"
+#import "HKXMineDefaultAddressExistModelDataModels.h"//确认是否有默认收货地址
+
+#import "UIImageView+WebCache.h"
+#import "HKXMineServeCertificateProfileModel.h"//下单结果
 @interface HKXMineShoppingGoodsDetailViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _detailTableView;//订单详情
     UIView      * _totalPriceView;//下单部分
 }
+
+@property (nonatomic , strong)HKXMineDefaultAddressExistData * defaultAddress;//默认地址
+
+@property (nonatomic , strong) NSMutableArray * cartIdArray;//商品id数组
+@property (nonatomic , strong) NSMutableArray * shopIdArray;//商铺id数组
 
 @end
 
@@ -27,7 +37,16 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
     [self createUI];
+    [self checkReceiveAddress];
+    
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self reCheckDefaultAddress];
 }
 #pragma mark - CreateUI
 - (void)createUI
@@ -35,11 +54,10 @@
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _detailTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0 , ScreenWidth, ScreenHeight  - 50 * myDelegate.autoSizeScaleY) style:UITableViewStylePlain ];
+    _detailTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0 , ScreenWidth, ScreenHeight  - 50 * myDelegate.autoSizeScaleY) style:UITableViewStyleGrouped ];
     _detailTableView.backgroundColor = [UIColor whiteColor];
     _detailTableView.delegate = self;
     _detailTableView.dataSource = self;
-    _detailTableView.scrollEnabled = NO;
     [self.view addSubview:_detailTableView];
     [_detailTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     
@@ -50,7 +68,7 @@
     _totalPriceView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_totalPriceView];
 
-    NSString * totalPrice = [NSString stringWithFormat:@"实付款：¥%.1f",1220.0];
+    NSString * totalPrice = [NSString stringWithFormat:@"实付款：¥%@",self.totalCount];
     UILabel * totalPriceLabel = [[UILabel alloc] initWithFrame:CGRectMake(120 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:totalPrice WithFont:15 * myDelegate.autoSizeScaleX], 15 * myDelegate.autoSizeScaleX)];
     totalPriceLabel.textColor = [CommonMethod getUsualColorWithString:@"#333333"];
     totalPriceLabel.text = totalPrice;
@@ -65,21 +83,89 @@
     [submitBtn addTarget:self action:@selector(submitBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [_totalPriceView addSubview:submitBtn];
 }
+- (void)checkReceiveAddress
+{
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",userId] ToGetMineDefaultAddressExistResult:^(id data) {
+        HKXMineDefaultAddressExistModel * model = data;
+        if (model.success)
+        {
+            self.defaultAddress = model.data;
+            [_detailTableView reloadData];
+        }
+        else
+        {
+            HKXMineReceiveAddressViewController * addNewAddressVC = [[HKXMineReceiveAddressViewController alloc] init];
+            addNewAddressVC.navigationItem.title = @"收货地址";
+            
+            [self.navigationController pushViewController:addNewAddressVC animated:YES];
+            
+        }
+    }];
+}
+- (void)reCheckDefaultAddress
+{
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",userId] ToGetMineDefaultAddressExistResult:^(id data) {
+        HKXMineDefaultAddressExistModel * model = data;
+        if (model.success)
+        {
+            self.defaultAddress = model.data;
+            [_detailTableView reloadData];
+        }
+        else
+        {
+            [self showHint:model.message];
+            
+        }
+    }];
+}
 #pragma mark - ConfigData
+- (void)loadData
+{
+    [self.shopIdArray removeAllObjects];
+    [self.cartIdArray removeAllObjects];
+    for (HKXMineShoppingCartListShopcartList * goodsModel in self.selectGoodsArray)
+    {
+        NSString * cartId = [NSString stringWithFormat:@"%ld",(long)goodsModel.carid];
+        [self.cartIdArray addObject:cartId];
+        NSString * shopID = [NSString stringWithFormat:@"%ld",goodsModel.companyid];
+        if (![self.shopIdArray containsObject:shopID])
+        {
+            [self.shopIdArray addObject:shopID];
+        }
+    }
+}
 #pragma mark - Action
 - (void)submitBtnClick:(UIButton *)btn
 {
     NSLog(@"下单");
-    HKXMinePayViewController * payVC = [[HKXMinePayViewController alloc] init];
-    payVC.payCount = @"1200";
-    payVC.navigationItem.title = @"支付方式";
-    [self.navigationController pushViewController:payVC animated:YES];
+    
+    [self loadData];
+    
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    [HKXHttpRequestManager sendRequestWithCartId:[self.cartIdArray componentsJoinedByString:@","] WithCompanyId:[self.shopIdArray componentsJoinedByString:@","] WithUserID:[NSString stringWithFormat:@"%ld",userId] WithReceiveName:self.defaultAddress.consignees WithReceiveTel:self.defaultAddress.consigneesTel WithReceiveAdd:self.defaultAddress.consigneesAdd ToGetOrderResult:^(id data) {
+        HKXMineServeCertificateProfileModel * model = data;
+        if (model.success)
+        {
+            HKXMinePayViewController * payVC = [[HKXMinePayViewController alloc] init];
+            payVC.payCount = self.totalCount;
+            payVC.navigationItem.title = @"支付方式";
+            [self.navigationController pushViewController:payVC animated:YES];
+        }
+        else
+        {
+            [self showHint:model.message];
+        }
+    }];
+    
+    
 }
 #pragma mark - Private Method
 #pragma mark - Delegate & Data Source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 1 + self.selectGoodsArray.count;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -88,13 +174,9 @@
     {
         return 88 * myDelegate.autoSizeScaleY;
     }
-    else if (indexPath.row == 1)
-    {
-        return 129 * myDelegate.autoSizeScaleY;
-    }
     else
     {
-        return 40 * myDelegate.autoSizeScaleY;
+        return 129 * myDelegate.autoSizeScaleY;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -140,63 +222,48 @@
     {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 21 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
-        label1.text = @"万三 12345678912";
+//        label1.text = @"万三 12345678912";
+        label1.text = [NSString stringWithFormat:@"%@ %@",self.defaultAddress.consignees,self.defaultAddress.consigneesTel];
         label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
         
         label2.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 25 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
-        label2.text = @"北京市海淀区大钟寺9号楼京仪大厦2层";
+//        label2.text = @"北京市海淀区大钟寺9号楼京仪大厦2层";
+        label2.text = self.defaultAddress.consigneesAdd;
         label2.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
     }
-    else if (indexPath.row == 1)
+    else
     {
+        HKXMineShoppingCartListShopcartList * goodsModel = self.selectGoodsArray[indexPath.row - 1];
         UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(30 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
         goodsImg.tag = 50005;
-        goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
+//        goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
+        [goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goodsModel.picture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
         [cell addSubview:goodsImg];
         
         label1.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY);
         label1.numberOfLines = 2;
-        label1.text = @"哈威V30D140液压泵哈威V30D140液压泵";
+//        label1.text = @"哈威V30D140液压泵哈威V30D140液压泵";
+        label1.text = goodsModel.goodsname;
         label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
         
         label2.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 14 * myDelegate.autoSizeScaleX);
-        label2.text = @"产品型号：XXXXXXX";
+//        label2.text = @"产品型号：XXXXXXX";
+        label2.text = goodsModel.model;
         label2.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
         label2.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
         
         label3.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label2.frame) + 13 * myDelegate.autoSizeScaleY, 110 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX);
         label3.textColor = [UIColor redColor];
-        label3.text = [NSString stringWithFormat:@"¥%.2f",1200.00];
+//        label3.text = [NSString stringWithFormat:@"¥%.2f",1200.00];
+        label3.text = [NSString stringWithFormat:@"%.2f",goodsModel.totalprice];
         label3.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
         
         
         label4.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 175 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label2.frame) + 13 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"数量：2" WithFont:12 * myDelegate.autoSizeScaleX], 12 * myDelegate.autoSizeScaleX);
-        label4.text = @"数量：2";
+//        label4.text = @"数量：2";
+        label4.text = [NSString stringWithFormat:@"数量：%d",goodsModel.buynumber];
         label4.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
         label4.font = [UIFont systemFontOfSize:12 * myDelegate.autoSizeScaleX];
-    }
-    else
-    {
-        label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 0, [CommonMethod getLabelLengthWithString:@"支付方式" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY);
-        label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
-        label2.frame = CGRectMake(294 * myDelegate.autoSizeScaleX, 0, ScreenWidth - 294 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
-        label2.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
-        
-        if (indexPath.row == 2)
-        {
-            label1.text = @"支付方式";
-            label2.text = @"在线支付";
-        }
-        else if (indexPath.row == 3)
-        {
-            label1.text = @"商品金额";
-            label2.text = @"¥1200.0";
-        }
-        else
-        {
-            label1.text = @"运费";
-            label2.text = @"包邮";
-        }
     }
     
     return cell;
@@ -211,6 +278,30 @@
     }
 }
 #pragma mark - Setters & Getters
+- (HKXMineDefaultAddressExistData *)defaultAddress
+{
+    if (!_defaultAddress)
+    {
+        _defaultAddress = [[HKXMineDefaultAddressExistData alloc] init];
+    }
+    return _defaultAddress;
+}
+- (NSMutableArray *)shopIdArray
+{
+    if (!_shopIdArray)
+    {
+        _shopIdArray = [NSMutableArray array];
+    }
+    return _shopIdArray;
+}
+- (NSMutableArray *)cartIdArray
+{
+    if (!_cartIdArray)
+    {
+        _cartIdArray = [NSMutableArray array];
+    }
+    return _cartIdArray;
+}
 
 - (void)didReceiveMemoryWarning
 {
