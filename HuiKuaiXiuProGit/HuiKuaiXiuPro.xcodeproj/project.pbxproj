@@ -182,8 +182,10 @@
 		EF9E78E71F2B30D000FC40F8 /* goodsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF9E78E11F2B30D000FC40F8 /* goodsTableViewCell.xib */; };
 		EFB305541F4C21BA005EA0AA /* HKXNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFB305531F4C21BA005EA0AA /* HKXNavigationController.m */; };
 		EFBD90DC1F394A70000D12B9 /* HKXMineOwnerRepairListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFBD90D91F394A70000D12B9 /* HKXMineOwnerRepairListViewController.m */; };
-		EFC0ACED1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACEC1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m */; };
-		EFC0ACF01F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACEF1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m */; };
+		EFC0ACED1F5CE5F500A4D576 /* HKXSaleListHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACEC1F5CE5F500A4D576 /* HKXSaleListHeaderView.m */; };
+		EFC0ACF01F5CE61900A4D576 /* HKXSaleListFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACEF1F5CE61900A4D576 /* HKXSaleListFooterView.m */; };
+		EFC0ACF31F5D2BE700A4D576 /* HKXGoodsView.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACF21F5D2BE700A4D576 /* HKXGoodsView.m */; };
+		EFC0ACF81F5D3BCB00A4D576 /* HKXConfirmOrderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC0ACF71F5D3BCB00A4D576 /* HKXConfirmOrderViewController.m */; };
 		EFC517951F58EE2600830283 /* SeverMyByLeaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517941F58EE2600830283 /* SeverMyByLeaseViewController.m */; };
 		EFC517991F58EE3E00830283 /* SupplierMyByLeaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517981F58EE3E00830283 /* SupplierMyByLeaseViewController.m */; };
 		EFC5179D1F58EE4F00830283 /* OwerMyleaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC5179C1F58EE4F00830283 /* OwerMyleaseViewController.m */; };
@@ -198,8 +200,8 @@
 		EFC517B61F58EEB500830283 /* EquipmentGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B21F58EEB500830283 /* EquipmentGoodsModel.m */; };
 		EFC517B71F58EEB500830283 /* CompanyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B41F58EEB500830283 /* CompanyModel.m */; };
 		EFC517BA1F5945D600830283 /* addressBookHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517B91F5945D600830283 /* addressBookHelper.m */; };
-		EFC517BE1F596BC500830283 /* HKXSupplierOrderStoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517BD1F596BC500830283 /* HKXSupplierOrderStoreModel.m */; };
-		EFC517C11F596BE100830283 /* HKXSupplierOrderGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */; };
+		EFC517BE1F596BC500830283 /* HKXOrderStoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517BD1F596BC500830283 /* HKXOrderStoreModel.m */; };
+		EFC517C11F596BE100830283 /* HKXOrderGoodsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = EFC517C01F596BE100830283 /* HKXOrderGoodsModel.m */; };
 		EFE7EA351F413BC500BFD10A /* HKXGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EFE7EA341F413BC500BFD10A /* HKXGuideViewController.m */; };
 		EFE8C5691F4FB3A8009493AE /* back-arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFE8C5671F4FB3A8009493AE /* back-arrow@2x.png */; };
 		EFE8C56A1F4FB3A8009493AE /* back-arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = EFE8C5681F4FB3A8009493AE /* back-arrow@3x.png */; };
@@ -539,10 +541,14 @@
 		EFB305531F4C21BA005EA0AA /* HKXNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXNavigationController.m; sourceTree = "<group>"; };
 		EFBD90D81F394A70000D12B9 /* HKXMineOwnerRepairListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineOwnerRepairListViewController.h; sourceTree = "<group>"; };
 		EFBD90D91F394A70000D12B9 /* HKXMineOwnerRepairListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineOwnerRepairListViewController.m; sourceTree = "<group>"; };
-		EFC0ACEB1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierSaleListHeaderView.h; sourceTree = "<group>"; };
-		EFC0ACEC1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierSaleListHeaderView.m; sourceTree = "<group>"; };
-		EFC0ACEE1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierSaleListFooterView.h; sourceTree = "<group>"; };
-		EFC0ACEF1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierSaleListFooterView.m; sourceTree = "<group>"; };
+		EFC0ACEB1F5CE5F500A4D576 /* HKXSaleListHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSaleListHeaderView.h; sourceTree = "<group>"; };
+		EFC0ACEC1F5CE5F500A4D576 /* HKXSaleListHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSaleListHeaderView.m; sourceTree = "<group>"; };
+		EFC0ACEE1F5CE61900A4D576 /* HKXSaleListFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSaleListFooterView.h; sourceTree = "<group>"; };
+		EFC0ACEF1F5CE61900A4D576 /* HKXSaleListFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSaleListFooterView.m; sourceTree = "<group>"; };
+		EFC0ACF11F5D2BE700A4D576 /* HKXGoodsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXGoodsView.h; sourceTree = "<group>"; };
+		EFC0ACF21F5D2BE700A4D576 /* HKXGoodsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXGoodsView.m; sourceTree = "<group>"; };
+		EFC0ACF61F5D3BCB00A4D576 /* HKXConfirmOrderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXConfirmOrderViewController.h; sourceTree = "<group>"; };
+		EFC0ACF71F5D3BCB00A4D576 /* HKXConfirmOrderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXConfirmOrderViewController.m; sourceTree = "<group>"; };
 		EFC517931F58EE2600830283 /* SeverMyByLeaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeverMyByLeaseViewController.h; sourceTree = "<group>"; };
 		EFC517941F58EE2600830283 /* SeverMyByLeaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeverMyByLeaseViewController.m; sourceTree = "<group>"; };
 		EFC517971F58EE3E00830283 /* SupplierMyByLeaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupplierMyByLeaseViewController.h; sourceTree = "<group>"; };
@@ -567,10 +573,10 @@
 		EFC517B41F58EEB500830283 /* CompanyModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CompanyModel.m; sourceTree = "<group>"; };
 		EFC517B81F5945D600830283 /* addressBookHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = addressBookHelper.h; sourceTree = "<group>"; };
 		EFC517B91F5945D600830283 /* addressBookHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = addressBookHelper.m; sourceTree = "<group>"; };
-		EFC517BC1F596BC500830283 /* HKXSupplierOrderStoreModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierOrderStoreModel.h; sourceTree = "<group>"; };
-		EFC517BD1F596BC500830283 /* HKXSupplierOrderStoreModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierOrderStoreModel.m; sourceTree = "<group>"; };
-		EFC517BF1F596BE100830283 /* HKXSupplierOrderGoodsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXSupplierOrderGoodsModel.h; sourceTree = "<group>"; };
-		EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXSupplierOrderGoodsModel.m; sourceTree = "<group>"; };
+		EFC517BC1F596BC500830283 /* HKXOrderStoreModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXOrderStoreModel.h; sourceTree = "<group>"; };
+		EFC517BD1F596BC500830283 /* HKXOrderStoreModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXOrderStoreModel.m; sourceTree = "<group>"; };
+		EFC517BF1F596BE100830283 /* HKXOrderGoodsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXOrderGoodsModel.h; sourceTree = "<group>"; };
+		EFC517C01F596BE100830283 /* HKXOrderGoodsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXOrderGoodsModel.m; sourceTree = "<group>"; };
 		EFE7EA331F413BC500BFD10A /* HKXGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXGuideViewController.h; sourceTree = "<group>"; };
 		EFE7EA341F413BC500BFD10A /* HKXGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXGuideViewController.m; sourceTree = "<group>"; };
 		EFE8C5671F4FB3A8009493AE /* back-arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back-arrow@2x.png"; sourceTree = "<group>"; };
@@ -663,6 +669,7 @@
 		9B34B81F1F4FB50700A39B3A /* buyingDetail */ = {
 			isa = PBXGroup;
 			children = (
+				EFC0ACF41F5D2BEA00A4D576 /* view */,
 				9B34B8231F4FCEA500A39B3A /* HKXMineBuyingDetailViewController.h */,
 				9B34B8241F4FCEA500A39B3A /* HKXMineBuyingDetailViewController.m */,
 			);
@@ -677,8 +684,7 @@
 				EFC0ACEA1F5CE5B800A4D576 /* View */,
 				EFC517BB1F596B5D00830283 /* Model */,
 			);
-			name = saleList;
-			path = ../Server/saleList;
+			path = saleList;
 			sourceTree = "<group>";
 		};
 		9B382C031F29DC1100ECA17F /* HKXSupplierPartsManagementModel */ = {
@@ -1159,7 +1165,6 @@
 		9B8AA5CE1F16030D00E5F662 /* supplier */ = {
 			isa = PBXGroup;
 			children = (
-				9B34B8261F4FF41C00A39B3A /* saleList */,
 				EFC517961F58EE2B00830283 /* MyLease */,
 				9B8813B11F543A780009DB86 /* askValue */,
 				9B8AA5D21F16039E00E5F662 /* PartsManagment */,
@@ -1172,8 +1177,9 @@
 		9B8AA5CF1F16030D00E5F662 /* Server */ = {
 			isa = PBXGroup;
 			children = (
-				EFC517921F58EE1100830283 /* MyLease */,
+				9B34B8261F4FF41C00A39B3A /* saleList */,
 				9B34B81E1F4FB50700A39B3A /* buyingList */,
+				EFC517921F58EE1100830283 /* MyLease */,
 				9B740CB21F4E7A9D00E32A8E /* shoppingCart */,
 				9B740CA31F4E687C00E32A8E /* myWallet */,
 				9B7EAE4E1F41371900F09C4D /* orderList */,
@@ -1634,6 +1640,7 @@
 		9BA0B4821F049DB00047E0E5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EFC0ACF51F5D3B9400A4D576 /* HKXConfirmOrderViewController */,
 				EFC5179E1F58EE6800830283 /* 减号@2x.png */,
 				EFC5179F1F58EE6800830283 /* 减号@3x.png */,
 				EFC517A01F58EE6800830283 /* 加号@2x.png */,
@@ -1988,12 +1995,30 @@
 		EFC0ACEA1F5CE5B800A4D576 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				EFC0ACEB1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.h */,
-				EFC0ACEC1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m */,
-				EFC0ACEE1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.h */,
-				EFC0ACEF1F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m */,
+				EFC0ACEB1F5CE5F500A4D576 /* HKXSaleListHeaderView.h */,
+				EFC0ACEC1F5CE5F500A4D576 /* HKXSaleListHeaderView.m */,
+				EFC0ACEE1F5CE61900A4D576 /* HKXSaleListFooterView.h */,
+				EFC0ACEF1F5CE61900A4D576 /* HKXSaleListFooterView.m */,
 			);
 			name = View;
+			sourceTree = "<group>";
+		};
+		EFC0ACF41F5D2BEA00A4D576 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				EFC0ACF11F5D2BE700A4D576 /* HKXGoodsView.h */,
+				EFC0ACF21F5D2BE700A4D576 /* HKXGoodsView.m */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
+		EFC0ACF51F5D3B9400A4D576 /* HKXConfirmOrderViewController */ = {
+			isa = PBXGroup;
+			children = (
+				EFC0ACF61F5D3BCB00A4D576 /* HKXConfirmOrderViewController.h */,
+				EFC0ACF71F5D3BCB00A4D576 /* HKXConfirmOrderViewController.m */,
+			);
+			name = HKXConfirmOrderViewController;
 			sourceTree = "<group>";
 		};
 		EFC517921F58EE1100830283 /* MyLease */ = {
@@ -2026,10 +2051,10 @@
 		EFC517BB1F596B5D00830283 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EFC517BC1F596BC500830283 /* HKXSupplierOrderStoreModel.h */,
-				EFC517BD1F596BC500830283 /* HKXSupplierOrderStoreModel.m */,
-				EFC517BF1F596BE100830283 /* HKXSupplierOrderGoodsModel.h */,
-				EFC517C01F596BE100830283 /* HKXSupplierOrderGoodsModel.m */,
+				EFC517BC1F596BC500830283 /* HKXOrderStoreModel.h */,
+				EFC517BD1F596BC500830283 /* HKXOrderStoreModel.m */,
+				EFC517BF1F596BE100830283 /* HKXOrderGoodsModel.h */,
+				EFC517C01F596BE100830283 /* HKXOrderGoodsModel.m */,
 			);
 			name = Model;
 			path = ../buyingList;
@@ -2213,7 +2238,7 @@
 				9B9943831F3D87B60034AC88 /* HKXMinePayViewController.m in Sources */,
 				EF9E78B31F2B304B00FC40F8 /* myview.m in Sources */,
 				9B8954281F57F2130019C799 /* HKXMineSupplierInqiryListData.m in Sources */,
-				EFC0ACED1F5CE5F500A4D576 /* HKXSupplierSaleListHeaderView.m in Sources */,
+				EFC0ACED1F5CE5F500A4D576 /* HKXSaleListHeaderView.m in Sources */,
 				9B74CC781F56B6C2002FE4F9 /* HKXMineShoppingCartListData.m in Sources */,
 				9B74CC7A1F56B6C2002FE4F9 /* HKXMineShoppingCartListShopcartList.m in Sources */,
 				9B8706F21F1DE28F0043BB0C /* HKXRepairMapViewController.m in Sources */,
@@ -2263,7 +2288,7 @@
 				9BBB400D1EEE7BCF00637D61 /* HuiKuaiXiuPro.xcdatamodeld in Sources */,
 				9B34B8221F4FB52200A39B3A /* HKXMineBuyingListViewController.m in Sources */,
 				9B78E1331F05FC8400ADBC23 /* HKXResetPswViewController.m in Sources */,
-				EFC517C11F596BE100830283 /* HKXSupplierOrderGoodsModel.m in Sources */,
+				EFC517C11F596BE100830283 /* HKXOrderGoodsModel.m in Sources */,
 				EF9E78AE1F2B304B00FC40F8 /* alertView.m in Sources */,
 				EFC517951F58EE2600830283 /* SeverMyByLeaseViewController.m in Sources */,
 				EF9E78E41F2B30D000FC40F8 /* goodsInfoTableViewCell.m in Sources */,
@@ -2271,6 +2296,7 @@
 				EFC517BA1F5945D600830283 /* addressBookHelper.m in Sources */,
 				9B9EE5CA1F25CB1A00A95247 /* AreaModel.m in Sources */,
 				9BA0B4901F049F600047E0E5 /* HKXMineViewController.m in Sources */,
+				EFC0ACF31F5D2BE700A4D576 /* HKXGoodsView.m in Sources */,
 				9B8813B41F543AEE0009DB86 /* HKXMineSupplierAskValueListViewController.m in Sources */,
 				9B9EE5D11F25D42700A95247 /* HKXOwnerRegisterMachineModel.m in Sources */,
 				9B48FFEB1F28895F006DBE95 /* HKXMineServeCertificateProfileModel.m in Sources */,
@@ -2289,7 +2315,7 @@
 				9B78E13A1F06308400ADBC23 /* CustomSubmitView.m in Sources */,
 				9B852D521F27483000779C18 /* HKXMineServeInfoData.m in Sources */,
 				EF9E78B01F2B304B00FC40F8 /* JGDownListMenu.m in Sources */,
-				EFC0ACF01F5CE61900A4D576 /* HKXSupplierSaleListFooterView.m in Sources */,
+				EFC0ACF01F5CE61900A4D576 /* HKXSaleListFooterView.m in Sources */,
 				9B7C14E51F21E05200CCD7CD /* HKXUserVertificationCodeData.m in Sources */,
 				EF400D911F3AD8CE0050D36A /* MBProgressHUD+NH.m in Sources */,
 				EF9E78CA1F2B305B00FC40F8 /* issueLeaseViewController.m in Sources */,
@@ -2323,7 +2349,7 @@
 				9B8AA5DA1F16040200E5F662 /* HKXSupplierReleaseEquipmentViewController.m in Sources */,
 				9B99437E1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostModel.m in Sources */,
 				9BBB40011EEE7BCE00637D61 /* main.m in Sources */,
-				EFC517BE1F596BC500830283 /* HKXSupplierOrderStoreModel.m in Sources */,
+				EFC517BE1F596BC500830283 /* HKXOrderStoreModel.m in Sources */,
 				9B7C14ED1F21FB2200CCD7CD /* HKXUserLocationData.m in Sources */,
 				9B99437D1F3D7CB60034AC88 /* HKXMIneOwnerRepairCostData.m in Sources */,
 				9B8706EB1F1DB5700043BB0C /* HKXOrderDetailViewController.m in Sources */,
@@ -2336,6 +2362,7 @@
 				9B9EE5CD1F25CB1A00A95247 /* ProvinceModel.m in Sources */,
 				9B7EAE5B1F41396000F09C4D /* HKXMineServerOrderListModel.m in Sources */,
 				9B852D511F27483000779C18 /* HKXMineOwnerInfoModel.m in Sources */,
+				EFC0ACF81F5D3BCB00A4D576 /* HKXConfirmOrderViewController.m in Sources */,
 				9B74CC791F56B6C2002FE4F9 /* HKXMineShoppingCartListModel.m in Sources */,
 				9B9703E41F0231540074D94A /* CommonMethod.m in Sources */,
 				9B789CE41F0B30AC000F33BA /* HKXHttpRequestManager.m in Sources */,

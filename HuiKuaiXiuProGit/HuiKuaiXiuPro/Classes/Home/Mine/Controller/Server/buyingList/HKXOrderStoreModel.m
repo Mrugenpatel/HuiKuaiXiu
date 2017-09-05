@@ -6,9 +6,9 @@
 //  Copyright © 2017年 Lee. All rights reserved.
 //
 
-#import "HKXSupplierOrderStoreModel.h"
+#import "HKXOrderStoreModel.h"
 
-@implementation HKXSupplierOrderStoreModel
+@implementation HKXOrderStoreModel
 
 
 - (instancetype)initWithDict:(NSDictionary *)dict{
@@ -27,7 +27,7 @@
         self.orderMessage = [self NULLToNil:dict[@"orderMessage"]];
         self.orderDate = [self NULLToNil:dict[@"orderDate"]];
         self.orderUpdateDate = [self NULLToNil:dict[@"orderUpdateDate"]];
-        self.goodsArr = [HKXSupplierOrderGoodsModel goodsWithArray:dict[@"orderGood"]];
+        self.goodsArr = [HKXOrderGoodsModel goodsWithArray:dict[@"orderGood"]];
        
     }
     return self;
@@ -42,7 +42,7 @@
 + (NSMutableArray *)modelWithArray:(NSArray *)array {
     NSMutableArray *arrayM = [NSMutableArray array];
     for (NSDictionary *dict in array) {
-        HKXSupplierOrderStoreModel *shop = [HKXSupplierOrderStoreModel shopWithDict:dict];
+        HKXOrderStoreModel *shop = [HKXOrderStoreModel shopWithDict:dict];
         [arrayM addObject:shop];
     }
     

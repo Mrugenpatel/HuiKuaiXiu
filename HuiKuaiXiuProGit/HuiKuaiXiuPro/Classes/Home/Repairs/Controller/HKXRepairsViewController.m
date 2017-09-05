@@ -211,7 +211,7 @@
         {
             float detailLabelLength = [CommonMethod getLabelLengthWithString:@"液压系统" WithFont:17 * myDelegate.autoSizeScaleX];
             
-            contentTF.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY + 98 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0);
+            //contentTF.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY + 98 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0);
             HKXMyTextView * textView = [[HKXMyTextView alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY + 98 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0)];
             textView.delegate = self;
             textView.font = [UIFont systemFontOfSize:18];
@@ -525,6 +525,11 @@
         HKXOwnerMoreInfoViewController * ower = [[HKXOwnerMoreInfoViewController alloc] init];
         brandButton.selected = NO;
         ower.mark = @"报修";
+        ower.returnBrandBlock = ^(NSString *type, NSString *brandId) {
+            
+            UITextField * brandModel = [self.view viewWithTag:20000];
+            brandModel.text = type;
+        };
         ower.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:ower animated:YES];
         

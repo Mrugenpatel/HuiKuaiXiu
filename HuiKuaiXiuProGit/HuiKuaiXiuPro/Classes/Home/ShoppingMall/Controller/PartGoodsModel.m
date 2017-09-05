@@ -19,7 +19,7 @@
         _number = [self NULLToNil:dict[@"number"]];
         _basename = [self NULLToNil:dict[@"basename"]];
         _brand = [self NULLToNil:dict[@"brand"]];
-        _model = [self NULLToNil:dict[@"_model"]];
+        _model = [self NULLToNil:dict[@"model"]];
         _price = [self NULLToNil:dict[@"price"]];
         _introduct = [self NULLToNil:dict[@"introduct"]];
         _picture = dict[@"picture"];

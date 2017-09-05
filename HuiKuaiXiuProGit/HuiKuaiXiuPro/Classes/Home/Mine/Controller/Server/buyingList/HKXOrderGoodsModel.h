@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface HKXSupplierOrderGoodsModel : NSObject
+@interface HKXOrderGoodsModel : NSObject
 
 //主键
 @property(nonatomic ,copy)NSString *orderGoodId;

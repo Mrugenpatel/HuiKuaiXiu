@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-#import "HKXSupplierOrderStoreModel.h"
+#import "HKXOrderStoreModel.h"
 
-@interface HKXSupplierSaleListHeaderView : UITableViewHeaderFooterView
+@interface HKXSaleListHeaderView : UITableViewHeaderFooterView
 
-@property(nonatomic ,strong)HKXSupplierOrderStoreModel * store;
+@property(nonatomic ,strong)HKXOrderStoreModel * store;
 @property(nonatomic ,strong)UIView * clientInfoView;
 
 @property(nonatomic ,strong)UILabel * orderNumLabel;

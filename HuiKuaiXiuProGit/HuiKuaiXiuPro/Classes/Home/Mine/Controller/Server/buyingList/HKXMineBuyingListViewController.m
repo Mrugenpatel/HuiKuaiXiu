@@ -10,12 +10,13 @@
 #import "CommonMethod.h"
 
 #import "HKXMineBuyingDetailViewController.h"//订单详情
-#import "HKXSupplierOrderStoreModel.h"
-#import "HKXSupplierOrderGoodsModel.h"
+#import "HKXOrderStoreModel.h"
+#import "HKXOrderGoodsModel.h"
 
 @interface HKXMineBuyingListViewController ()<UICollectionViewDelegate , UICollectionViewDataSource>
 {
     UICollectionView * _buyingCollectionView;//买入订单
+    int page;
 }
 
 @property(nonatomic ,strong)NSMutableArray *storeArr;
@@ -30,11 +31,12 @@
     // Do any additional setup after loading the view.
     
     [self createUI];
+    [_buyingCollectionView.mj_header beginRefreshing];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self configData];
+    
 }
 
 - (NSMutableArray *)storeArr{
@@ -73,11 +75,17 @@
     [_buyingCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
     [_buyingCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footer"];
     
+    _buyingCollectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(configData)];
+    
+    
+    _buyingCollectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    
 }
 #pragma mark - ConfigData
 - (void)configData
 {
     
+    page = 2;
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -90,9 +98,10 @@
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
         [self.view hideActivity];
+        [_buyingCollectionView.mj_header endRefreshing];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            self.storeArr = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+            self.storeArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
             [_buyingCollectionView reloadData];
             
         }else{
@@ -102,12 +111,50 @@
         
     } failure:^(NSError *error) {
         
+        [_buyingCollectionView.mj_header endRefreshing];
         NSLog(@"请求失败%@",error);
         [self.view hideActivity];
     
     }];
  
 }
+
+- (void)loadData{
+    
+    NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+    double uId = [defaults doubleForKey:@"userDataId"];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
+                           @"8",@"pageSize",
+                           nil];
+    [self.view showActivity];
+    
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectBuy.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        [_buyingCollectionView.mj_footer endRefreshing];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            self.storeArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
+            [_buyingCollectionView reloadData];
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        [_buyingCollectionView.mj_footer endRefreshing];
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
 #pragma mark - Action
 #pragma mark - Private Method
 #pragma mark - Delegate & Data Source
@@ -147,7 +194,7 @@
    
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    HKXSupplierOrderStoreModel * store = self.storeArr[section];
+    HKXOrderStoreModel * store = self.storeArr[section];
     //卖家待发货
     if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"10"]){
         
@@ -169,7 +216,7 @@
 //返回collectionView的item的个数
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    HKXSupplierOrderStoreModel * store = self.storeArr[section];
+    HKXOrderStoreModel * store = self.storeArr[section];
     
     return store.goodsArr.count;
 }
@@ -178,7 +225,7 @@
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    HKXSupplierOrderStoreModel * store = self.storeArr[indexPath.section];
+    HKXOrderStoreModel * store = self.storeArr[indexPath.section];
      UICollectionReusableView *reusableView = nil;
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         //在这设置区头
@@ -305,8 +352,8 @@
     static NSString* cellIdentifier = @"cell";
     UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
-    HKXSupplierOrderStoreModel * store = self.storeArr[indexPath.section];
-    HKXSupplierOrderGoodsModel * goods = store.goodsArr[indexPath.row];
+    HKXOrderStoreModel * store = self.storeArr[indexPath.section];
+    HKXOrderGoodsModel * goods = store.goodsArr[indexPath.row];
     UIImageView * reGoodsImage = [cell viewWithTag:90001];
     [reGoodsImage removeFromSuperview];
     UILabel * reGoodsNameLabel = [cell viewWithTag:90002];
@@ -364,6 +411,7 @@
 {
     NSLog(@"%ld区 %ld个",indexPath.section,indexPath.row);
     HKXMineBuyingDetailViewController * buyingDetailVC = [[HKXMineBuyingDetailViewController alloc] init];
+    buyingDetailVC.store = self.storeArr[indexPath.section];
     buyingDetailVC.navigationItem.title = @"订单详情";
     [self.navigationController pushViewController:buyingDetailVC animated:YES];
 }
@@ -372,8 +420,7 @@
     
     
     UIView * view = [actionBtn superview];
-    
-    HKXSupplierOrderStoreModel * store = self.storeArr[view.tag];
+    HKXOrderStoreModel * store = self.storeArr[view.tag];
     if (actionBtn.tag == 90006) {
        
         //交易成功
@@ -456,7 +503,8 @@
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            
+            [self showHint:dicts[@"message"]];
+            [_buyingCollectionView.mj_header beginRefreshing];
             
         }else{
             
@@ -471,9 +519,6 @@
     }];
     
 }
-
-
-
 - (void)confirmTakeGoodsWithOrderId:(NSString *)orderId{
     
     
@@ -487,8 +532,8 @@
         NSLog(@"请求成功%@",dicts);
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
-            
-            
+            [self showHint:dicts[@"message"]];
+            [_buyingCollectionView.mj_header beginRefreshing];
             
         }else{
             
@@ -519,7 +564,8 @@
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            
+            [self showHint:dicts[@"message"]];
+            [_buyingCollectionView.mj_header beginRefreshing];
             
         }else{
             

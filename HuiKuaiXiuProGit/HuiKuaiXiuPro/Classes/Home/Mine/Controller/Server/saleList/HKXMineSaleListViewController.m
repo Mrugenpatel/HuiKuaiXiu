@@ -9,14 +9,14 @@
 #import "HKXMineSaleListViewController.h"
 #import "CommonMethod.h"
 
-#import "HKXSupplierOrderStoreModel.h"
-#import "HKXSupplierOrderGoodsModel.h"
+#import "HKXOrderStoreModel.h"
+#import "HKXOrderGoodsModel.h"
 
-#import "HKXSupplierSaleListHeaderView.h"
-#import "HKXSupplierSaleListFooterView.h"
+#import "HKXSaleListHeaderView.h"
+#import "HKXSaleListFooterView.h"
 static NSString * const HKXHeaderId = @"header";
 static NSString * const HKXFooterId = @"footer";
-@interface HKXMineSaleListViewController ()<UIScrollViewDelegate , UITableViewDelegate , UITableViewDataSource,HKXSupplierSaleListBtnDelegate>
+@interface HKXMineSaleListViewController ()<UIScrollViewDelegate , UITableViewDelegate , UITableViewDataSource,HKXSaleListBtnDelegate>
 {
     UISegmentedControl * _segmentControl;//分段控制
     UIScrollView       * _bottomScrollView;//底层大的滑动视图
@@ -109,9 +109,9 @@ static NSString * const HKXFooterId = @"footer";
         
         [goodsListTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
         
-        [goodsListTableView registerClass:[HKXSupplierSaleListHeaderView class] forHeaderFooterViewReuseIdentifier:HKXHeaderId];
+        [goodsListTableView registerClass:[HKXSaleListHeaderView class] forHeaderFooterViewReuseIdentifier:HKXHeaderId];
         
-        [goodsListTableView registerClass:[HKXSupplierSaleListFooterView class] forHeaderFooterViewReuseIdentifier:HKXFooterId];
+        [goodsListTableView registerClass:[HKXSaleListFooterView class] forHeaderFooterViewReuseIdentifier:HKXFooterId];
         
         goodsListTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(configData)];
         
@@ -137,10 +137,11 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
+            goodsListTableView = _tableViewListArray[0];
             [goodsListTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                self.allGoodsDataListArray = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+                self.allGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.tableViewListArray[0] reloadData];
                 
             }else{
@@ -151,6 +152,7 @@ static NSString * const HKXFooterId = @"footer";
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
+            goodsListTableView = _tableViewListArray[0];
             [goodsListTableView.mj_header endRefreshing];
             [self.view hideActivity];
             
@@ -164,6 +166,7 @@ static NSString * const HKXFooterId = @"footer";
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
+        goodsListTableView = _tableViewListArray[1];
         [goodsListTableView.mj_header endRefreshing];
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectrOrderStatus.do"] params:dict success:^(id responseObject) {
             
@@ -172,7 +175,7 @@ static NSString * const HKXFooterId = @"footer";
             [self.view hideActivity];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                self.allDoneGoodsDataListArray = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+                self.allDoneGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.tableViewListArray[1] reloadData];
                 
             }else{
@@ -182,6 +185,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
+            goodsListTableView = _tableViewListArray[1];
             [goodsListTableView.mj_header endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
@@ -189,21 +193,23 @@ static NSString * const HKXFooterId = @"footer";
         }];
     }else if (_segmentControl.selectedSegmentIndex == 2){
         
-         int i = 1;
+        int i = 1;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
+       
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectSeller.do"] params:dict success:^(id responseObject) {
             
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
+            goodsListTableView = _tableViewListArray[2];
             [goodsListTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                self.allCanceledGoodsDataListArray = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+                self.allCanceledGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.tableViewListArray[2] reloadData];
                 
             }else{
@@ -213,6 +219,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
+            goodsListTableView = _tableViewListArray[2];
             [goodsListTableView.mj_header endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
@@ -230,7 +237,7 @@ static NSString * const HKXFooterId = @"footer";
     if (_segmentControl.selectedSegmentIndex == 0) {
         
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithDouble:uId],@"uId",page,@"pageNo",
+                               [NSNumber numberWithDouble:uId],@"uId",[NSNumber numberWithInt:page],@"pageNo",
                                @"8",@"pageSize",
                                nil];
         [self.view showActivity];
@@ -239,11 +246,12 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            [goodsListTableView.mj_header endRefreshing];
+            goodsListTableView = _tableViewListArray[0];
+            [goodsListTableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                tempArr = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+                tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.allGoodsDataListArray addObject:tempArr];
                 page ++;
                 [self.tableViewListArray[0] reloadData];
@@ -256,7 +264,7 @@ static NSString * const HKXFooterId = @"footer";
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
-            [goodsListTableView.mj_header endRefreshing];
+            [goodsListTableView.mj_footer endRefreshing];
             [self.view hideActivity];
             
         }];
@@ -265,11 +273,12 @@ static NSString * const HKXFooterId = @"footer";
         
         int i = 0;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
+                               [NSNumber numberWithDouble:uId],@"uId",[NSNumber numberWithInt:page],@"pageNo",
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
-        [goodsListTableView.mj_header endRefreshing];
+        goodsListTableView = _tableViewListArray[1];
+        [goodsListTableView.mj_footer endRefreshing];
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectrOrderStatus.do"] params:dict success:^(id responseObject) {
             
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -278,10 +287,10 @@ static NSString * const HKXFooterId = @"footer";
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                tempArr = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+                tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.allGoodsDataListArray addObject:tempArr];
                 page ++;
-                [self.tableViewListArray[0] reloadData];
+                [self.tableViewListArray[1] reloadData];
                 
             }else{
                 
@@ -290,7 +299,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
-            [goodsListTableView.mj_header endRefreshing];
+            [goodsListTableView.mj_footer endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
             
@@ -299,7 +308,7 @@ static NSString * const HKXFooterId = @"footer";
         
         int i = 1;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
+                               [NSNumber numberWithDouble:uId],@"uId",[NSNumber numberWithInt:page],@"pageNo",
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
@@ -308,14 +317,15 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            [goodsListTableView.mj_header endRefreshing];
+            goodsListTableView = _tableViewListArray[2];
+            [goodsListTableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                tempArr = [HKXSupplierOrderStoreModel modelWithArray:dicts[@"data"]];
+                tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.allGoodsDataListArray addObject:tempArr];
                 page ++;
-                [self.tableViewListArray[0] reloadData];
+                [self.tableViewListArray[2] reloadData];
                 
             }else{
                 
@@ -324,7 +334,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
-            [goodsListTableView.mj_header endRefreshing];
+            [goodsListTableView.mj_footer endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
             
@@ -343,7 +353,19 @@ static NSString * const HKXFooterId = @"footer";
 - (void)segmentedControlValueChanged:(UISegmentedControl *)sc
 {
     [_bottomScrollView setContentOffset:CGPointMake(_bottomScrollView.frame.size.width * sc.selectedSegmentIndex, 0) animated:YES];
-    
+    if (sc.selectedSegmentIndex == 0) {
+        
+        goodsListTableView = _tableViewListArray[0];
+        [goodsListTableView.mj_header beginRefreshing];
+    }else if (sc.selectedSegmentIndex == 1) {
+        
+        goodsListTableView = _tableViewListArray[1];
+        [goodsListTableView.mj_header beginRefreshing];
+    }if (sc.selectedSegmentIndex == 2) {
+        
+        goodsListTableView = _tableViewListArray[2];
+        [goodsListTableView.mj_header beginRefreshing];
+    }
 }
 
 /**
@@ -394,23 +416,8 @@ static NSString * const HKXFooterId = @"footer";
  */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    HKXSupplierOrderStoreModel * store = self.allGoodsDataListArray[section];
-    if (tableView == self.tableViewListArray[0])
-    {
-        
-        return store.goodsArr.count;
-    }
-    else if (tableView == self.tableViewListArray[1])
-    {
-        return self.allDoneGoodsDataListArray.count;
-    }
-    else if(tableView == self.tableViewListArray[2])
-    {
-        return self.allCanceledGoodsDataListArray.count;
-    }else{
-        
-        return 0;
-    }
+    HKXOrderStoreModel * store = self.allGoodsDataListArray[section];
+    return store.goodsArr.count;
 }
 /**
  *  cell的行高
@@ -437,8 +444,8 @@ static NSString * const HKXFooterId = @"footer";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    HKXSupplierOrderStoreModel * store = self.allGoodsDataListArray[section];
-    HKXSupplierSaleListHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HKXHeaderId];
+    HKXOrderStoreModel * store = self.allGoodsDataListArray[section];
+    HKXSaleListHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HKXHeaderId];
     header.store = store;
    
     return header;
@@ -447,8 +454,8 @@ static NSString * const HKXFooterId = @"footer";
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
 
-    HKXSupplierOrderStoreModel * store = self.allGoodsDataListArray[section];
-    HKXSupplierSaleListFooterView *footer = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HKXFooterId];
+    HKXOrderStoreModel * store = self.allGoodsDataListArray[section];
+    HKXSaleListFooterView *footer = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HKXFooterId];
     footer.tag = section;
     footer.delegate = self;
     footer.store = store;
@@ -486,8 +493,8 @@ static NSString * const HKXFooterId = @"footer";
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-   HKXSupplierOrderStoreModel * store = self.allGoodsDataListArray[indexPath.section];
-    HKXSupplierOrderGoodsModel * goods = store.goodsArr[indexPath.row];
+    HKXOrderStoreModel * store = self.allGoodsDataListArray[indexPath.section];
+    HKXOrderGoodsModel * goods = store.goodsArr[indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     UIImageView * reGoodsImage = [cell viewWithTag:90001];
@@ -577,7 +584,8 @@ static NSString * const HKXFooterId = @"footer";
 
 - (void)btnClick:(UIButton *)actionBtn{
     
-    HKXSupplierOrderStoreModel * store = self.allGoodsDataListArray[actionBtn.tag];
+    UIView * footer = actionBtn.superview;
+    HKXOrderStoreModel * store = self.allGoodsDataListArray[footer.tag];
     if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"-1"]) {
         
         [self delaeteOrderWithOrderId:[NSString stringWithFormat:@"%@",store.orderId]];
@@ -587,9 +595,16 @@ static NSString * const HKXFooterId = @"footer";
         NSLog(@"完成");
         
     }else if([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"10"]) {
-        
+
+        if (actionBtn.tag > 999) {
+            
         [self cancelOrderWithOrderId:[NSString stringWithFormat:@"%@",store.orderId]];
+            
+        }else{
+        
         [self confirmDispatchGoodsWithOrderId:[NSString stringWithFormat:@"%@",store.orderId]];
+            
+        }
         
     }else if([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]) {
         
@@ -618,7 +633,7 @@ static NSString * const HKXFooterId = @"footer";
                            [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/sellerCallOrder.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
@@ -626,7 +641,7 @@ static NSString * const HKXFooterId = @"footer";
         if ([dicts[@"success"] boolValue] == YES) {
             
             [self showHint:dicts[@"message"]];
-            
+            [goodsListTableView.mj_header beginRefreshing];
         }else{
             
             [self showHint:dicts[@"message"]];
@@ -641,8 +656,6 @@ static NSString * const HKXFooterId = @"footer";
     
 }
 
-
-
 - (void)confirmDispatchGoodsWithOrderId:(NSString *)orderId{
     
     
@@ -650,7 +663,7 @@ static NSString * const HKXFooterId = @"footer";
                            [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deliverGood.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
@@ -658,7 +671,7 @@ static NSString * const HKXFooterId = @"footer";
         if ([dicts[@"success"] boolValue] == YES) {
             
             [self showHint:dicts[@"message"]];
-            
+            [goodsListTableView.mj_header beginRefreshing];
         }else{
             
             [self showHint:dicts[@"message"]];
@@ -681,7 +694,7 @@ static NSString * const HKXFooterId = @"footer";
                            [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/sellerDelOrder.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
@@ -689,6 +702,7 @@ static NSString * const HKXFooterId = @"footer";
         if ([dicts[@"success"] boolValue] == YES) {
             
             [self showHint:dicts[@"message"]];
+            [goodsListTableView.mj_header beginRefreshing];
             
         }else{
             

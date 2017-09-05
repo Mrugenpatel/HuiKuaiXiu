@@ -176,9 +176,7 @@
                 
                 [self showHint:dicts[@"message"]];
             }
-            
-            
-            
+
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
@@ -211,9 +209,7 @@
                 [self showHint:dicts[@"message"]];
                 
             }
-            
-            
-            
+ 
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
@@ -222,6 +218,7 @@
         }];
     }
 }
+
 #pragma mark - Private Method
 #pragma mark - Delegate & Data Source
 #pragma mark - Setters & Getters

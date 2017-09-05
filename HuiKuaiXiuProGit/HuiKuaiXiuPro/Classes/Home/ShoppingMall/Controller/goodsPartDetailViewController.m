@@ -10,6 +10,8 @@
 
 #import "HKXShoppingMallViewController.h"
 
+#import "HKXConfirmOrderViewController.h"
+
 #import "goodsInfoTableViewCell.h"
 #import "bottomPopView.h"
 #import "UIImageView+WebCache.h"
@@ -82,7 +84,7 @@
     [self createLandscapeTopScrollView];
     
     goodsName = [[UILabel alloc] initWithFrame:CGRectMake(20, _landscapeTopScrollView.frame.origin.y + _landscapeTopScrollView.frame.size.height, ScreenWidth - 40, 50 * delegate.autoSizeScaleY)];
-    goodsName.text = self.partModel.brand;
+    goodsName.text = self.partModel.basename;
     goodsName.numberOfLines = 0;
     goodsName.lineBreakMode = NSLineBreakByWordWrapping;
     goodsName.font = [UIFont systemFontOfSize:20];
@@ -406,9 +408,7 @@
                     
                     [self showHint:dicts[@"message"]];
                 }
-                
-                
-                
+ 
             } failure:^(NSError *error) {
                 
                 NSLog(@"请求失败%@",error);
@@ -460,13 +460,14 @@
         
     }];
     
-
-    
-    
 }
 //购买
 - (void)buy{
     
+    HKXConfirmOrderViewController * confirm = [[HKXConfirmOrderViewController alloc] init];
+    confirm.partGood = self.partModel;
+    confirm.partGood.number = count;
+    [self.navigationController pushViewController:confirm animated:YES];
     
 }
 

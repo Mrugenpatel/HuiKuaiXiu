@@ -8,17 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-#import "HKXSupplierOrderStoreModel.h"
+#import "HKXOrderStoreModel.h"
 
-@protocol HKXSupplierSaleListBtnDelegate <NSObject>
+@protocol HKXSaleListBtnDelegate <NSObject>
 
 - (void)btnClick:(UIButton *)actionBtn;
 
 @end
 
-@interface HKXSupplierSaleListFooterView : UITableViewHeaderFooterView
-@property(nonatomic ,strong)HKXSupplierOrderStoreModel * store;
+@interface HKXSaleListFooterView : UITableViewHeaderFooterView
+@property(nonatomic ,strong)HKXOrderStoreModel * store;
 @property(nonatomic ,strong)UIButton * actionLeftBtn;
 @property(nonatomic ,strong)UIButton * actionRightBtn;
-@property(nonatomic ,weak)id<HKXSupplierSaleListBtnDelegate>delegate;
+@property(nonatomic ,weak)id<HKXSaleListBtnDelegate>delegate;
 @end

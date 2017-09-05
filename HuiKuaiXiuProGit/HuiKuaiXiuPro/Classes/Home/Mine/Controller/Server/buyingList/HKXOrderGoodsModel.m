@@ -6,9 +6,9 @@
 //  Copyright © 2017年 Lee. All rights reserved.
 //
 
-#import "HKXSupplierOrderGoodsModel.h"
+#import "HKXOrderGoodsModel.h"
 
-@implementation HKXSupplierOrderGoodsModel
+@implementation HKXOrderGoodsModel
 
 - (instancetype)initWithDict:(NSDictionary *)dict{
     
@@ -41,7 +41,7 @@
     NSMutableArray *arrayM = [NSMutableArray array];
     for (NSDictionary *dict in array) {
         
-        HKXSupplierOrderGoodsModel *goods = [HKXSupplierOrderGoodsModel goodsWithDict:dict];
+        HKXOrderGoodsModel *goods = [HKXOrderGoodsModel goodsWithDict:dict];
         [arrayM addObject:goods];
     }
     return arrayM;

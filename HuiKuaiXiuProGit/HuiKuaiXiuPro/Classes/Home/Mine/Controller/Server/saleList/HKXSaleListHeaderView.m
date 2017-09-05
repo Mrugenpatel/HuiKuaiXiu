@@ -6,11 +6,11 @@
 //  Copyright © 2017年 Lee. All rights reserved.
 //
 
-#import "HKXSupplierSaleListHeaderView.h"
+#import "HKXSaleListHeaderView.h"
 
 #import "CommonMethod.h"
 
-@implementation HKXSupplierSaleListHeaderView
+@implementation HKXSaleListHeaderView
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -47,7 +47,7 @@
     return self;
 }
 
-- (void)setStore:(HKXSupplierOrderStoreModel *)store{
+- (void)setStore:(HKXOrderStoreModel *)store{
     
     _store = store;
     self.orderNumLabel.text = [NSString stringWithFormat:@"订单编号:%@",store.orderId];

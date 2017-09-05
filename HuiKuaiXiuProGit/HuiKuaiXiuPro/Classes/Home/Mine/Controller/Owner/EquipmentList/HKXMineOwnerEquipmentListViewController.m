@@ -93,7 +93,10 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
     }
-    
+    UIButton * reEditBtn = [cell viewWithTag:3004];
+    [reEditBtn removeFromSuperview];
+    UIButton * reDeleteBtn = [cell viewWithTag:3005];
+    [reDeleteBtn removeFromSuperview];
     UIImageView * reLogoImage = [cell viewWithTag:3000];
     [reLogoImage removeFromSuperview];
     UILabel * reTitleLabel = [cell viewWithTag:3001];
@@ -135,10 +138,45 @@
         numeberLabel.text = equipmentModel.nameplateNum;
     [cell addSubview:numeberLabel];
 
-
+    NSArray * btnTitleArr = @[@"编辑",@"删除"];
+    for (int i = 0; i < 2; i ++)
+    {
+        UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        //            btn.tag = 3004 + i;
+        btn.tag = 35000 + i * 10000 + indexPath.row ;
+        
+        btn.frame = CGRectMake(CGRectGetMaxX(logoImageView.frame) + 33 * myDelegate.autoSizeScaleX * i + 184 * myDelegate.autoSizeScaleX, 87 * myDelegate.autoSizeScaleY, 33 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY);
+        [btn setTitle:btnTitleArr[i] forState:UIControlStateNormal];
+        btn.backgroundColor = [UIColor whiteColor];
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(editOrDeleteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        btn.titleLabel.font = [UIFont systemFontOfSize:11 * myDelegate.autoSizeScaleX];
+        [cell addSubview:btn];
+    }
     
     return cell;
 }
+
+- (void)editOrDeleteBtnClick:(UIButton *)btn
+{
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    self.hidesBottomBarWhenPushed = YES;
+    if (btn.tag < 45000)
+    {
+        NSInteger indexPath = btn.tag - 35000;
+        
+        //编辑
+        
+    }
+    else
+    {
+        NSInteger indexPath = btn.tag - 45000;
+        //删除
+       
+        
+    }
+}
+
 
 #pragma mark - Setters & Getters
 - (NSMutableArray *)equipmentListArray

@@ -11,6 +11,7 @@
 #import "WXApi.h"
 #import <AlipaySDK/AlipaySDK.h>
 #import "HKXMineOwnerRepairListViewController.h"
+#import "HKXShoppingMallViewController.h"
 @interface HKXMinePayViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _payTableView;
@@ -52,8 +53,16 @@
 
 - (void)popViewcontroller{
     
-    HKXMineOwnerRepairListViewController * list = [[HKXMineOwnerRepairListViewController alloc] init];
-    [self.navigationController popToViewController:list animated:YES];
+    if (self.come == 0) {
+        
+        HKXShoppingMallViewController * shoppingMall = [[HKXShoppingMallViewController alloc] init];
+        [self.navigationController popToViewController:shoppingMall animated:YES];
+        
+    }else{
+    
+       HKXMineOwnerRepairListViewController * list = [[HKXMineOwnerRepairListViewController alloc] init];
+       [self.navigationController popToViewController:list animated:YES];
+    }
 }
 
 #pragma mark - CreateUI
@@ -92,16 +101,31 @@
 - (void)payCOSTBtnClick:(UIButton *)btn
 {
     
-    if (!_WechatBtn.selected || !_AlipayBtn.selected) {
+    if (!_WechatBtn.selected && !_AlipayBtn.selected) {
         
         [self showHint:@"请选择支付方式"];
-    }
-    if (_WechatBtn.selected) {
+        return;
+    }if (_WechatBtn.selected) {
         
+        if (self.come == 0) {
+            
+        [self GoodsWechatPay];
+        }else{
+            
         [self WechatPay];
+            
+        }
+        
     }else if (_AlipayBtn.selected){
         
-        [self Alipay];
+        if (self.come == 0) {
+            
+            [self GoodsAlipay];
+        }else{
+            
+            [self Alipay];
+            
+        }
     }
     
     
@@ -114,7 +138,7 @@
     NSLog(@"%@",dict);
     
     [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",@"http://ceshihkx.ngrok.cc/hkx/",@"app/pay/repairwxpay.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"app/pay/repairwxpay.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",responseObject);
@@ -123,8 +147,6 @@
         if ([dicts[@"success"] boolValue] == YES) {
             
             // NOTE: 调用支付结果开始支付
-            
-
             NSDictionary * json = [dicts objectForKey:@"data"];
             PayReq *request = [[PayReq alloc] init];
             request.partnerId = [json objectForKey:@"partnerid"];
@@ -151,6 +173,48 @@
     
 
 }
+//微信
+- (void)GoodsWechatPay{
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:[_ruoId doubleValue]],@"orderId",[NSNumber numberWithInteger:self.come],@"come",nil];
+    NSLog(@"%@",dict);
+    
+    [self.view showActivity];
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"pay/shopOrderWXpay.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",responseObject);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            // NOTE: 调用支付结果开始支付
+            NSDictionary * json = [dicts objectForKey:@"data"];
+            PayReq *request = [[PayReq alloc] init];
+            request.partnerId = [json objectForKey:@"partnerid"];
+            request.prepayId= [json objectForKey:@"prepayid"];
+            request.package = [json objectForKey:@"package"];
+            request.nonceStr= [json objectForKey:@"noncestr"];
+            request.timeStamp= [[json objectForKey:@"timestamp"] intValue];
+            request.sign= [json objectForKey:@"sign"];
+            
+            [WXApi sendReq:request];
+            
+        }else if ([dicts[@"success"] boolValue] == NO) {
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        [self showHint:@"请求失败"];
+    }];
+    
+    
+}
+
 //支付宝
 - (void)Alipay{
     
@@ -158,7 +222,7 @@
     NSLog(@"%@",dict);
     
     [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",@"http://ceshihkx.ngrok.cc/hkx/",@"app/pay/repairAlipay.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"app/pay/repairAlipay.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",responseObject);
@@ -196,6 +260,51 @@
         [self showHint:@"请求失败"];
     }];
 
+}
+- (void)GoodsAlipay{
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:[_ruoId doubleValue]],@"orderId",[NSNumber numberWithInteger:self.come],@"come",nil];
+    NSLog(@"%@",dict);
+    
+    [self.view showActivity];
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"app/pay/repairAlipay.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",responseObject);
+        
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            // NOTE: 调用支付结果开始支付
+            [[AlipaySDK defaultService] payOrder:dicts[@"data"] fromScheme:@"Lee.HKXPro" callback:^(NSDictionary *resultDic) {
+                
+                NSLog(@"reslut = %@",resultDic);
+                if ([resultDic[@"resultStatus"] isEqualToString:@"9000"]) {
+                    
+                    [self showHint:@"支付成功"];
+                    HKXMineOwnerRepairListViewController * list = [[HKXMineOwnerRepairListViewController alloc] init];
+                    [self.navigationController popToViewController:list animated:YES];
+                }else{
+                    
+                    [self showHint:@"支付失败"];
+                }
+                
+                
+            }];
+            
+        }else if ([dicts[@"success"] boolValue] == NO) {
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        [self showHint:@"请求失败"];
+    }];
+    
 }
 
 

@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "HKXOrderStoreModel.h"
+
 @interface HKXMineBuyingDetailViewController : UIViewController
+
+@property(nonatomic ,strong)HKXOrderStoreModel * store;
 
 @end

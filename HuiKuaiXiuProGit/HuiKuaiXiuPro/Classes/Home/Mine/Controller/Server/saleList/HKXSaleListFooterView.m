@@ -6,11 +6,11 @@
 //  Copyright © 2017年 Lee. All rights reserved.
 //
 
-#import "HKXSupplierSaleListFooterView.h"
+#import "HKXSaleListFooterView.h"
 
 #import "CommonMethod.h"
 
-@implementation HKXSupplierSaleListFooterView
+@implementation HKXSaleListFooterView
 
 - (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -22,7 +22,7 @@
         self.actionLeftBtn.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,5 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
         self.actionLeftBtn.layer.cornerRadius = 2;
         self.actionLeftBtn.clipsToBounds = YES;
-        self.actionLeftBtn.tag = self.tag;
+        self.actionLeftBtn.tag = self.tag + 1000;
         [self.actionLeftBtn addTarget:self action:@selector(leftBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.actionLeftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.actionLeftBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa302"];
@@ -32,7 +32,7 @@
         self.actionRightBtn.frame = CGRectMake(22 * myDelegate.autoSizeScaleX + 180 * myDelegate.autoSizeScaleX,5 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
         self.actionRightBtn.layer.cornerRadius = 2;
         self.actionRightBtn.clipsToBounds = YES;
-        self.actionRightBtn.tag = self.tag;
+        self.actionRightBtn.tag = self.tag + 100;
         [self.actionRightBtn addTarget:self action:@selector(rightBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.actionRightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.actionRightBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa302"];
@@ -41,7 +41,7 @@
     return self;
 }
 
-- (void)setStore:(HKXSupplierOrderStoreModel *)store{
+- (void)setStore:(HKXOrderStoreModel *)store{
     
     _store = store;
     

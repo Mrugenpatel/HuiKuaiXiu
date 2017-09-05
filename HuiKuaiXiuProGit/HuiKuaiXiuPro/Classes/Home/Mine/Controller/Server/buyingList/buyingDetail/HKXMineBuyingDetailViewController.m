@@ -9,6 +9,8 @@
 #import "HKXMineBuyingDetailViewController.h"
 #import "CommonMethod.h"
 
+#import "HKXGoodsView.h"
+
 @interface HKXMineBuyingDetailViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _detailTableView;//订单详情
@@ -41,10 +43,7 @@
 }
 #pragma mark - ConfigData
 #pragma mark - Action
-- (void)buyOneMoreBtnClick:(UIButton *)btn
-{
-    NSLog(@"再来一单");
-}
+
 #pragma mark - Private Method
 #pragma mark - Delegate & Data Source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -54,6 +53,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     if (indexPath.row == 0)
     {
         return 95 / 2 * myDelegate.autoSizeScaleY;
@@ -68,7 +68,7 @@
     }
     else if (indexPath.row == 3)
     {
-        return (190 + 20 + 34) / 2 * myDelegate.autoSizeScaleY;
+        return (190 + 20 + 34) / 2 * myDelegate.autoSizeScaleY * self.store.goodsArr.count;
     }
     else if (indexPath.row == 7)
     {
@@ -104,7 +104,8 @@
     [reImg removeFromSuperview];
     UIButton * reOneMoreBtn = [cell viewWithTag:50006];
     [reOneMoreBtn removeFromSuperview];
-    
+    UIButton * reOneMoreBtn2 = [cell viewWithTag:50007];
+    [reOneMoreBtn2 removeFromSuperview];
     
     UILabel * label1 = [[UILabel alloc] init];
     label1.tag = 50000;
@@ -122,75 +123,108 @@
     if (indexPath.row == 0)
     {
         label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
-        label1.text = @"订单号：1234567";
+        label1.text =[NSString stringWithFormat:@"订单号:%@",self.store.orderId];
         label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
         
         label2.frame = CGRectMake(300 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"卖家待发货" WithFont:16 * myDelegate.autoSizeScaleX], 16 * myDelegate.autoSizeScaleX);
-        label2.text = @"完成";
+        label2.text = [NSString stringWithFormat:@"%@",_store.orderMessage];
         label2.textColor = [UIColor redColor];
         label2.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
     }
     else if (indexPath.row == 1)
     {
         label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 13 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
-        label1.text = @"万三 12345678912";
+        label1.text = [NSString stringWithFormat:@"%@ %@",self.store.companyName,self.store.addTel];
         label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
         
         label2.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 25 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
-        label2.text = @"北京市海淀区大钟寺9号楼京仪大厦2层";
+        label2.text = [NSString stringWithFormat:@"%@",self.store.add];
         label2.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
     }
     else if (indexPath.row == 2)
     {
         cell.backgroundColor = [UIColor colorWithRed:235 / 255.0 green:235 / 255.0 blue:235 / 255.0 alpha:1];
-        label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 8 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 14 * myDelegate.autoSizeScaleX);
-        label1.text = @"凝碧液压店铺";
+        label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 8 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 14 * myDelegate.autoSizeScaleY);
+        label1.text = [NSString stringWithFormat:@"%@",self.store.companyName];
         label1.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
     }
     else if (indexPath.row == 3)
     {
-        UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(30 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
-        goodsImg.tag = 50005;
-        goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
-        [cell addSubview:goodsImg];
+        for (int i = 0; i < self.store.goodsArr.count; i ++) {
+            
+            HKXGoodsView * goodsView = [[HKXGoodsView alloc] initWithFrame:CGRectMake(0,(190 + 20 + 34) / 2 * myDelegate.autoSizeScaleY * i, ScreenWidth, (190 + 20 + 34) / 2 * myDelegate.autoSizeScaleY)];
+            goodsView.goods = self.store.goodsArr[i];
+            [cell addSubview:goodsView];
+        }
         
-        label1.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY);
-        label1.numberOfLines = 2;
-        label1.text = @"哈威V30D140液压泵哈威V30D140液压泵";
-        label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
-        
-        label2.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 9 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 14 * myDelegate.autoSizeScaleX);
-        label2.text = @"产品型号：XXXXXXX";
-        label2.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
-        label2.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
-        
-        label3.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label2.frame) + 13 * myDelegate.autoSizeScaleY, 110 * myDelegate.autoSizeScaleX, 15 * myDelegate.autoSizeScaleX);
-        label3.textColor = [UIColor redColor];
-        label3.text = [NSString stringWithFormat:@"¥%.2f",1200.00];
-        label3.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
-        
-        
-        label4.frame = CGRectMake(CGRectGetMaxX(goodsImg.frame) + 175 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label2.frame) + 13 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"数量：2" WithFont:12 * myDelegate.autoSizeScaleX], 12 * myDelegate.autoSizeScaleX);
-        label4.text = @"数量：2";
-        label4.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
-        label4.font = [UIFont systemFontOfSize:12 * myDelegate.autoSizeScaleX];
     }
     else if (indexPath.row == 7)
     {
         label1.frame = CGRectMake(224 * myDelegate.autoSizeScaleX, 13 * myDelegate.autoSizeScaleY, ScreenWidth - 224 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleY);
-        label1.text = @"实付款：¥1200.0";
+        label1.text = [NSString stringWithFormat:@"实付款:¥ %.2f",[self.store.cost floatValue]];
         label1.textColor = [UIColor redColor];
         label1.font = [UIFont boldSystemFontOfSize:15 * myDelegate.autoSizeScaleY];
         
-        UIButton * oneMoreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        oneMoreBtn.tag = 50006;
-        oneMoreBtn.frame = CGRectMake(217 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 67 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
-        oneMoreBtn.layer.cornerRadius = 2;
-        oneMoreBtn.clipsToBounds = YES;
-        oneMoreBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa304"];
-        [oneMoreBtn setTitle:@"再来一单" forState:UIControlStateNormal];
-        [oneMoreBtn addTarget:self action:@selector(buyOneMoreBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:oneMoreBtn];
+        UIButton * leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        leftBtn.tag = 50006;
+        leftBtn.frame = CGRectMake(217 * myDelegate.autoSizeScaleX -  150 * myDelegate.autoSizeScaleX - 30* myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 67 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
+        leftBtn.layer.cornerRadius = 2;
+        leftBtn.clipsToBounds = YES;
+        leftBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa304"];
+        
+        [leftBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+        [leftBtn addTarget:self action:@selector(leftBtnclick:) forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:leftBtn];
+        
+        UIButton * rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        rightBtn.tag = 50007;
+        rightBtn.frame = CGRectMake(217 * myDelegate.autoSizeScaleX, CGRectGetMaxY(label1.frame) + 67 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
+        rightBtn.layer.cornerRadius = 2;
+        rightBtn.clipsToBounds = YES;
+        rightBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa304"];
+        [rightBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+        [rightBtn addTarget:self action:@selector(rightBtnclick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        //卖家待发货
+        if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"10"]){
+            
+            leftBtn.hidden = YES;
+            rightBtn.hidden = YES;
+            
+        } //交易成功
+        else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"0"]){
+            
+            [leftBtn setTitle:@"删除订单" forState:UIControlStateNormal];
+            [rightBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+           
+            
+        }//待付款
+        else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
+     
+            leftBtn.hidden = YES;
+            [rightBtn setTitle:@"取消定单" forState:UIControlStateNormal];
+         
+        }//卖家已发货
+        else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
+           
+            [leftBtn setTitle:@"确认收货" forState:UIControlStateNormal];
+            [rightBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+         
+        }//交易成功
+        else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"3"]){
+            
+            [leftBtn setTitle:@"删除订单" forState:UIControlStateNormal];
+            [rightBtn setTitle:@"再来一单" forState:UIControlStateNormal];
+
+        }//已取消
+        else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"-1"]){
+            
+            leftBtn.hidden = YES;
+            [rightBtn setTitle:@"删除订单" forState:UIControlStateNormal];
+
+        }
+
+        [cell addSubview:rightBtn];
     }
     else
     {
@@ -199,12 +233,12 @@
         label2.frame = CGRectMake(294 * myDelegate.autoSizeScaleX, 0, ScreenWidth - 294 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
         label2.font = [UIFont systemFontOfSize:14 * myDelegate.autoSizeScaleX];
         
-        if (indexPath.row == 2)
+        if (indexPath.row == 4)
         {
             label1.text = @"支付方式";
             label2.text = @"在线支付";
         }
-        else if (indexPath.row == 3)
+        else if (indexPath.row == 5)
         {
             label1.text = @"商品金额";
             label2.text = @"¥1200.0";
@@ -217,6 +251,173 @@
     }
     return cell;
 }
+
+- (void)leftBtnclick:(UIButton *)leftBtn{
+    
+    
+    //交易成功
+    if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"0"]){
+        
+        //删除订单
+        [self delaeteOrderWithOrderId:self.store.orderId];
+        
+    }//待付款
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
+        
+        
+        
+    }//卖家已发货
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
+        
+        //确认收货
+        [self confirmTakeGoodsWithOrderId:self.store.orderId];
+        
+    }//交易成功
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"3"]){
+        
+        //删除订单
+        [self delaeteOrderWithOrderId:self.store.orderId];
+        
+    }//已取消
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"-1"]){
+        
+        
+        
+    }
+
+    
+}
+
+- (void)rightBtnclick:(UIButton *)rightBtn{
+    
+    //交易成功
+    if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"0"]){
+        
+        //再来一单
+        
+    }//待付款
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
+        
+        //取消订单
+        [self cancelOrderWithOrderId:self.store.orderId];
+        
+    }//卖家已发货
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
+        
+        //再来一单
+        
+    }//交易成功
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"3"]){
+        
+        //再来一单
+        
+    }//已取消
+    else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"-1"]){
+        
+        //删除订单
+        [self delaeteOrderWithOrderId:self.store.orderId];
+        
+    }
+
+    
+    
+}
+
+
+- (void)cancelOrderWithOrderId:(NSString *)orderId{
+    
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:[self.store.orderId doubleValue]],@"orderId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
+
+
+- (void)confirmTakeGoodsWithOrderId:(NSString *)orderId{
+    
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:[self.store.orderId doubleValue]],@"orderId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
+
+- (void)delaeteOrderWithOrderId:(NSString *)orderId{
+    
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithDouble:[self.store.orderId doubleValue]],@"orderId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self.view hideActivity];
+        
+    }];
+    
+}
+
+
 #pragma mark - Setters & Getters
 
 - (void)didReceiveMemoryWarning {

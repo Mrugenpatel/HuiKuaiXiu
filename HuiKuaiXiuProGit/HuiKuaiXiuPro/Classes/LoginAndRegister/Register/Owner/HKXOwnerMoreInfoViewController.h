@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "HKXRegisterData.h"
 
+typedef void (^ReturnBrandBlock)(NSString * brandId,NSString *type);
 
 @interface HKXOwnerMoreInfoViewController : UIViewController
+
+@property(nonatomic, copy) ReturnBrandBlock returnBrandBlock;
 
 @property (nonatomic , copy) NSString * mark;//新注册用户添加设备还是报修添加设备
 

@@ -364,10 +364,23 @@
     repairListModel * model = _orderListArray[indexPath.row];
     if ([model.appointmentTime isKindOfClass:[NSNull class]]) {
         
-        return 426.5 * myDelegate.autoSizeScaleY;
+        if ([model.repairStatus doubleValue] != 2){
+            
+            return 426.5 * myDelegate.autoSizeScaleY + 31 * myDelegate.autoSizeScaleY ;
+        }else{
+            
+            return 426.5 * myDelegate.autoSizeScaleY;
+        }
+        
     }else{
         
-        return 466.5 * myDelegate.autoSizeScaleY;
+        if ([model.repairStatus doubleValue] != 2){
+            
+            return 466.5 * myDelegate.autoSizeScaleY + 31 * myDelegate.autoSizeScaleY ;
+        }else{
+            
+            return 466.5 * myDelegate.autoSizeScaleY;
+        }
     }
     
     
@@ -375,6 +388,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     
     static NSString * cellIdentifier = @"cell";
     static NSString * cellIdentifier1 = @"cell1";
@@ -391,10 +405,18 @@
         cell1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier1];
     }
     repairListModel * model = _orderListArray[indexPath.row];
+    cell.contentView.tag = indexPath.row;
+    cell.tag = indexPath.row;
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callTele:)];
+    
+    cell1.contentView.tag = indexPath.row;
+    cell1.tag = indexPath.row;
     if([model.appointmentTime isKindOfClass:[NSNull class]] || model.appointmentTime.length == 0){
         
         UILabel * reEquipmentLabel = [cell viewWithTag:4000];
         [reEquipmentLabel removeFromSuperview];
+        UILabel * reTeleLb = [cell viewWithTag:3999];
+        [reTeleLb removeFromSuperview];
         UILabel * reTroubleTypeLabel = [cell viewWithTag:4001];
         [reTroubleTypeLabel removeFromSuperview];
         UILabel * reTroubleDescribeLabel = [cell viewWithTag:4002];
@@ -418,12 +440,31 @@
         //    维修设备
         UILabel * equipmentNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, 55 / 2 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
         equipmentNameLabel.tag = 4000;
-        equipmentNameLabel.text = [NSString stringWithFormat:@"维修设备：%@",    model.brandModel];
+        equipmentNameLabel.text = [NSString stringWithFormat:@"维修设备：%@",model.brandModel];
         equipmentNameLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
         [cell addSubview:equipmentNameLabel];
         
-        //    故障类型
-        UILabel * troubleTypeLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
+        //机主电话
+        UILabel * teleLb = [[UILabel alloc] init];
+        
+        //故障类型
+        UILabel * troubleTypeLabel = [[UILabel alloc] init];
+        if ([model.repairStatus doubleValue] != 2) {
+            teleLb.frame= CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+            teleLb.tag = 3999;
+            teleLb.userInteractionEnabled = YES;
+            [teleLb addGestureRecognizer:tap];
+            teleLb.text = [NSString stringWithFormat:@"机主电话：%@",model.telephone];
+            teleLb.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
+            [cell addSubview:teleLb];
+            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(teleLb.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+            
+        }else{
+            
+            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+        }
+        
+        
         troubleTypeLabel.tag = 4001;
         troubleTypeLabel.text = [NSString stringWithFormat:@"故障类型：%@",model.fault];
         troubleTypeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
@@ -509,6 +550,8 @@
         
         UILabel * reEquipmentLabel = [cell1 viewWithTag:4000];
         [reEquipmentLabel removeFromSuperview];
+        UILabel * reTeleLb = [cell viewWithTag:3999];
+        [reTeleLb removeFromSuperview];
         UILabel * reTroubleTypeLabel = [cell1 viewWithTag:4001];
         [reTroubleTypeLabel removeFromSuperview];
         UILabel * reTroubleDescribeLabel = [cell1 viewWithTag:4002];
@@ -538,12 +581,31 @@
         equipmentNameLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
         [cell1 addSubview:equipmentNameLabel];
         
-        //    故障类型
-        UILabel * troubleTypeLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
+        //机主电话
+        UILabel * teleLb = [[UILabel alloc] init];
+        //故障类型
+        UILabel * troubleTypeLabel = [[UILabel alloc] init];
+        if ([model.repairStatus doubleValue] != 2) {
+            teleLb.frame= CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+            teleLb.tag = 3999;
+            teleLb.userInteractionEnabled = YES;
+            [teleLb addGestureRecognizer:tap];
+            teleLb.text = [NSString stringWithFormat:@"机主电话：%@",model.telephone];
+            teleLb.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
+            [cell1 addSubview:teleLb];
+            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(teleLb.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+            
+        }else{
+            
+            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+        }
+        
+        
         troubleTypeLabel.tag = 4001;
         troubleTypeLabel.text = [NSString stringWithFormat:@"故障类型：%@",model.fault];
         troubleTypeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
         [cell1 addSubview:troubleTypeLabel];
+        
         
         //   维修时间
         UILabel * repairTime = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troubleTypeLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
@@ -684,6 +746,7 @@
         
         NSLog(@"正在进行的订单");
         [self.view hideActivity];
+        [self showHint:@"请等待机主确认"];
         
     }else if ([model.repairStatus doubleValue] == 2) {
         
@@ -757,6 +820,14 @@
     
     
     
+}
+
+- (void)callTele:(UILabel *)view{
+    
+    UIView * suView = view.superview;
+    repairListModel * model = self.orderListArray[suView.tag];
+    NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",model.telephone];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }
 
 #pragma mark - Setters & Getters

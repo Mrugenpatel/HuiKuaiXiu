@@ -23,6 +23,7 @@
 #import "HKXOrderReceivingViewController.h"//orderReceiving
 #import "HKXLeaseViewController.h"//lease
 #import "HKXMineViewController.h"//mine
+#import "HKXRepairsViewController.h"
 
 #import <Photos/Photos.h>
 #import <CTAssetsPickerController/CTAssetsPickerController.h>
@@ -207,6 +208,16 @@
         HKXUserVertificationCodeResultModel * model = data;
         if (model.success)
         {
+            if ([self.mark isEqualToString:@"报修"]) {
+                UITextField * tf = [_bottomScrollView viewWithTag:4001];
+                if (self.returnBrandBlock) {
+                    
+                    self.returnBrandBlock(tf.text, @"3");
+                    [self.navigationController popViewControllerAnimated:YES];
+                }
+                return;
+            }
+            
             AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];
             backGroundView.backgroundColor = [UIColor darkGrayColor];

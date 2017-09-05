@@ -12,4 +12,5 @@
 
 @property (nonatomic , copy) NSString * payCount;//待支付金额
 @property (nonatomic , copy) NSString * ruoId;//订单id
+@property(nonatomic ,assign)NSInteger  come;
 @end
