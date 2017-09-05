@@ -51,7 +51,7 @@
     
     _store = store;
     self.orderNumLabel.text = [NSString stringWithFormat:@"订单编号:%@",store.orderId];
-    self.clientNameLabel.text = [NSString stringWithFormat:@"姓名:%@",store.companyName];
+    self.clientNameLabel.text = [NSString stringWithFormat:@"姓名:%@",store.addName];
     self.clientPhoneLabel.text = [NSString stringWithFormat:@"电话:%@",store.addTel];
     self.clientAddressLabel.text = [NSString stringWithFormat:@"地址:%@",store.add];
 }

@@ -10,6 +10,7 @@
 #import "CommonMethod.h"
 
 #import "HKXMineBuyingDetailViewController.h"//订单详情
+#import "HKXMinePayViewController.h"
 #import "HKXOrderStoreModel.h"
 #import "HKXOrderGoodsModel.h"
 
@@ -296,10 +297,10 @@
                 else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
                     if (i == 0 ) {
                         
-                        actionBtn.hidden = YES;
+                        [actionBtn setTitle:@"取消定单" forState:UIControlStateNormal];
                     }else{
                         
-                        [actionBtn setTitle:@"取消定单" forState:UIControlStateNormal];
+                        [actionBtn setTitle:@"立即支付" forState:UIControlStateNormal];
                     }
                     
                 }//卖家已发货
@@ -328,7 +329,7 @@
                     
                     if (i == 0 ) {
                         
-                         actionBtn.hidden = YES;
+                        actionBtn.hidden = YES;
                     }else{
                         
                         [actionBtn setTitle:@"删除订单" forState:UIControlStateNormal];
@@ -432,7 +433,7 @@
         }//待付款
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
             
-            
+            [self cancelOrderWithOrderId:store.orderId];
             
         }//卖家已发货
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"2"]){
@@ -463,8 +464,11 @@
         }//待付款
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
             
-            //取消订单
-            [self cancelOrderWithOrderId:store.orderId];
+            //支付
+            HKXMinePayViewController * pay = [[HKXMinePayViewController alloc] init];
+            pay.ruoId = store.orderId;
+            pay.payCount =[NSString stringWithFormat:@"%@",store.cost];
+            [self.navigationController pushViewController:pay animated:YES];
             
         }//卖家已发货
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"2"]){
@@ -578,6 +582,11 @@
         [self.view hideActivity];
         
     }];
+    
+}
+//再来一单
+- (void)BuyGoodsAgainWithOrderId:(NSString *)orderId{
+    
     
 }
 

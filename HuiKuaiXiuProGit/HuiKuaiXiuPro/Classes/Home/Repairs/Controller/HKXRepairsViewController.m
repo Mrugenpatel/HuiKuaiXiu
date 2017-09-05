@@ -133,7 +133,7 @@
     [self.view addSubview:_bottomView];
     
     //    文本框
-    NSArray * placeHolderContentArray = @[@"设备品牌/型号",@"设备所在地",@"联系人",@"联系人电话",@"设备工作小时",@"设备故障简要描述"];
+    NSArray * placeHolderContentArray = @[@"设备品牌/型号",@"设备所在地",@"联系人",@"联系人电话",@"设备工作小时",@""];
     for (int i = 0; i < placeHolderContentArray.count; i ++)
     {
         UITextField * contentTF = [[UITextField alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
@@ -211,7 +211,7 @@
         {
             float detailLabelLength = [CommonMethod getLabelLengthWithString:@"液压系统" WithFont:17 * myDelegate.autoSizeScaleX];
             
-            //contentTF.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY + 98 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0);
+            contentTF.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY + 98 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0);
             HKXMyTextView * textView = [[HKXMyTextView alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY + 98 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0)];
             textView.delegate = self;
             textView.font = [UIFont systemFontOfSize:18];
@@ -220,7 +220,7 @@
             textView.layer.borderWidth = 0.5;
             textView.layer.cornerRadius = 4.0f;
             textView.layer.masksToBounds = YES;
-            textView.placeholder = placeHolderContentArray[i];
+            textView.placeholder = @"设备故障简要描述";
             textView.placeholderColor = [UIColor lightGrayColor];
             textView.verticalSpacing = 10;
             textView.textContainerInset = UIEdgeInsetsMake(15, 10, 15, 10);
@@ -857,7 +857,7 @@
     
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:brandModel.text,@"brandModel",[NSNumber numberWithDouble:[_modleid doubleValue]],@"mId",address.text,@"address",contact.text,@"contact",telephone.text,@"telephone",workHours.text,@"workHours",faultType,@"faultType",faultInfo.text,@"faultInfo",imageDataString,@"picture",[NSNumber numberWithDouble:uId],@"uId",NULL,@"appointmentTime",lon,@"lon",lat,@"lat",nil];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:brandModel.text,@"brandModel",[NSNumber numberWithDouble:[_modleid doubleValue]],@"mId",address.text,@"address",contact.text,@"contact",telephone.text,@"telephone",workHours.text,@"workHours",faultType,@"faultType",faultInfo.text,@"faultInfo",imageDataString,@"picture",[NSNumber numberWithDouble:uId],@"uId",@"",@"appointmentTime",lon,@"lon",lat,@"lat",nil];
     NSLog(@"%@",dict);
     
     [self.view showActivity];

@@ -20,7 +20,9 @@ static NSString * const HKXFooterId = @"footer";
 {
     UISegmentedControl * _segmentControl;//分段控制
     UIScrollView       * _bottomScrollView;//底层大的滑动视图
-    UITableView * goodsListTableView;
+    UITableView * allGoodsListTableView;
+    UITableView * allDoneGoodsListTableView;
+    UITableView * allCanceledGoodsTableView;
     int page;
 }
 
@@ -43,7 +45,7 @@ static NSString * const HKXFooterId = @"footer";
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.segementTitleArray = [NSMutableArray arrayWithObjects:@"全部订单",@"已完成",@"已取消", nil];
     [self createUI];
-    [goodsListTableView.mj_header beginRefreshing];
+    [allGoodsListTableView.mj_header beginRefreshing];
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -87,37 +89,95 @@ static NSString * const HKXFooterId = @"footer";
     _bottomScrollView.delegate = self;
     [self.view addSubview:_bottomScrollView];
     
-    for (int i = 0 ; i < self.segementTitleArray.count ; i ++)
+    allGoodsListTableView = [[UITableView alloc] initWithFrame:CGRectMake(_bottomScrollView.frame.size.width * 0, 0, _bottomScrollView.frame.size.width, _bottomScrollView.frame.size.height) style:UITableViewStyleGrouped];
+    allGoodsListTableView.dataSource = self;
+    allGoodsListTableView.delegate = self;
+    allGoodsListTableView.showsVerticalScrollIndicator = NO;
+    //        设置分割线长度
+    if ([allGoodsListTableView respondsToSelector:@selector(setSeparatorInset:)])
     {
-        goodsListTableView = [[UITableView alloc] initWithFrame:CGRectMake(_bottomScrollView.frame.size.width * i, 0, _bottomScrollView.frame.size.width, _bottomScrollView.frame.size.height) style:UITableViewStyleGrouped];
-        goodsListTableView.dataSource = self;
-        goodsListTableView.delegate = self;
-        goodsListTableView.showsVerticalScrollIndicator = NO;
-        [_bottomScrollView addSubview:goodsListTableView];
-        [self.tableViewListArray addObject:goodsListTableView];
-        
-        
-        //        设置分割线长度
-        if ([goodsListTableView respondsToSelector:@selector(setSeparatorInset:)])
-        {
-            [goodsListTableView setSeparatorInset:UIEdgeInsetsMake(0, 12, 0, 12)];
-        }
-        if ([goodsListTableView respondsToSelector:@selector(setLayoutMargins:)])
-        {
-            [goodsListTableView setLayoutMargins:UIEdgeInsetsMake(0, 12, 0, 12)];
-        }
-        
-        [goodsListTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-        
-        [goodsListTableView registerClass:[HKXSaleListHeaderView class] forHeaderFooterViewReuseIdentifier:HKXHeaderId];
-        
-        [goodsListTableView registerClass:[HKXSaleListFooterView class] forHeaderFooterViewReuseIdentifier:HKXFooterId];
-        
-        goodsListTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(configData)];
-        
-        
-        goodsListTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+        [allGoodsListTableView setSeparatorInset:UIEdgeInsetsMake(0, 12, 0, 12)];
     }
+    if ([allGoodsListTableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [allGoodsListTableView setLayoutMargins:UIEdgeInsetsMake(0, 12, 0, 12)];
+    }
+    
+    [allGoodsListTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    
+    [allGoodsListTableView registerClass:[HKXSaleListHeaderView class] forHeaderFooterViewReuseIdentifier:HKXHeaderId];
+    
+    [allGoodsListTableView registerClass:[HKXSaleListFooterView class] forHeaderFooterViewReuseIdentifier:HKXFooterId];
+    
+    allGoodsListTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(configData)];
+    
+    
+    allGoodsListTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    [_bottomScrollView addSubview:allGoodsListTableView];
+    
+        
+        
+   
+    allDoneGoodsListTableView = [[UITableView alloc] initWithFrame:CGRectMake(_bottomScrollView.frame.size.width * 1, 0, _bottomScrollView.frame.size.width, _bottomScrollView.frame.size.height) style:UITableViewStyleGrouped];
+    allDoneGoodsListTableView.dataSource = self;
+    allDoneGoodsListTableView.delegate = self;
+    allDoneGoodsListTableView.showsVerticalScrollIndicator = NO;
+    [_bottomScrollView addSubview:allDoneGoodsListTableView];
+    [self.tableViewListArray addObject:allDoneGoodsListTableView];
+    
+    
+    //        设置分割线长度
+    if ([allDoneGoodsListTableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [allDoneGoodsListTableView setSeparatorInset:UIEdgeInsetsMake(0, 12, 0, 12)];
+    }
+    if ([allDoneGoodsListTableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [allDoneGoodsListTableView setLayoutMargins:UIEdgeInsetsMake(0, 12, 0, 12)];
+    }
+    
+    [allDoneGoodsListTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    
+    [allDoneGoodsListTableView registerClass:[HKXSaleListHeaderView class] forHeaderFooterViewReuseIdentifier:HKXHeaderId];
+    
+    [allDoneGoodsListTableView registerClass:[HKXSaleListFooterView class] forHeaderFooterViewReuseIdentifier:HKXFooterId];
+    
+    allDoneGoodsListTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(configData)];
+    
+    
+    allDoneGoodsListTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    
+    
+    
+    allCanceledGoodsTableView = [[UITableView alloc] initWithFrame:CGRectMake(_bottomScrollView.frame.size.width * 2, 0, _bottomScrollView.frame.size.width, _bottomScrollView.frame.size.height) style:UITableViewStyleGrouped];
+    allCanceledGoodsTableView.dataSource = self;
+    allCanceledGoodsTableView.delegate = self;
+    allCanceledGoodsTableView.showsVerticalScrollIndicator = NO;
+    [_bottomScrollView addSubview:allCanceledGoodsTableView];
+    [self.tableViewListArray addObject:allCanceledGoodsTableView];
+    
+    
+    //        设置分割线长度
+    if ([allCanceledGoodsTableView respondsToSelector:@selector(setSeparatorInset:)])
+    {
+        [allCanceledGoodsTableView setSeparatorInset:UIEdgeInsetsMake(0, 12, 0, 12)];
+    }
+    if ([allCanceledGoodsTableView respondsToSelector:@selector(setLayoutMargins:)])
+    {
+        [allCanceledGoodsTableView setLayoutMargins:UIEdgeInsetsMake(0, 12, 0, 12)];
+    }
+    
+    [allCanceledGoodsTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    
+    [allCanceledGoodsTableView registerClass:[HKXSaleListHeaderView class] forHeaderFooterViewReuseIdentifier:HKXHeaderId];
+    
+    [allCanceledGoodsTableView registerClass:[HKXSaleListFooterView class] forHeaderFooterViewReuseIdentifier:HKXFooterId];
+    
+    allCanceledGoodsTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(configData)];
+    
+    
+    allCanceledGoodsTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
+    
 }
 #pragma mark - ConfigData
 - (void)configData
@@ -137,8 +197,7 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            goodsListTableView = _tableViewListArray[0];
-            [goodsListTableView.mj_header endRefreshing];
+            [allGoodsListTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 self.allGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
@@ -152,8 +211,8 @@ static NSString * const HKXFooterId = @"footer";
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
-            goodsListTableView = _tableViewListArray[0];
-            [goodsListTableView.mj_header endRefreshing];
+            
+            [allGoodsListTableView.mj_header endRefreshing];
             [self.view hideActivity];
             
         }];
@@ -166,13 +225,14 @@ static NSString * const HKXFooterId = @"footer";
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
-        goodsListTableView = _tableViewListArray[1];
-        [goodsListTableView.mj_header endRefreshing];
+        
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectrOrderStatus.do"] params:dict success:^(id responseObject) {
             
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
+           
+            [allDoneGoodsListTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 self.allDoneGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
@@ -185,8 +245,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
-            goodsListTableView = _tableViewListArray[1];
-            [goodsListTableView.mj_header endRefreshing];
+            [allDoneGoodsListTableView.mj_header endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
             
@@ -205,8 +264,7 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            goodsListTableView = _tableViewListArray[2];
-            [goodsListTableView.mj_header endRefreshing];
+            [allCanceledGoodsTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 self.allCanceledGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
@@ -219,8 +277,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
-            goodsListTableView = _tableViewListArray[2];
-            [goodsListTableView.mj_header endRefreshing];
+            [allCanceledGoodsTableView.mj_header endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
             
@@ -246,8 +303,8 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            goodsListTableView = _tableViewListArray[0];
-            [goodsListTableView.mj_footer endRefreshing];
+            
+            [allGoodsListTableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
@@ -264,7 +321,7 @@ static NSString * const HKXFooterId = @"footer";
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
-            [goodsListTableView.mj_footer endRefreshing];
+            [allGoodsListTableView.mj_footer endRefreshing];
             [self.view hideActivity];
             
         }];
@@ -277,18 +334,18 @@ static NSString * const HKXFooterId = @"footer";
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
-        goodsListTableView = _tableViewListArray[1];
-        [goodsListTableView.mj_footer endRefreshing];
+        
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectrOrderStatus.do"] params:dict success:^(id responseObject) {
             
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
+            [allDoneGoodsListTableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.allGoodsDataListArray addObject:tempArr];
+                [self.allDoneGoodsDataListArray addObject:tempArr];
                 page ++;
                 [self.tableViewListArray[1] reloadData];
                 
@@ -299,7 +356,7 @@ static NSString * const HKXFooterId = @"footer";
             
         } failure:^(NSError *error) {
             
-            [goodsListTableView.mj_footer endRefreshing];
+            [allDoneGoodsListTableView.mj_footer endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
             
@@ -317,13 +374,12 @@ static NSString * const HKXFooterId = @"footer";
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            goodsListTableView = _tableViewListArray[2];
-            [goodsListTableView.mj_footer endRefreshing];
+            [allCanceledGoodsTableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.allGoodsDataListArray addObject:tempArr];
+                [self.allCanceledGoodsDataListArray addObject:tempArr];
                 page ++;
                 [self.tableViewListArray[2] reloadData];
                 
@@ -333,8 +389,8 @@ static NSString * const HKXFooterId = @"footer";
             }
             
         } failure:^(NSError *error) {
-            
-            [goodsListTableView.mj_footer endRefreshing];
+
+            [allCanceledGoodsTableView.mj_footer endRefreshing];
             NSLog(@"请求失败%@",error);
             [self.view hideActivity];
             
@@ -355,16 +411,15 @@ static NSString * const HKXFooterId = @"footer";
     [_bottomScrollView setContentOffset:CGPointMake(_bottomScrollView.frame.size.width * sc.selectedSegmentIndex, 0) animated:YES];
     if (sc.selectedSegmentIndex == 0) {
         
-        goodsListTableView = _tableViewListArray[0];
-        [goodsListTableView.mj_header beginRefreshing];
+        [allGoodsListTableView.mj_header beginRefreshing];
     }else if (sc.selectedSegmentIndex == 1) {
         
-        goodsListTableView = _tableViewListArray[1];
-        [goodsListTableView.mj_header beginRefreshing];
-    }if (sc.selectedSegmentIndex == 2) {
+        [allDoneGoodsListTableView.mj_header beginRefreshing];
         
-        goodsListTableView = _tableViewListArray[2];
-        [goodsListTableView.mj_header beginRefreshing];
+    }else if (sc.selectedSegmentIndex == 2) {
+
+        [allCanceledGoodsTableView.mj_header beginRefreshing];
+       
     }
 }
 
@@ -389,16 +444,16 @@ static NSString * const HKXFooterId = @"footer";
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     
-    if (tableView == self.tableViewListArray[0])
+    if (tableView == allGoodsListTableView)
     {
         
         return self.allGoodsDataListArray.count;
     }
-    else if (tableView == self.tableViewListArray[1])
+    else if (tableView == allDoneGoodsListTableView)
     {
         return self.allDoneGoodsDataListArray.count;
     }
-    else if(tableView == self.tableViewListArray[2])
+    else if(tableView == allCanceledGoodsTableView)
     {
         return self.allCanceledGoodsDataListArray.count;
     }else{
@@ -593,7 +648,7 @@ static NSString * const HKXFooterId = @"footer";
     }else if([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"0"]) {
         
         NSLog(@"完成");
-        
+
     }else if([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"10"]) {
 
         if (actionBtn.tag > 999) {
@@ -641,7 +696,17 @@ static NSString * const HKXFooterId = @"footer";
         if ([dicts[@"success"] boolValue] == YES) {
             
             [self showHint:dicts[@"message"]];
-            [goodsListTableView.mj_header beginRefreshing];
+            if (_segmentControl.selectedSegmentIndex == 0) {
+                
+                [allGoodsListTableView.mj_header beginRefreshing];
+            }else if (_segmentControl.selectedSegmentIndex == 1){
+                
+                [allDoneGoodsListTableView.mj_header beginRefreshing];
+            }else if (_segmentControl.selectedSegmentIndex == 2){
+                
+                [allCanceledGoodsTableView.mj_header beginRefreshing];
+            }
+        
         }else{
             
             [self showHint:dicts[@"message"]];
@@ -671,7 +736,18 @@ static NSString * const HKXFooterId = @"footer";
         if ([dicts[@"success"] boolValue] == YES) {
             
             [self showHint:dicts[@"message"]];
-            [goodsListTableView.mj_header beginRefreshing];
+            
+            if (_segmentControl.selectedSegmentIndex == 0) {
+                
+                [allGoodsListTableView.mj_header beginRefreshing];
+            }else if (_segmentControl.selectedSegmentIndex == 1){
+                
+                [allDoneGoodsListTableView.mj_header beginRefreshing];
+            }else if (_segmentControl.selectedSegmentIndex == 2){
+                
+                [allCanceledGoodsTableView.mj_header beginRefreshing];
+            }
+            
         }else{
             
             [self showHint:dicts[@"message"]];
@@ -685,7 +761,6 @@ static NSString * const HKXFooterId = @"footer";
     }];
     
 }
-
 
 - (void)delaeteOrderWithOrderId:(NSString *)orderId{
     
@@ -702,7 +777,16 @@ static NSString * const HKXFooterId = @"footer";
         if ([dicts[@"success"] boolValue] == YES) {
             
             [self showHint:dicts[@"message"]];
-            [goodsListTableView.mj_header beginRefreshing];
+            if (_segmentControl.selectedSegmentIndex == 0) {
+                
+                [allGoodsListTableView.mj_header beginRefreshing];
+            }else if (_segmentControl.selectedSegmentIndex == 1){
+                
+                [allDoneGoodsListTableView.mj_header beginRefreshing];
+            }else if (_segmentControl.selectedSegmentIndex == 2){
+                
+                [allCanceledGoodsTableView.mj_header beginRefreshing];
+            }
             
         }else{
             

@@ -7,6 +7,7 @@
 //
 
 #import "HKXMineBuyingDetailViewController.h"
+#import "HKXMinePayViewController.h"
 #import "CommonMethod.h"
 
 #import "HKXGoodsView.h"
@@ -201,8 +202,8 @@
         }//待付款
         else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
      
-            leftBtn.hidden = YES;
-            [rightBtn setTitle:@"取消定单" forState:UIControlStateNormal];
+            [leftBtn setTitle:@"取消订单" forState:UIControlStateNormal];
+            [rightBtn setTitle:@"去支付" forState:UIControlStateNormal];
          
         }//卖家已发货
         else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
@@ -264,7 +265,7 @@
     }//待付款
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
         
-        
+         [self cancelOrderWithOrderId:self.store.orderId];
         
     }//卖家已发货
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
@@ -298,8 +299,11 @@
     }//待付款
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
         
-        //取消订单
-        [self cancelOrderWithOrderId:self.store.orderId];
+        //支付
+        HKXMinePayViewController * pay = [[HKXMinePayViewController alloc] init];
+        pay.ruoId = self.store.orderId;
+        pay.payCount =[NSString stringWithFormat:@"%@",self.store.cost];
+        [self.navigationController pushViewController:pay animated:YES];
         
     }//卖家已发货
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
@@ -338,7 +342,8 @@
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            
+            [self showHint:dicts[@"message"]];
+            [self.navigationController popViewControllerAnimated:YES];
             
         }else{
             
@@ -370,7 +375,8 @@
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            
+            [self showHint:dicts[@"message"]];
+            [self.navigationController popViewControllerAnimated:YES];
             
         }else{
             
@@ -401,7 +407,8 @@
         [self.view hideActivity];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            
+            [self showHint:dicts[@"message"]];
+            [self.navigationController popViewControllerAnimated:YES];
             
         }else{
             

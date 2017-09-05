@@ -115,6 +115,7 @@
 		9BF70C051F596F26002FCD59 /* HKXMineAddressListData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C011F596F26002FCD59 /* HKXMineAddressListData.m */; };
 		9BF70C061F596F26002FCD59 /* HKXMineAddressListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BF70C031F596F26002FCD59 /* HKXMineAddressListModel.m */; };
 		CEA104D873E0E7F52E648939 /* libPods-HuiKuaiXiuPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0592FDD7DDF70CF0F4F743BD /* libPods-HuiKuaiXiuPro.a */; };
+		EF0C6D071F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = EF0C6D061F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.m */; };
 		EF390AC11F4D5644008F65A8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF390AC01F4D5644008F65A8 /* QuartzCore.framework */; };
 		EF3DA81E1F53F0C7006D5B8B /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EF3DA81C1F53F0C7006D5B8B /* AlipaySDK.bundle */; };
 		EF3DA81F1F53F0C7006D5B8B /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF3DA81D1F53F0C7006D5B8B /* AlipaySDK.framework */; };
@@ -441,6 +442,8 @@
 		9BF70C021F596F26002FCD59 /* HKXMineAddressListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineAddressListModel.h; sourceTree = "<group>"; };
 		9BF70C031F596F26002FCD59 /* HKXMineAddressListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineAddressListModel.m; sourceTree = "<group>"; };
 		9BF70C041F596F26002FCD59 /* HKXMineAddressListModelDataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineAddressListModelDataModels.h; sourceTree = "<group>"; };
+		EF0C6D051F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXOrderReceivingListTableViewCell.h; sourceTree = "<group>"; };
+		EF0C6D061F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXOrderReceivingListTableViewCell.m; sourceTree = "<group>"; };
 		EF390AC01F4D5644008F65A8 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		EF3DA81C1F53F0C7006D5B8B /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
 		EF3DA81D1F53F0C7006D5B8B /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
@@ -1497,6 +1500,8 @@
 				EF52EDB61F384D4F001FC384 /* repairCostTableViewCell.h */,
 				EF52EDB71F384D4F001FC384 /* repairCostTableViewCell.m */,
 				EF52EDB81F384D4F001FC384 /* repairCostTableViewCell.xib */,
+				EF0C6D051F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.h */,
+				EF0C6D061F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2298,6 +2303,7 @@
 				9BA0B4901F049F600047E0E5 /* HKXMineViewController.m in Sources */,
 				EFC0ACF31F5D2BE700A4D576 /* HKXGoodsView.m in Sources */,
 				9B8813B41F543AEE0009DB86 /* HKXMineSupplierAskValueListViewController.m in Sources */,
+				EF0C6D071F5E90FC00EFA4A8 /* HKXOrderReceivingListTableViewCell.m in Sources */,
 				9B9EE5D11F25D42700A95247 /* HKXOwnerRegisterMachineModel.m in Sources */,
 				9B48FFEB1F28895F006DBE95 /* HKXMineServeCertificateProfileModel.m in Sources */,
 				9B740C9E1F4E652B00E32A8E /* UIView+Extension.m in Sources */,

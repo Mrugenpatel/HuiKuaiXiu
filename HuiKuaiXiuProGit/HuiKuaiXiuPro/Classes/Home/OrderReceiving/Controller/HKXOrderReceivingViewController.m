@@ -18,6 +18,8 @@
 #import "orderMapViewController.h"
 #import "repairCostViewController.h"
 #import "JGDownListMenu.h"
+#import "HKXOrderReceivingListTableViewCell.h"
+
 @interface HKXOrderReceivingViewController ()<UITableViewDelegate , UITableViewDataSource,CLLocationManagerDelegate,UITabBarControllerDelegate,DownListMenuDelegate>
 {
     UITableView * _bottomTableView;
@@ -45,6 +47,7 @@
     self.tabBarController.delegate=self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userInfoNotification:) name:@"userInfoNotification" object:nil];
     page = 1;
+    searchString = @"";
     [self createUI];
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -118,9 +121,8 @@
     _bottomTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _bottomTableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_bottomTableView];
-    [_bottomTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
-    [_bottomTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell1"];
-    
+   
+    [_bottomTableView registerClass:[HKXOrderReceivingListTableViewCell class] forCellReuseIdentifier:@"cell"];
     _bottomTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(refresh)];
     
     
@@ -162,7 +164,7 @@
     }else{
         
         [searchBtn setBackgroundColor:[UIColor whiteColor]];
-        searchString = nil;
+        searchString = @"";
         [_bottomTableView.mj_header beginRefreshing];
     }
     if (searchBtn.tag == 2) {
@@ -243,6 +245,7 @@
         }else{
             
             [self showHint:dicts[@"message"]];
+            [_bottomTableView reloadData];
         }
         
         
@@ -335,7 +338,7 @@
 {
     NSLog(@"跳转至地图定位界面");
     orderMapViewController * map = [[orderMapViewController alloc] init];
-    repairListModel * model = _orderListArray[btn.tag -4010];
+    repairListModel * model = _orderListArray[btn.tag];
     CLLocation * location;
     if ([model.latitude isKindOfClass:[NSNull class]] || [model.longitude isKindOfClass:[NSNull class]]) {
         
@@ -391,310 +394,33 @@
     
     
     static NSString * cellIdentifier = @"cell";
-    static NSString * cellIdentifier1 = @"cell1";
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    HKXOrderReceivingListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if (!cell)
     {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+        cell = [[HKXOrderReceivingListTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    UITableViewCell * cell1 = [tableView dequeueReusableCellWithIdentifier:cellIdentifier1];
-    cell1.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (!cell1)
-    {
-        cell1 = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier1];
-    }
+  
     repairListModel * model = _orderListArray[indexPath.row];
-    cell.contentView.tag = indexPath.row;
+    cell.repairModel = model;
     cell.tag = indexPath.row;
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(callTele:)];
-    
-    cell1.contentView.tag = indexPath.row;
-    cell1.tag = indexPath.row;
-    if([model.appointmentTime isKindOfClass:[NSNull class]] || model.appointmentTime.length == 0){
+    cell.CallTeleBlock = ^(UIGestureRecognizer *tap) {
+      
+        [self callTele:tap];
+    };
+    cell.BtnClickBlock = ^(UIButton *btn) {
         
-        UILabel * reEquipmentLabel = [cell viewWithTag:4000];
-        [reEquipmentLabel removeFromSuperview];
-        UILabel * reTeleLb = [cell viewWithTag:3999];
-        [reTeleLb removeFromSuperview];
-        UILabel * reTroubleTypeLabel = [cell viewWithTag:4001];
-        [reTroubleTypeLabel removeFromSuperview];
-        UILabel * reTroubleDescribeLabel = [cell viewWithTag:4002];
-        [reTroubleDescribeLabel removeFromSuperview];
-        UILabel * reTroubleDetailLabel = [cell viewWithTag:4003];
-        [reTroubleDetailLabel removeFromSuperview];
-        UILabel * reTroublePicLabel = [cell viewWithTag:4004];
-        [reTroublePicLabel removeFromSuperview];
-        for (int i = 0; i < 4; i ++)
-        {
-            UIImageView * rePicImage = [cell viewWithTag:4005 + i];
-            [rePicImage removeFromSuperview];
-        }
-        UILabel * reAddressLabel = [cell viewWithTag:4009];
-        [reAddressLabel removeFromSuperview];
-        UIButton * reAddressBtn = [cell viewWithTag:4010];
-        [reAddressBtn removeFromSuperview];
-        UIButton * reActionBtn = [cell viewWithTag:4011];
-        [reActionBtn removeFromSuperview];
-        
-        //    维修设备
-        UILabel * equipmentNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, 55 / 2 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
-        equipmentNameLabel.tag = 4000;
-        equipmentNameLabel.text = [NSString stringWithFormat:@"维修设备：%@",model.brandModel];
-        equipmentNameLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell addSubview:equipmentNameLabel];
-        
-        //机主电话
-        UILabel * teleLb = [[UILabel alloc] init];
-        
-        //故障类型
-        UILabel * troubleTypeLabel = [[UILabel alloc] init];
-        if ([model.repairStatus doubleValue] != 2) {
-            teleLb.frame= CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
-            teleLb.tag = 3999;
-            teleLb.userInteractionEnabled = YES;
-            [teleLb addGestureRecognizer:tap];
-            teleLb.text = [NSString stringWithFormat:@"机主电话：%@",model.telephone];
-            teleLb.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-            [cell addSubview:teleLb];
-            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(teleLb.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+        if (btn.tag > 999) {
             
+           [self orderStateBtnClick:btn];
         }else{
             
-            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+           [self showMapAddressBtnClick:btn];
         }
+       
         
-        
-        troubleTypeLabel.tag = 4001;
-        troubleTypeLabel.text = [NSString stringWithFormat:@"故障类型：%@",model.fault];
-        troubleTypeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell addSubview:troubleTypeLabel];
-        
-        
-        
-        float titleLabelLength = [CommonMethod getLabelLengthWithString:@"故障描述：" WithFont:17 * myDelegate.autoSizeScaleX];
-        //    故障描述
-        UILabel * troubleDescribeLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troubleTypeLabel.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleX)];
-        troubleDescribeLabel.tag = 4002;
-        troubleDescribeLabel.text = [NSString stringWithFormat:@"故障描述："];
-        troubleDescribeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell addSubview:troubleDescribeLabel];
-        
-        UILabel * troubleDetailLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(troubleDescribeLabel.frame),CGRectGetMaxY(troubleTypeLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX - titleLabelLength, 48 * myDelegate.autoSizeScaleX)];
-        troubleDetailLabel.tag = 4003;
-        troubleDetailLabel.text = [NSString stringWithFormat:@"%@",model.faultInfo];
-        troubleDetailLabel.numberOfLines = 2;
-        troubleDetailLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell addSubview:troubleDetailLabel];
-        
-        //    故障图片
-        UILabel * troublePicLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troubleDetailLabel.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleX)];
-        troublePicLabel.tag = 4004;
-        troublePicLabel.text = [NSString stringWithFormat:@"故障图片"];
-        troublePicLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell addSubview:troublePicLabel];
-        NSString * str = @"1";
-        NSInteger o = model.picture.count;
-        if (model.picture.count < 4) {
-            
-            for (int k = 0; k < (4 - o)
-                 ; k ++) {
-                
-                [model.picture addObject:str];
-            }
-        }
-        for (int i = 0; i < 4; i ++)
-        {
-            int X = i % 2;
-            int Y = i / 2;
-            UIImageView * troublePicImage = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY)];
-            
-            [troublePicImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture[i]]] placeholderImage:[UIImage imageNamed:@""]];
-            
-            troublePicImage.tag = 4005 + i;
-            [cell addSubview:troublePicImage];
-            
-            if (i == 2)
-            {
-                //            地址
-                UILabel * addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troublePicImage.frame) + 17 * myDelegate.autoSizeScaleY, ScreenWidth - 78 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
-                addressLabel.tag = 4009;
-                addressLabel.text = [NSString stringWithFormat:@"地址：%@",model.address];
-                addressLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-                [cell addSubview:addressLabel];
-                
-                //            定位
-                UIButton * addressBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                addressBtn.tag = 4010 + indexPath.row;
-                addressBtn.frame = CGRectMake(CGRectGetMaxX(addressLabel.frame) + 19 * myDelegate.autoSizeScaleX, addressLabel.frame.origin.y - 2.5 * myDelegate.autoSizeScaleY, 15 * myDelegate.autoSizeScaleX, 22 * myDelegate.autoSizeScaleY);
-                [addressBtn setImage:[UIImage imageNamed:@"定位"] forState:UIControlStateNormal];
-                [addressBtn addTarget:self action:@selector(showMapAddressBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-                [cell addSubview:addressBtn];
-                
-                //            抢单按钮
-                UIButton * actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                actionBtn.tag = 4011 + indexPath.row;
-                actionBtn.frame = CGRectMake(203 * myDelegate.autoSizeScaleX, CGRectGetMaxY(addressLabel.frame) + 19 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
-                [actionBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#ffa304"]];
-                [actionBtn setTitle:model.repairexplain forState:UIControlStateNormal];
-                [actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                [actionBtn addTarget:self action:@selector(orderStateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-                actionBtn.layer.cornerRadius = 2;
-                actionBtn.clipsToBounds = YES;
-                [cell addSubview:actionBtn];
-            }
-        }
-        
-        return cell;
-    }else{
-        
-        UILabel * reEquipmentLabel = [cell1 viewWithTag:4000];
-        [reEquipmentLabel removeFromSuperview];
-        UILabel * reTeleLb = [cell viewWithTag:3999];
-        [reTeleLb removeFromSuperview];
-        UILabel * reTroubleTypeLabel = [cell1 viewWithTag:4001];
-        [reTroubleTypeLabel removeFromSuperview];
-        UILabel * reTroubleDescribeLabel = [cell1 viewWithTag:4002];
-        [reTroubleDescribeLabel removeFromSuperview];
-        UILabel * appointTime = [cell1 viewWithTag:4402];
-        [appointTime removeFromSuperview];
-        UILabel * reTroubleDetailLabel = [cell1 viewWithTag:4003];
-        [reTroubleDetailLabel removeFromSuperview];
-        UILabel * reTroublePicLabel = [cell1 viewWithTag:4004];
-        [reTroublePicLabel removeFromSuperview];
-        for (int i = 0; i < 4; i ++)
-        {
-            UIImageView * rePicImage = [cell1 viewWithTag:4005 + i];
-            [rePicImage removeFromSuperview];
-        }
-        UILabel * reAddressLabel = [cell1 viewWithTag:4009];
-        [reAddressLabel removeFromSuperview];
-        UIButton * reAddressBtn = [cell1 viewWithTag:4010];
-        [reAddressBtn removeFromSuperview];
-        UIButton * reActionBtn = [cell1 viewWithTag:4011];
-        [reActionBtn removeFromSuperview];
-        
-        //    维修设备
-        UILabel * equipmentNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, 55 / 2 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
-        equipmentNameLabel.tag = 4000;
-        equipmentNameLabel.text = [NSString stringWithFormat:@"维修设备：%@",model.brandModel];
-        equipmentNameLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell1 addSubview:equipmentNameLabel];
-        
-        //机主电话
-        UILabel * teleLb = [[UILabel alloc] init];
-        //故障类型
-        UILabel * troubleTypeLabel = [[UILabel alloc] init];
-        if ([model.repairStatus doubleValue] != 2) {
-            teleLb.frame= CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
-            teleLb.tag = 3999;
-            teleLb.userInteractionEnabled = YES;
-            [teleLb addGestureRecognizer:tap];
-            teleLb.text = [NSString stringWithFormat:@"机主电话：%@",model.telephone];
-            teleLb.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-            [cell1 addSubview:teleLb];
-            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(teleLb.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
-            
-        }else{
-            
-            troubleTypeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
-        }
-        
-        
-        troubleTypeLabel.tag = 4001;
-        troubleTypeLabel.text = [NSString stringWithFormat:@"故障类型：%@",model.fault];
-        troubleTypeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell1 addSubview:troubleTypeLabel];
-        
-        
-        //   维修时间
-        UILabel * repairTime = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troubleTypeLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
-        repairTime.tag = 4402;
-        repairTime.textColor = [UIColor orangeColor];
-        repairTime.text = [NSString stringWithFormat:@"维修时间: %@",model.appointmentTime];
-        NSMutableAttributedString * repairTimeStr =[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"维修时间: %@",model.appointmentTime]];
-        NSRange redRange = NSMakeRange(0, [[repairTimeStr string] rangeOfString:@":"].location + 1);
-        
-        [repairTimeStr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:redRange];
-        [repairTime setAttributedText:repairTimeStr];
-        repairTime.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell1 addSubview:repairTime];
-        
-        float titleLabelLength = [CommonMethod getLabelLengthWithString:@"故障描述：" WithFont:17 * myDelegate.autoSizeScaleX];
-        //    故障描述
-        UILabel * troubleDescribeLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(repairTime.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleX)];
-        troubleDescribeLabel.tag = 4002;
-        troubleDescribeLabel.text = [NSString stringWithFormat:@"故障描述："];
-        troubleDescribeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell1 addSubview:troubleDescribeLabel];
-        
-        UILabel * troubleDetailLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(troubleDescribeLabel.frame),CGRectGetMaxY(repairTime.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX - titleLabelLength, 48 * myDelegate.autoSizeScaleX)];
-        troubleDetailLabel.tag = 4003;
-        troubleDetailLabel.text = [NSString stringWithFormat:@"%@",model.faultInfo];
-        troubleDetailLabel.numberOfLines = 2;
-        troubleDetailLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell1 addSubview:troubleDetailLabel];
-        
-        //    故障图片
-        UILabel * troublePicLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troubleDetailLabel.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleX)];
-        troublePicLabel.tag = 4004;
-        troublePicLabel.text = [NSString stringWithFormat:@"故障图片"];
-        troublePicLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-        [cell1 addSubview:troublePicLabel];
-        NSString * str = @"1";
-        NSInteger o = model.picture.count;
-        if (model.picture.count < 4) {
-            
-            for (int k = 0; k < (4 - o)
-                 ; k ++) {
-                
-                [model.picture addObject:str];
-            }
-        }
-        for (int i = 0; i < 4; i ++)
-        {
-            int X = i % 2;
-            int Y = i / 2;
-            UIImageView * troublePicImage = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY)];
-            
-            [troublePicImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture[i]]] placeholderImage:[UIImage imageNamed:@""]];
-            
-            troublePicImage.tag = 4005 + i;
-            [cell1 addSubview:troublePicImage];
-            
-            if (i == 2)
-            {
-                //            地址
-                UILabel * addressLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(troublePicImage.frame) + 17 * myDelegate.autoSizeScaleY, ScreenWidth - 78 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX)];
-                addressLabel.tag = 4009;
-                addressLabel.text = [NSString stringWithFormat:@"地址：%@",model.address];
-                addressLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-                [cell1 addSubview:addressLabel];
-                
-                //            定位
-                UIButton * addressBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                addressBtn.tag = 4010 + indexPath.row;
-                addressBtn.frame = CGRectMake(CGRectGetMaxX(addressLabel.frame) + 19 * myDelegate.autoSizeScaleX, addressLabel.frame.origin.y - 2.5 * myDelegate.autoSizeScaleY, 15 * myDelegate.autoSizeScaleX, 22 * myDelegate.autoSizeScaleY);
-                [addressBtn setImage:[UIImage imageNamed:@"定位"] forState:UIControlStateNormal];
-                [addressBtn addTarget:self action:@selector(showMapAddressBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-                [cell1 addSubview:addressBtn];
-                
-                //            抢单按钮
-                UIButton * actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                actionBtn.tag = 4011 + indexPath.row;
-                actionBtn.frame = CGRectMake(203 * myDelegate.autoSizeScaleX, CGRectGetMaxY(addressLabel.frame) + 19 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
-                [actionBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#ffa304"]];
-                [actionBtn setTitle:model.repairexplain forState:UIControlStateNormal];
-                [actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                [actionBtn addTarget:self action:@selector(orderStateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-                actionBtn.layer.cornerRadius = 2;
-                actionBtn.clipsToBounds = YES;
-                [cell1 addSubview:actionBtn];
-            }
-        }
-        
-        return cell1;
-    }
+    };
+    return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -706,7 +432,7 @@
     NSLog(@"不同的抢单状态");
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
-    repairListModel * model = _orderListArray[btn.tag - 4011];
+    repairListModel * model = _orderListArray[btn.tag - 1000];
     
     //    21 下一步，维修人员调取下一步接口
     //    22 正在进行，不进行调取接口
@@ -822,10 +548,11 @@
     
 }
 
-- (void)callTele:(UILabel *)view{
+- (void)callTele:(UIGestureRecognizer *)gesture{
     
-    UIView * suView = view.superview;
-    repairListModel * model = self.orderListArray[suView.tag];
+    CGPoint location = [gesture locationInView:_bottomTableView];
+    NSIndexPath *indexPath = [_bottomTableView indexPathForRowAtPoint:location];
+    repairListModel * model = self.orderListArray[indexPath.row];
     NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",model.telephone];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }
