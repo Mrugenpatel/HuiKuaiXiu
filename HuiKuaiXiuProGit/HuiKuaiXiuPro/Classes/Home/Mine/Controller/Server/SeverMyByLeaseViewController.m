@@ -118,7 +118,7 @@
                            @"8",@"pageSize",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"bylease/ selectByuId.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"bylease/selectByuId.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
