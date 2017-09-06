@@ -100,6 +100,9 @@
 		9BA0B4901F049F600047E0E5 /* HKXMineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA0B48F1F049F600047E0E5 /* HKXMineViewController.m */; };
 		9BA0B4931F049F720047E0E5 /* HKXRepairsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA0B4921F049F720047E0E5 /* HKXRepairsViewController.m */; };
 		9BA0B4961F049F890047E0E5 /* HKXShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA0B4951F049F890047E0E5 /* HKXShoppingMallViewController.m */; };
+		9BA12A621F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA12A601F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.m */; };
+		9BA12A691F5E3ABC005EF1C4 /* HKXMineMyWalletData.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA12A651F5E3ABC005EF1C4 /* HKXMineMyWalletData.m */; };
+		9BA12A6A1F5E3ABC005EF1C4 /* HKXMineMyWalletModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BA12A671F5E3ABC005EF1C4 /* HKXMineMyWalletModel.m */; };
 		9BB7B7C21F1CB14A00F46A48 /* HKXRepairsOrderTimeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BB7B7C11F1CB14A00F46A48 /* HKXRepairsOrderTimeViewController.m */; };
 		9BBB40011EEE7BCE00637D61 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBB40001EEE7BCE00637D61 /* main.m */; };
 		9BBB40071EEE7BCE00637D61 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BBB40061EEE7BCE00637D61 /* ViewController.m */; };
@@ -414,6 +417,14 @@
 		9BA0B4921F049F720047E0E5 /* HKXRepairsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXRepairsViewController.m; sourceTree = "<group>"; };
 		9BA0B4941F049F890047E0E5 /* HKXShoppingMallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXShoppingMallViewController.h; sourceTree = "<group>"; };
 		9BA0B4951F049F890047E0E5 /* HKXShoppingMallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXShoppingMallViewController.m; sourceTree = "<group>"; };
+		9BA12A5F1F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineConfirmOrderResultModel.h; sourceTree = "<group>"; };
+		9BA12A601F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineConfirmOrderResultModel.m; sourceTree = "<group>"; };
+		9BA12A611F5E3126005EF1C4 /* HKXMineConfirmOrderResultModelDataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineConfirmOrderResultModelDataModels.h; sourceTree = "<group>"; };
+		9BA12A641F5E3ABC005EF1C4 /* HKXMineMyWalletData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineMyWalletData.h; sourceTree = "<group>"; };
+		9BA12A651F5E3ABC005EF1C4 /* HKXMineMyWalletData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineMyWalletData.m; sourceTree = "<group>"; };
+		9BA12A661F5E3ABC005EF1C4 /* HKXMineMyWalletModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineMyWalletModel.h; sourceTree = "<group>"; };
+		9BA12A671F5E3ABC005EF1C4 /* HKXMineMyWalletModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXMineMyWalletModel.m; sourceTree = "<group>"; };
+		9BA12A681F5E3ABC005EF1C4 /* HKXMineMyWalletModelDataModels.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXMineMyWalletModelDataModels.h; sourceTree = "<group>"; };
 		9BB7B7C01F1CB14A00F46A48 /* HKXRepairsOrderTimeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HKXRepairsOrderTimeViewController.h; sourceTree = "<group>"; };
 		9BB7B7C11F1CB14A00F46A48 /* HKXRepairsOrderTimeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HKXRepairsOrderTimeViewController.m; sourceTree = "<group>"; };
 		9BBB3FFC1EEE7BCE00637D61 /* HuiKuaiXiuPro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HuiKuaiXiuPro.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1516,6 +1527,8 @@
 		9BA0B4771F049C8D0047E0E5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				9BA12A631F5E3ABC005EF1C4 /* HKXMineMyWalletModel */,
+				9BA12A5E1F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel */,
 				9BF70BFF1F596F26002FCD59 /* HKXMineAddressListModel */,
 				9BF70BF71F5947EB002FCD59 /* HKXMineDefaultAddressExistModel */,
 				9B8954181F57B91C0019C799 /* HKXMineShoppingCartUpdateCartNumberModel */,
@@ -1687,6 +1700,28 @@
 			children = (
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		9BA12A5E1F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel */ = {
+			isa = PBXGroup;
+			children = (
+				9BA12A5F1F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.h */,
+				9BA12A601F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.m */,
+				9BA12A611F5E3126005EF1C4 /* HKXMineConfirmOrderResultModelDataModels.h */,
+			);
+			path = HKXMineConfirmOrderResultModel;
+			sourceTree = "<group>";
+		};
+		9BA12A631F5E3ABC005EF1C4 /* HKXMineMyWalletModel */ = {
+			isa = PBXGroup;
+			children = (
+				9BA12A641F5E3ABC005EF1C4 /* HKXMineMyWalletData.h */,
+				9BA12A651F5E3ABC005EF1C4 /* HKXMineMyWalletData.m */,
+				9BA12A661F5E3ABC005EF1C4 /* HKXMineMyWalletModel.h */,
+				9BA12A671F5E3ABC005EF1C4 /* HKXMineMyWalletModel.m */,
+				9BA12A681F5E3ABC005EF1C4 /* HKXMineMyWalletModelDataModels.h */,
+			);
+			path = HKXMineMyWalletModel;
 			sourceTree = "<group>";
 		};
 		9BB7B7BA1F1CB12800F46A48 /* immediate */ = {
@@ -2231,6 +2266,7 @@
 			files = (
 				9B7C14E61F21E05200CCD7CD /* HKXUserVertificationCodeResultModel.m in Sources */,
 				9B9300561F5A523100E4E7C0 /* HKXCustomShoppingCartCollectionViewCell.m in Sources */,
+				9BA12A621F5E3126005EF1C4 /* HKXMineConfirmOrderResultModel.m in Sources */,
 				9B8813B71F5446230009DB86 /* HKXMineOwnerEquipmentListViewController.m in Sources */,
 				9B8AA5DD1F16042200E5F662 /* HKXSupplierPartsAndEquipmentManagmentViewController.m in Sources */,
 				9B6D7BF31F0CE12B008FDA57 /* HKXServerMoreInfoViewController.m in Sources */,
@@ -2263,11 +2299,13 @@
 				EF400D921F3AD8CE0050D36A /* MBProgressHUD.m in Sources */,
 				EFE8C56F1F5035E3009493AE /* HKXSeverCollectionViewCell.m in Sources */,
 				9B852D531F27483000779C18 /* HKXMineServeInfoModel.m in Sources */,
+				9BA12A691F5E3ABC005EF1C4 /* HKXMineMyWalletData.m in Sources */,
 				9B7ADD111F298A79000E8B2F /* HKXSupplierReleasePartsModel.m in Sources */,
 				9B7C14EE1F21FB2200CCD7CD /* HKXUserLocationModel.m in Sources */,
 				9B56FD301F558193001A3F1A /* HKXMineOwnerEquipmentListModel.m in Sources */,
 				9B89542A1F57F2130019C799 /* HKXMineSupplierInqiryListPm.m in Sources */,
 				9B740CC31F4EFE1800E32A8E /* HKXMineAddNewReceiveAddressViewController.m in Sources */,
+				9BA12A6A1F5E3ABC005EF1C4 /* HKXMineMyWalletModel.m in Sources */,
 				EF9E78B21F2B304B00FC40F8 /* MyDropView.m in Sources */,
 				EFC517B61F58EEB500830283 /* EquipmentGoodsModel.m in Sources */,
 				9BA0B4871F049F040047E0E5 /* HKXOrderReceivingViewController.m in Sources */,
