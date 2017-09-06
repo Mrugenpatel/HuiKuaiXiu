@@ -107,7 +107,7 @@
         return;
     }if (_WechatBtn.selected) {
         
-        if (self.come == 0) {
+        if (self.come == 0 || self.come == 1) {
             
         [self GoodsWechatPay];
         }else{
@@ -118,7 +118,8 @@
         
     }else if (_AlipayBtn.selected){
         
-        if (self.come == 0) {
+        if (self.come == 0 || self.come == 1)
+        {
             
             [self GoodsAlipay];
         }else{

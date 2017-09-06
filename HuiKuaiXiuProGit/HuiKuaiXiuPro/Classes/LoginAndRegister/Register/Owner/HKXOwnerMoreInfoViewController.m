@@ -25,6 +25,8 @@
 #import "HKXMineViewController.h"//mine
 #import "HKXRepairsViewController.h"
 
+#import "HKXMineConfirmOrderResultModelDataModels.h"
+
 #import <Photos/Photos.h>
 #import <CTAssetsPickerController/CTAssetsPickerController.h>
 #import <AssetsLibrary/ALAsset.h>
@@ -205,14 +207,14 @@
     [self.view showActivity];
     [HKXHttpRequestManager sendRequestWithOwnerInfo:self.machineModel ToGetOwnerAddMachineResult:^(id data) {
         [self.view hideActivity];
-        HKXUserVertificationCodeResultModel * model = data;
+        HKXMineConfirmOrderResultModel * model = data;
         if (model.success)
         {
             if ([self.mark isEqualToString:@"报修"]) {
                 UITextField * tf = [_bottomScrollView viewWithTag:4001];
                 if (self.returnBrandBlock) {
                     
-                    self.returnBrandBlock(tf.text, @"3");
+                    self.returnBrandBlock(tf.text, [NSString stringWithFormat:@"%ld",(long)model.data]);
                     [self.navigationController popViewControllerAnimated:YES];
                 }
                 return;

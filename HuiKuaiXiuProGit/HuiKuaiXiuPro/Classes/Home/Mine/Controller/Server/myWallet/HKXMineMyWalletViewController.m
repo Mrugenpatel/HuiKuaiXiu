@@ -12,12 +12,15 @@
 #import "HKXHttpRequestManager.h"
 
 #import "HKXMineMyWalletAddViewController.h"
+#import "HKXMineMyWalletModelDataModels.h"
 
 
 @interface HKXMineMyWalletViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _bottomTableView;
 }
+
+@property (nonatomic , strong) HKXMineMyWalletData * myWalletModel;//银行卡信息model
 
 @end
 
@@ -31,6 +34,14 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self createUI ];
+    
+    
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self configData];
 }
 #pragma mark - CreateUI
 - (void)createUI
@@ -48,6 +59,24 @@
     [_bottomTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
 }
 #pragma mark - ConfigData
+- (void)configData
+{
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",(long)userId] ToGetMineMyWalletResult:^(id data) {
+        HKXMineMyWalletModel * model = data;
+        if (model.success)
+        {
+            self.isCard = true;
+            self.myWalletModel = [model.data firstObject];
+        }
+        else
+        {
+            self.isCard = false;
+            [self showHint:model.message];
+        }
+        [_bottomTableView reloadData];
+    }];
+}
 #pragma mark - Action
 #pragma mark - Private Method
 #pragma mark - Delegate & Data Source
@@ -99,7 +128,7 @@
     if (self.isCard == true)
     {
         cardLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, 24 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"建设银行储蓄卡" WithFont:14 * myDelegate.autoSizeScaleX], 14 * myDelegate.autoSizeScaleX);
-        cardLabel.text = @"建设银行储蓄卡";
+        cardLabel.text = self.myWalletModel.userName;
     }
     [cell addSubview:cardLabel];
     
@@ -113,7 +142,8 @@
     if (self.isCard == true)
     {
         cardNumLabel.frame = CGRectMake(0, 62 * myDelegate.autoSizeScaleY, cell.frame.size.width, 17 * myDelegate.autoSizeScaleX);
-        cardNumLabel.text = @"1234 **** **** 1234";
+//        cardNumLabel.text = @"1234 **** **** 1234";
+        cardNumLabel.text = self.myWalletModel.userIdCard;
         cardNumLabel.textAlignment = NSTextAlignmentCenter;
         
     }
@@ -122,12 +152,23 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    HKXMineMyWalletAddViewController * addCardVC = [[HKXMineMyWalletAddViewController alloc] init];
-    addCardVC.navigationItem.title = @"我的钱包";
-    [self.navigationController pushViewController:addCardVC animated:YES];
+    if (self.isCard == false)
+    {
+        HKXMineMyWalletAddViewController * addCardVC = [[HKXMineMyWalletAddViewController alloc] init];
+        addCardVC.navigationItem.title = @"我的钱包";
+        [self.navigationController pushViewController:addCardVC animated:YES];
+    }
+    
 }
 #pragma mark - Setters & Getters
-
+- (HKXMineMyWalletData *)myWalletModel
+{
+    if (!_myWalletModel)
+    {
+        _myWalletModel = [[HKXMineMyWalletData alloc] init];
+    }
+    return _myWalletModel;
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

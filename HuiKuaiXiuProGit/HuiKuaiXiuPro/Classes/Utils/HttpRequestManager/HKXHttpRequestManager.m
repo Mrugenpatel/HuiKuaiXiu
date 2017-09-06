@@ -34,6 +34,9 @@
 #import "HKXMineDefaultAddressExistModelDataModels.h"//个人中心默认收货地址查询
 #import "HKXMineAddressListModelDataModels.h"//个人中心所有收货地址
 
+#import "HKXMineConfirmOrderResultModelDataModels.h"//从购物车确认订单结果
+#import "HKXMineMyWalletModelDataModels.h"//个人中心我的钱包
+
 @implementation HKXHttpRequestManager
 
 /**
@@ -160,7 +163,7 @@
                            nil];
     
     [manager POST:[NSString stringWithFormat:@"%@machine/add.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        HKXUserVertificationCodeResultModel * model = [HKXUserVertificationCodeResultModel modelObjectWithDictionary:responseObject];
+        HKXMineConfirmOrderResultModel * model = [HKXMineConfirmOrderResultModel modelObjectWithDictionary:responseObject];
         complete(model);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"error = %@",error.description);
@@ -978,7 +981,7 @@
                            nil];
     
     [manager POST:[NSString stringWithFormat:@"%@userOrder/add.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        HKXMineConfirmOrderResultModel * model = [HKXMineConfirmOrderResultModel modelObjectWithDictionary:responseObject];
         
         complete(model);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -1029,6 +1032,57 @@
     
     [manager POST:[NSString stringWithFormat:@"%@supplier/updateRack.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         HKXMineServeCertificateProfileModel * model = [HKXMineServeCertificateProfileModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+
+/**
+ 根据userid获取个人中心银行卡信息
+ 
+ @param userId userid
+ @param complete 个人中心银行卡信息
+ */
++ (void)sendRequestWithUserId:(NSString *)userId ToGetMineMyWalletResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           userId,@"uId",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@bank/selectBank.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineMyWalletModel * model = [HKXMineMyWalletModel modelObjectWithDictionary:responseObject];
+        
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
+/**
+ 根据userid以及添加银行卡信息获得添加银行卡信息
+ 
+ @param userId userid
+ @param cardNum 银行卡号
+ @param userName 持卡人姓名
+ @param userBank 开户行地址
+ @param complete 添加结果
+ */
++ (void)sendRequestWithUserId:(NSString *)userId WithUserCardNumber:(NSString *)cardNum WithUserName:(NSString *)userName WithUserCardBankAdd:(NSString *)userBank ToGetAddNewCardResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           userId,@"uId",
+                           cardNum,@"userIdCard",
+                           userName,@"userName",
+                           userBank,@"userOpenBank",
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@bank/addBank.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXMineMyWalletModel * model = [HKXMineMyWalletModel modelObjectWithDictionary:responseObject];
         
         complete(model);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

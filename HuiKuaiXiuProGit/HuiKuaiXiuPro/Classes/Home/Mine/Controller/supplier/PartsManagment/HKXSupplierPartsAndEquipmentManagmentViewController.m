@@ -72,6 +72,8 @@
 #pragma mark - ConfigData
 - (void)loadData
 {
+    [self.infoArray removeAllObjects];
+    [self.selectArray removeAllObjects];
     long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
     [self.view showActivity];
     if (self.isParts)

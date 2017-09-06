@@ -9,6 +9,9 @@
 #import "HKXMineMyWalletAddViewController.h"
 #import "CommonMethod.h"
 
+#import "HKXHttpRequestManager.h"
+#import "HKXMineMyWalletModelDataModels.h"
+
 @interface HKXMineMyWalletAddViewController ()
 {
     UIView * _bottomView;
@@ -72,9 +75,60 @@
 #pragma mark - Action
 - (void)submitBtnClick
 {
+    long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
+    UITextField * cardTf = [_bottomView viewWithTag:8000];
+    UITextField * cardNameTF = [_bottomView viewWithTag:8001];
+    UITextField * cardBankTf = [_bottomView viewWithTag:8002];
+
+    if ([self unicodeLengthOfString:cardTf.text] < 5 )
+    {
+        [self showHint:@"银行卡号不正确"];
+        return;
+    }
+    else if ([self unicodeLengthOfString:cardNameTF.text] < 2)
+    {
+        [self showHint:@"输入姓名不正确"];
+        return;
+    }
+    else if ([self unicodeLengthOfString:cardBankTf.text] < 2)
+    {
+        [self showHint:@"输入地址不正确"];
+        return;
+    }
+    else
+    {
+        [HKXHttpRequestManager sendRequestWithUserId:[NSString stringWithFormat:@"%ld",(long)userId] WithUserCardNumber:cardTf.text WithUserName:cardNameTF.text WithUserCardBankAdd:cardBankTf.text ToGetAddNewCardResult:^(id data) {
+            HKXMineMyWalletModel * model = data;
+            [self showHint:model.message];
+            if (model.success)
+            {
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }];
+    }
     NSLog(@"提交银行卡信息");
 }
 #pragma mark - Private Method
+- (NSUInteger)unicodeLengthOfString:(NSString *)text
+{
+    NSUInteger asciiLength = 0;
+    
+    for (NSUInteger i = 0; i < text.length; i++) {
+        
+        
+        unichar uc = [text characterAtIndex: i];
+        
+        asciiLength += isascii(uc) ? 1 : 2;
+    }
+    
+    NSUInteger unicodeLength = asciiLength / 2;
+    
+    if(asciiLength % 2) {
+        unicodeLength++;
+    }
+    
+    return unicodeLength;
+}
 #pragma mark - Delegate & Data Source
 #pragma mark - Setters & Getters
 

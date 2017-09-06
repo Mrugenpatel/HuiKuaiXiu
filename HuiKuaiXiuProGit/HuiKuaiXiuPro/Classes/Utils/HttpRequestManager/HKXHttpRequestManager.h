@@ -368,4 +368,23 @@
  */
 + (void)sendRequestWithEquipmentID:(NSString *)equipmentId WithEquipmentStatus:(NSString *)equipmentStatus ToGetUpdateEquipmentReckResult:(void (^)(id data))complete;
 
+/**
+ 根据userid获取个人中心银行卡信息
+
+ @param userId userid
+ @param complete 个人中心银行卡信息
+ */
++ (void)sendRequestWithUserId:(NSString *)userId ToGetMineMyWalletResult:(void (^)(id data))complete;
+
+/**
+ 根据userid以及添加银行卡信息获得添加银行卡信息
+
+ @param userId userid
+ @param cardNum 银行卡号
+ @param userName 持卡人姓名
+ @param userBank 开户行地址
+ @param complete 添加结果
+ */
++ (void)sendRequestWithUserId:(NSString *)userId WithUserCardNumber:(NSString *)cardNum WithUserName:(NSString *)userName WithUserCardBankAdd:(NSString *)userBank ToGetAddNewCardResult:(void (^)(id data))complete;
+
 @end

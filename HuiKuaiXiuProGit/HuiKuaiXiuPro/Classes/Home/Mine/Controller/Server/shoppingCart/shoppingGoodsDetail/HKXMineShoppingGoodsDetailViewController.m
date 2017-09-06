@@ -16,7 +16,7 @@
 #import "HKXMineDefaultAddressExistModelDataModels.h"//确认是否有默认收货地址
 
 #import "UIImageView+WebCache.h"
-#import "HKXMineServeCertificateProfileModel.h"//下单结果
+#import "HKXMineConfirmOrderResultModelDataModels.h"//下单结果
 @interface HKXMineShoppingGoodsDetailViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _detailTableView;//订单详情
@@ -145,12 +145,14 @@
     
     long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
     [HKXHttpRequestManager sendRequestWithCartId:[self.cartIdArray componentsJoinedByString:@","] WithCompanyId:[self.shopIdArray componentsJoinedByString:@","] WithUserID:[NSString stringWithFormat:@"%ld",userId] WithReceiveName:self.defaultAddress.consignees WithReceiveTel:self.defaultAddress.consigneesTel WithReceiveAdd:self.defaultAddress.consigneesAdd ToGetOrderResult:^(id data) {
-        HKXMineServeCertificateProfileModel * model = data;
+        HKXMineConfirmOrderResultModel * model = data;
         if (model.success)
         {
             HKXMinePayViewController * payVC = [[HKXMinePayViewController alloc] init];
             payVC.payCount = self.totalCount;
+            payVC.come = 1;
             payVC.navigationItem.title = @"支付方式";
+            payVC.ruoId = [NSString stringWithFormat:@"%ld",(long)model.data];
             [self.navigationController pushViewController:payVC animated:YES];
         }
         else
