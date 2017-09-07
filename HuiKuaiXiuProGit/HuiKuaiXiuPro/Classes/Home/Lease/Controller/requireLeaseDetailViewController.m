@@ -53,11 +53,13 @@
 }
 - (void)createUI{
     
+     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 5)];
     view.backgroundColor = [CommonMethod getUsualColorWithString:@"#f6f6f6"];
     [self.view addSubview:view];
     
-    requireLeaseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 69, ScreenWidth, ScreenHeight - 64 - 5 - 100) style:UITableViewStylePlain];
+    requireLeaseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 69 , ScreenWidth, ScreenHeight - 64 - 5 - 100) style:UITableViewStylePlain];
     requireLeaseTableView.delegate = self;
     requireLeaseTableView.dataSource = self;
     requireLeaseTableView.scrollEnabled = NO;
@@ -65,7 +67,7 @@
     
     [self.view addSubview:requireLeaseTableView];
     UIButton * cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancleBtn.frame = CGRectMake(20, ScreenHeight - 70, ScreenWidth / 2 -20 * 2, 50);
+    cancleBtn.frame = CGRectMake(20, ScreenHeight - 70, ScreenWidth / 2 -20 * 2, 44 * myDelegate.autoSizeScaleY);
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
     [cancleBtn setBackgroundColor:[UIColor brownColor]];
     cancleBtn.clipsToBounds=YES;

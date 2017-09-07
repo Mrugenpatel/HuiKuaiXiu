@@ -27,15 +27,15 @@
 - (void)layoutSubviews{
     
     [super layoutSubviews];
-    
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     CGFloat width = self.bounds.size.width;
     CGFloat height = self.bounds.size.height;
     NSDictionary *attrs = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:17]};
     CGSize size=[self.label.text sizeWithAttributes:attrs];
-    self.label.frame = CGRectMake(0, 0, size.width, 50);
+    self.label.frame = CGRectMake(0, 0, size.width, 44 * myDelegate.autoSizeScaleY);
     self.yesBtn.frame = CGRectMake(self.label.bounds.size.width, 2,50,height);
     self.yesBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-    self.noBtn.frame = CGRectMake(self.label.bounds.size.width + self.yesBtn.bounds.size.width, 2, 50, height);
+    self.noBtn.frame = CGRectMake(self.label.bounds.size.width + self.yesBtn.bounds.size.width, 2, 44 * myDelegate.autoSizeScaleY, height);
     self.noBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     
 }

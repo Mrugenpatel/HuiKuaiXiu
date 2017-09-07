@@ -51,12 +51,14 @@
 
 - (void)createUI{
     
-    UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 5)];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+
+    UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 5 * myDelegate.autoSizeScaleY)];
     view.backgroundColor = [CommonMethod getUsualColorWithString:@"#f6f6f6"];
     [self.view addSubview:view];
     
     brandTf = [[UITextField alloc] init];
-    brandTf.frame = CGRectMake(20, view.frame.origin.y + view.frame.size.height + 10, ScreenWidth - 40, 50);
+    brandTf.frame = CGRectMake(20 * myDelegate.autoSizeScaleX, view.frame.origin.y + view.frame.size.height + 10 * myDelegate.autoSizeScaleY, ScreenWidth - 40, 44 * myDelegate.autoSizeScaleY);
     [brandTf.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [brandTf.layer setBorderWidth:1];
     brandTf.clipsToBounds=YES;
@@ -71,7 +73,7 @@
     
     [self.view addSubview:brandTf];
     brandButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    brandButton.frame = CGRectMake(brandTf.frame.size.width + brandTf.frame.origin.x- 32, brandTf.frame.origin.y + 10, 30, 30);
+    brandButton.frame = CGRectMake(brandTf.frame.size.width + brandTf.frame.origin.x - 32, brandTf.frame.origin.y + 10, 30, 30);
     [brandButton addTarget:self action:@selector(chooseBrand:) forControlEvents:UIControlEventTouchUpInside];
     //[brandButton setImage:[UIImage imageNamed:@"箭头"] forState:UIControlStateNormal];
     brandButton.backgroundColor = [UIColor whiteColor];
@@ -84,7 +86,7 @@
     
     
     siteTextfield = [[UITextField alloc] init];
-    siteTextfield.frame = CGRectMake(brandTf.frame.origin.x, brandTf.frame.origin.y + brandTf.frame.size.height + 10, brandTf.frame.size.width, 50);
+    siteTextfield.frame = CGRectMake(brandTf.frame.origin.x, brandTf.frame.origin.y + brandTf.frame.size.height + 10 * myDelegate.autoSizeScaleY, brandTf.frame.size.width, 44 * myDelegate.autoSizeScaleY);
     [siteTextfield.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [siteTextfield.layer setBorderWidth:1];
     siteTextfield.clipsToBounds=YES;
@@ -99,7 +101,7 @@
     [self.view addSubview:siteTextfield];
     
     
-    myView1 = [[myview alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, siteTextfield.frame.origin.y + siteTextfield.frame.size.height, brandTf.frame.size.width, 50)];
+    myView1 = [[myview alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, siteTextfield.frame.origin.y + siteTextfield.frame.size.height, brandTf.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     myView1.label.text = @"是否含油";
     myView1.label.backgroundColor = [UIColor whiteColor];
     myView1.yesBtn.selected = NO;
@@ -114,7 +116,7 @@
     [myView1.noBtn addTarget:self action:@selector(chooseNo1:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:myView1];
     
-    myView2 = [[myview alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, myView1.frame.origin.y + myView1.frame.size.height, brandTf.frame.size.width, 50)];
+    myView2 = [[myview alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, myView1.frame.origin.y + myView1.frame.size.height, brandTf.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     myView2.label.text = @"是否带司机";
     myView2.label.backgroundColor = [UIColor whiteColor];
     myView2.yesBtn.selected = NO;
@@ -129,7 +131,7 @@
     [myView2.noBtn addTarget:self action:@selector(chooseNo2:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:myView2];
     
-    costField = [[UITextField alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, myView2.frame.origin.y + myView2.frame.size.height + 10, brandTf.frame.size.width, 50)];
+    costField = [[UITextField alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, myView2.frame.origin.y + myView2.frame.size.height + 10, brandTf.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     costField.borderStyle = UITextBorderStyleLine;
     costField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
@@ -147,7 +149,7 @@
     costField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [self.view addSubview:costField];
     
-    phoneNumField = [[UITextField alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, costField.frame.origin.y + costField.frame.size.height + 10, brandTf.frame.size.width, 50)];
+    phoneNumField = [[UITextField alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, costField.frame.origin.y + costField.frame.size.height + 10, brandTf.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     phoneNumField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"机主电话" attributes:@{NSForegroundColorAttributeName:[CommonMethod getUsualColorWithString:@"#999999"]}];
     phoneNumField.keyboardType = UIKeyboardTypeNumberPad;
     phoneNumField.layer.borderColor=[[UIColor lightGrayColor]CGColor];
@@ -160,13 +162,13 @@
     phoneNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [self.view addSubview:phoneNumField];
     
-    UILabel * pictureLb = [[UILabel alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, phoneNumField.frame.origin.y + phoneNumField.frame.size.height + 10, 50, 50)];
+    UILabel * pictureLb = [[UILabel alloc] initWithFrame:CGRectMake(brandTf.frame.origin.x, phoneNumField.frame.origin.y + phoneNumField.frame.size.height + 10 * myDelegate.autoSizeScaleY, 50, 44 * myDelegate.autoSizeScaleY)];
     pictureLb.font = [UIFont systemFontOfSize:15];
     pictureLb.text = @"照片";
     [self.view addSubview:pictureLb];
     
     pictureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    pictureBtn.frame = CGRectMake(pictureLb.frame.origin.x + pictureLb.frame.size.width, pictureLb.frame.origin.y + 20, 80, 50);
+    pictureBtn.frame = CGRectMake(pictureLb.frame.origin.x + pictureLb.frame.size.width, pictureLb.frame.origin.y + 20* myDelegate.autoSizeScaleY, 80, 50 * myDelegate.autoSizeScaleY);
     CAShapeLayer *border = [CAShapeLayer layer];
     border.strokeColor = [CommonMethod getUsualColorWithString:@"#a0a0a0"].CGColor;
     border.fillColor = nil;
@@ -182,7 +184,7 @@
     
     
     UIButton * cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancleBtn.frame = CGRectMake(brandTf.frame.origin.x, ScreenHeight - 70, ScreenWidth / 2 - brandTf.frame.origin.x * 2, 50);
+    cancleBtn.frame = CGRectMake(brandTf.frame.origin.x, ScreenHeight - 70, ScreenWidth / 2 - brandTf.frame.origin.x * 2, 44 * myDelegate.autoSizeScaleY);
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
     [cancleBtn setBackgroundColor:[UIColor brownColor]];
     cancleBtn.clipsToBounds=YES;
@@ -208,6 +210,9 @@
     NSInteger i = [aStr integerValue];
     brandTf.text = self.brandArr[i][@"brandType"];
     _modleid =self.brandArr[i][@"modelId"];
+    siteTextfield.text =self.brandArr[i][@"address"];
+    phoneNumField.text =self.brandArr[i][@"telphone"];
+    
     NSLog(@"选中设备");
     
 }
@@ -240,17 +245,17 @@
             
         }else{
             
-            //所有的设备ID
-            //            NSMutableArray * idArr = [[NSMutableArray alloc] init];
-            //            for (id idStr in self.brandArr) {
-            //
-            //                [idArr addObject:idStr[@"modelid"]];
-            //
-            //            }
-            
             self.brandArr = dicts[@"data"];
-            CGRect rect = CGRectMake(ScreenWidth - 100, brandTf.frame.origin.y + brandTf.frame.size.height, 80, self.brandArr.count * 40);
-            _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
+            
+            if (self.brandArr.count * 40 > ScreenHeight -  brandTf.frame.origin.y - brandTf.frame.size.height) {
+                
+                CGRect rect = CGRectMake(ScreenWidth - 100, brandTf.frame.origin.y + brandTf.frame.size.height, 80,ScreenHeight -  brandTf.frame.origin.y - brandTf.frame.size.height);
+                _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
+            }else{
+                
+                CGRect rect = CGRectMake(ScreenWidth - 100, brandTf.frame.origin.y + brandTf.frame.size.height, 80,self.brandArr.count * 40);
+                _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
+            }
             _list.delegate = self;
             [self.view addSubview:self.list];
             NSLog(@"设备型号");

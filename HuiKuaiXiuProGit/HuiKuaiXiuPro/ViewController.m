@@ -215,9 +215,7 @@
                 NSLog(@"-====>%@",userData);
                 NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
                 [defaults setInteger:userData.role forKey:@"userDataRole"];
-                
                 [defaults setDouble:userData.dataIdentifier forKey:@"userDataId"];
-                
                 [defaults setBool:YES forKey:@"userLoginState"];
                 NSArray * arr = [[NSString stringWithFormat:@"%f",userData.dataIdentifier] componentsSeparatedByString:@"."];
                 if (userData.role == 0) {

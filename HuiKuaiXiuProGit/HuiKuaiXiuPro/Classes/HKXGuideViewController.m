@@ -35,7 +35,7 @@
     
     
     
-    NSArray * imageNames = @[@"引导1",@"引导2"];
+    NSArray * imageNames = @[@"引导页1",@"引导页2"];
     
     UIScrollView *myScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight)];
     for (int i = 0; i < 2; i ++) {

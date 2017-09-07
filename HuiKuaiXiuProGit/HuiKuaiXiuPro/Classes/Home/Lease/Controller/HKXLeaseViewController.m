@@ -153,7 +153,7 @@
     
     //出租/求租按钮
     leButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    leButton.frame = CGRectMake(ScreenWidth / 2 - ScreenWidth / 4, view.frame.origin.y + view.frame.size.height + 10, ScreenWidth / 4, 40);
+    leButton.frame = CGRectMake(ScreenWidth / 2 - ScreenWidth / 4, view.frame.origin.y + view.frame.size.height + 10 * myDelegate.autoSizeScaleY, ScreenWidth / 4, 40 * myDelegate.autoSizeScaleY);
     [leButton setBackgroundColor:[CommonMethod getUsualColorWithString:@"#ffa304"]];
     leButton.layer.borderWidth=1;//设置边框的宽度
     leButton.layer.borderColor=[[CommonMethod getUsualColorWithString:@"#ffa304"] CGColor];//设置边框的颜色
@@ -180,7 +180,7 @@
     [reButton addTarget:self action:@selector(reBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:reButton];
     
-    leAndRetableView = [[UITableView alloc] initWithFrame:CGRectMake(0, reButton.frame.origin.y + reButton.frame.size.height + 10, ScreenWidth, ScreenHeight - reButton.frame.origin.y - 80) style:UITableViewStylePlain];
+    leAndRetableView = [[UITableView alloc] initWithFrame:CGRectMake(0, reButton.frame.origin.y + reButton.frame.size.height + 10 * myDelegate.autoSizeScaleY, ScreenWidth, ScreenHeight - reButton.frame.origin.y - reButton.frame.size.height - 54) style:UITableViewStylePlain];
     leAndRetableView.delegate = self;
     leAndRetableView.dataSource = self;
     leAndRetableView.backgroundColor = [UIColor whiteColor];
@@ -222,19 +222,19 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 _dataArr = dicts[@"data"];
-                
                 [leAndRetableView reloadData];
                 
                 
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [leAndRetableView reloadData];
             }
             
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
-            
+            [self showHint:@"请求失败"];
             [self.view hideActivity];
             [leAndRetableView.mj_header endRefreshing];
         }];
@@ -256,16 +256,15 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
+             [leAndRetableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                _dataArr = dicts[@"data"];
-                
-                
+                _dataArr = dicts[@"data"]; 
                 [leAndRetableView reloadData];
-                [leAndRetableView.mj_header endRefreshing];
+               
             }else{
-                [leAndRetableView.mj_header endRefreshing];
                 [self showHint:dicts[@"message"]];
+                [leAndRetableView reloadData];
             }
             
         } failure:^(NSError *error) {
@@ -563,9 +562,6 @@
             [self showHint:@"请求失败"];
         }];
     }
-    
-    
-    
 }
 
 

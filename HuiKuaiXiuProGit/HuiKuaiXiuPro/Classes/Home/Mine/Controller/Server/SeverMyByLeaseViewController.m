@@ -86,7 +86,7 @@
     [self.view addSubview:view];
     
     
-    leAndRetableView = [[UITableView alloc] initWithFrame:CGRectMake(0,CGRectGetMaxY(view.frame) + 10, ScreenWidth, ScreenHeight - view.frame.origin.y - 80) style:UITableViewStylePlain];
+    leAndRetableView = [[UITableView alloc] initWithFrame:CGRectMake(0,CGRectGetMaxY(view.frame) + 10 * myDelegate.autoSizeScaleY, ScreenWidth, ScreenHeight - view.frame.origin.y - view.frame.size.height - 44) style:UITableViewStylePlain];
     leAndRetableView.delegate = self;
     leAndRetableView.dataSource = self;
     leAndRetableView.backgroundColor = [UIColor whiteColor];
@@ -129,11 +129,11 @@
             _dataArr = dicts[@"data"];
             
             [leAndRetableView reloadData];
-            
-            
+ 
         }else{
             
             [self showHint:dicts[@"message"]];
+            [leAndRetableView reloadData];
         }
         
     } failure:^(NSError *error) {
@@ -257,6 +257,48 @@
         return cell;
     
     
+}
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定删除本条记录?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            
+            //删除数据
+            NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:_dataArr[indexPath.row][@"byleaseid"],@"byleaseid",nil];
+            [self.view showActivity];
+            [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"bylease/dellease.do"] params:dict success:^(id responseObject) {
+                
+                NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                NSLog(@"请求成功%@",dicts);
+                [self.view hideActivity];
+                if ([dicts[@"success"] boolValue] == YES) {
+                    
+                    [self showHint:dicts[@"message"]];
+                    [leAndRetableView.mj_header beginRefreshing];
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
+                }
+                
+            } failure:^(NSError *error) {
+                
+                NSLog(@"请求失败%@",error);
+                [self.view hideActivity];
+            }];
+            
+            
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+    }];
+    return @[deleteAction];
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     

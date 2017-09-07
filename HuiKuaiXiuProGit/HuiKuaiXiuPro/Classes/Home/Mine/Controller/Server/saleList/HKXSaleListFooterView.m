@@ -47,6 +47,7 @@
     
     if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"-1"]) {
         
+        
         self.actionLeftBtn.hidden = YES;
         [self.actionRightBtn setTitle:@"删除订单" forState:UIControlStateNormal];
         

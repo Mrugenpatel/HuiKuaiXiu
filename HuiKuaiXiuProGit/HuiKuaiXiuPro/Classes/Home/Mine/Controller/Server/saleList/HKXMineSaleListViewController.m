@@ -14,6 +14,7 @@
 
 #import "HKXSaleListHeaderView.h"
 #import "HKXSaleListFooterView.h"
+#import "UIImageView+WebCache.h"
 static NSString * const HKXHeaderId = @"header";
 static NSString * const HKXFooterId = @"footer";
 @interface HKXMineSaleListViewController ()<UIScrollViewDelegate , UITableViewDelegate , UITableViewDataSource,HKXSaleListBtnDelegate>
@@ -123,7 +124,7 @@ static NSString * const HKXFooterId = @"footer";
     allDoneGoodsListTableView.delegate = self;
     allDoneGoodsListTableView.showsVerticalScrollIndicator = NO;
     [_bottomScrollView addSubview:allDoneGoodsListTableView];
-    [self.tableViewListArray addObject:allDoneGoodsListTableView];
+    
     
     
     //        设置分割线长度
@@ -154,7 +155,7 @@ static NSString * const HKXFooterId = @"footer";
     allCanceledGoodsTableView.delegate = self;
     allCanceledGoodsTableView.showsVerticalScrollIndicator = NO;
     [_bottomScrollView addSubview:allCanceledGoodsTableView];
-    [self.tableViewListArray addObject:allCanceledGoodsTableView];
+    
     
     
     //        设置分割线长度
@@ -186,7 +187,12 @@ static NSString * const HKXFooterId = @"footer";
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
     if (_segmentControl.selectedSegmentIndex == 0) {
-
+        
+        if (self.allDoneGoodsDataListArray.count != 0) {
+            
+            [self.allDoneGoodsDataListArray removeAllObjects];
+        }
+        
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
                                @"8",@"pageSize",
@@ -201,7 +207,7 @@ static NSString * const HKXFooterId = @"footer";
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 self.allGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.tableViewListArray[0] reloadData];
+                [allGoodsListTableView reloadData];
                 
             }else{
                 
@@ -219,6 +225,10 @@ static NSString * const HKXFooterId = @"footer";
 
     }else if (_segmentControl.selectedSegmentIndex == 1){
         
+        if (self.allDoneGoodsDataListArray.count != 0) {
+            
+            [self.allDoneGoodsDataListArray removeAllObjects];
+        }
         int i = 0;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
@@ -236,7 +246,7 @@ static NSString * const HKXFooterId = @"footer";
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 self.allDoneGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.tableViewListArray[1] reloadData];
+                [allDoneGoodsListTableView reloadData];
                 
             }else{
                 
@@ -252,23 +262,26 @@ static NSString * const HKXFooterId = @"footer";
         }];
     }else if (_segmentControl.selectedSegmentIndex == 2){
         
-        int i = 1;
+        if (self.allCanceledGoodsDataListArray.count != 0) {
+            
+            [self.allCanceledGoodsDataListArray removeAllObjects];
+        }
+        int i = -1;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
        
-        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectSeller.do"] params:dict success:^(id responseObject) {
+        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectrOrderStatus.do"] params:dict success:^(id responseObject) {
             
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-            NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
             [allCanceledGoodsTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 self.allCanceledGoodsDataListArray = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.tableViewListArray[2] reloadData];
+                [allCanceledGoodsTableView reloadData];
                 
             }else{
                 
@@ -311,7 +324,7 @@ static NSString * const HKXFooterId = @"footer";
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.allGoodsDataListArray addObject:tempArr];
                 page ++;
-                [self.tableViewListArray[0] reloadData];
+                [allGoodsListTableView reloadData];
                 
             }else{
                 
@@ -347,7 +360,7 @@ static NSString * const HKXFooterId = @"footer";
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.allDoneGoodsDataListArray addObject:tempArr];
                 page ++;
-                [self.tableViewListArray[1] reloadData];
+                [allDoneGoodsListTableView reloadData];
                 
             }else{
                 
@@ -363,13 +376,13 @@ static NSString * const HKXFooterId = @"footer";
         }];
     }else if (_segmentControl.selectedSegmentIndex == 2){
         
-        int i = 1;
+        int i = -1;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",[NSNumber numberWithInt:page],@"pageNo",
                                @"8",@"pageSize",[NSNumber numberWithInt:i],@"status",
                                nil];
         [self.view showActivity];
-        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectSeller.do"] params:dict success:^(id responseObject) {
+        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/selectrOrderStatus.do"] params:dict success:^(id responseObject) {
             
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
@@ -381,7 +394,7 @@ static NSString * const HKXFooterId = @"footer";
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 [self.allCanceledGoodsDataListArray addObject:tempArr];
                 page ++;
-                [self.tableViewListArray[2] reloadData];
+                [allDoneGoodsListTableView reloadData];
                 
             }else{
                 
@@ -499,7 +512,19 @@ static NSString * const HKXFooterId = @"footer";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
-    HKXOrderStoreModel * store = self.allGoodsDataListArray[section];
+    HKXOrderStoreModel * store;
+    if (tableView == allGoodsListTableView) {
+        
+        store= self.allGoodsDataListArray[section];
+        
+    }else if (tableView == allDoneGoodsListTableView){
+        
+        store = self.allDoneGoodsDataListArray[section];
+        
+    }else{
+        
+        store = self.allCanceledGoodsDataListArray[section];
+    }
     HKXSaleListHeaderView *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HKXHeaderId];
     header.store = store;
    
@@ -509,7 +534,21 @@ static NSString * const HKXFooterId = @"footer";
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
 
-    HKXOrderStoreModel * store = self.allGoodsDataListArray[section];
+    HKXOrderStoreModel * store;
+    if (tableView == allGoodsListTableView) {
+        
+        store= self.allGoodsDataListArray[section];
+        
+    }else if (tableView == allDoneGoodsListTableView){
+        
+        store = self.allDoneGoodsDataListArray[section];
+        
+    }else{
+        
+        store = self.allCanceledGoodsDataListArray[section];
+    }
+    
+  
     HKXSaleListFooterView *footer = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HKXFooterId];
     footer.tag = section;
     footer.delegate = self;
@@ -521,7 +560,7 @@ static NSString * const HKXFooterId = @"footer";
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    return 75 * myDelegate.autoSizeScaleY;
+    return 85 * myDelegate.autoSizeScaleY;
 }
 /**
  *  区尾高度
@@ -548,7 +587,22 @@ static NSString * const HKXFooterId = @"footer";
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-    HKXOrderStoreModel * store = self.allGoodsDataListArray[indexPath.section];
+    
+    HKXOrderStoreModel * store;
+    if (tableView == allGoodsListTableView) {
+        
+        store= self.allGoodsDataListArray[indexPath.section];
+        
+    }else if (tableView == allDoneGoodsListTableView){
+        
+        store = self.allDoneGoodsDataListArray[indexPath.section];
+        
+    }else{
+        
+        store = self.allCanceledGoodsDataListArray[indexPath.section];
+    }
+    
+    store = self.allGoodsDataListArray[indexPath.section];
     HKXOrderGoodsModel * goods = store.goodsArr[indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -575,7 +629,7 @@ static NSString * const HKXFooterId = @"footer";
     
     UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(16 * myDelegate.autoSizeScaleX,20 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
     goodsImg.tag = 90001;
-    goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
+    [goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goods.goodPicture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
     [cell addSubview:goodsImg];
     
     UILabel * goodsNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 15 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY , [CommonMethod getLabelLengthWithString:@"慧快修 工程机械专用液压油" WithFont:13 * myDelegate.autoSizeScaleX ], 13 * myDelegate.autoSizeScaleX)];

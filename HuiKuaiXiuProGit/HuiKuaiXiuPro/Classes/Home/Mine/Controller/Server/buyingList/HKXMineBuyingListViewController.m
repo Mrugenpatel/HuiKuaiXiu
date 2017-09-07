@@ -10,10 +10,12 @@
 #import "CommonMethod.h"
 
 #import "HKXMineBuyingDetailViewController.h"//订单详情
-#import "HKXMinePayViewController.h"
+#import "HKXMinePayViewController.h"//支付
+#import "goodsPartDetailViewController.h"//配件详情
 #import "HKXOrderStoreModel.h"
 #import "HKXOrderGoodsModel.h"
-
+#import "PartGoodsModel.h"
+#import "UIImageView+WebCache.h"
 @interface HKXMineBuyingListViewController ()<UICollectionViewDelegate , UICollectionViewDataSource>
 {
     UICollectionView * _buyingCollectionView;//买入订单
@@ -65,7 +67,7 @@
     UICollectionViewFlowLayout * flowLayOut = [[UICollectionViewFlowLayout alloc] init];
     flowLayOut.scrollDirection = UICollectionViewScrollDirectionVertical;
     
-    _buyingCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0 , ScreenWidth, ScreenHeight  - 20 * myDelegate.autoSizeScaleY) collectionViewLayout:flowLayOut];
+    _buyingCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0 ,ScreenWidth, ScreenHeight  - 20 * myDelegate.autoSizeScaleY) collectionViewLayout:flowLayOut];
     _buyingCollectionView.backgroundColor = [UIColor whiteColor];
     _buyingCollectionView.delegate = self;
     _buyingCollectionView.dataSource = self;
@@ -85,6 +87,11 @@
 #pragma mark - ConfigData
 - (void)configData
 {
+    
+    if (self.storeArr.count != 0) {
+        
+        [self.storeArr removeAllObjects];
+    }
     
     page = 2;
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
@@ -375,7 +382,7 @@
     
     UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(30 *myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
     goodsImg.tag = 90001;
-    goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
+    [goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goods.goodPicture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
     [cell addSubview:goodsImg];
     
     UILabel * goodsNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY)];
@@ -422,6 +429,7 @@
     
     UIView * view = [actionBtn superview];
     HKXOrderStoreModel * store = self.storeArr[view.tag];
+    HKXOrderGoodsModel * goods = store.goodsArr[0];
     if (actionBtn.tag == 90006) {
        
         //交易成功
@@ -460,7 +468,7 @@
         if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"0"]){
             
             //再来一单
-            
+            [self BuyGoodsAgainWithPId:goods.mId];
         }//待付款
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
             
@@ -474,12 +482,12 @@
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"2"]){
             
             //再来一单
-            
+            [self BuyGoodsAgainWithPId:goods.mId];
         }//交易成功
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"3"]){
             
             //再来一单
-            
+            [self BuyGoodsAgainWithPId:goods.mId];
         }//已取消
         else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"-1"]){
             
@@ -500,7 +508,7 @@
                            [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
@@ -530,7 +538,7 @@
                            [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
@@ -561,7 +569,7 @@
                            [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
                            nil];
     [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
@@ -585,7 +593,36 @@
     
 }
 //再来一单
-- (void)BuyGoodsAgainWithOrderId:(NSString *)orderId{
+- (void)BuyGoodsAgainWithPId:(NSString *)pId{
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithInt:[pId intValue]],@"pId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"supplierbase/partdetail.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            goodsPartDetailViewController * partDetail = [[goodsPartDetailViewController alloc] init];
+            partDetail.partModel = [[PartGoodsModel alloc] initWithDict:dicts[@"data"]];
+            [self.navigationController pushViewController:partDetail animated:YES];
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self showHint:@"请求失败"];
+        [self.view hideActivity];
+        
+    }];
+    
     
     
 }

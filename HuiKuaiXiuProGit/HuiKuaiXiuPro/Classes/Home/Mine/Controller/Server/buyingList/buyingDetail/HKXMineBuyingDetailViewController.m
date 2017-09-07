@@ -8,6 +8,8 @@
 
 #import "HKXMineBuyingDetailViewController.h"
 #import "HKXMinePayViewController.h"
+#import "goodsPartDetailViewController.h"
+#import "PartGoodsModel.h"
 #import "CommonMethod.h"
 
 #import "HKXGoodsView.h"
@@ -292,10 +294,11 @@
 - (void)rightBtnclick:(UIButton *)rightBtn{
     
     //交易成功
+    HKXOrderGoodsModel * goods = self.store.goodsArr[0];
     if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"0"]){
         
         //再来一单
-        
+        [self BuyGoodsAgainWithPId:goods.mId];
     }//待付款
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"11"]){
         
@@ -309,12 +312,12 @@
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"2"]){
         
         //再来一单
-        
+        [self BuyGoodsAgainWithPId:goods.mId];
     }//交易成功
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"3"]){
         
         //再来一单
-        
+        [self BuyGoodsAgainWithPId:goods.mId];
     }//已取消
     else if ([[NSString stringWithFormat:@"%@",self.store.orderStatus] isEqualToString:@"-1"]){
         
@@ -424,6 +427,40 @@
     
 }
 
+//再来一单
+- (void)BuyGoodsAgainWithPId:(NSString *)pId{
+    
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           [NSNumber numberWithInt:[pId intValue]],@"pId",
+                           nil];
+    [self.view showActivity];
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"supplierbase/partdetail.do"] params:dict success:^(id responseObject) {
+        
+        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+        NSLog(@"请求成功%@",dicts);
+        [self.view hideActivity];
+        if ([dicts[@"success"] boolValue] == YES) {
+            
+            goodsPartDetailViewController * partDetail = [[goodsPartDetailViewController alloc] init];
+            partDetail.partModel = [[PartGoodsModel alloc] initWithDict:dicts[@"data"]];
+            [self.navigationController pushViewController:partDetail animated:YES];
+            
+        }else{
+            
+            [self showHint:dicts[@"message"]];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        NSLog(@"请求失败%@",error);
+        [self showHint:@"请求失败"];
+        [self.view hideActivity];
+        
+    }];
+    
+    
+    
+}
 
 #pragma mark - Setters & Getters
 

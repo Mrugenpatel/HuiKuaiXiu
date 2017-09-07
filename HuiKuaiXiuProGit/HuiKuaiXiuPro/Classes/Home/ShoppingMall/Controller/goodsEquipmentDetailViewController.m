@@ -39,7 +39,7 @@
     
     
     self.view.backgroundColor  = [UIColor whiteColor];
-
+    AppDelegate * delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     goodsImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 150)];
     goodsImgView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.equipmentModel.picture]]]];
     [self.view addSubview:goodsImgView];
@@ -52,7 +52,7 @@
     [self.view addSubview:goodsName];
     
     buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    buyBtn = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth / 3 * 2 - 30, ScreenHeight - 80, ScreenWidth / 3, 50)];
+    buyBtn = [[UIButton alloc] initWithFrame:CGRectMake(ScreenWidth / 3 * 2 - 30, ScreenHeight - 80, ScreenWidth / 3, 44 * delegate.autoSizeScaleY)];
     [buyBtn setTitle:@"询 价" forState:UIControlStateNormal];
     [buyBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     buyBtn.layer.cornerRadius = 4;
@@ -87,12 +87,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
         
-        return 30;
+    return 30;
     
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-        return 5;
+    return 5;
     
 }
 

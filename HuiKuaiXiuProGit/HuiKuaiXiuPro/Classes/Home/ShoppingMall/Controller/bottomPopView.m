@@ -42,7 +42,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
 - (void)layoutSubviews{
     
     [super layoutSubviews];
-    
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.bgView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.5];
     self.bgView.frame = CGRectMake(0, 20, ScreenWidth, ScreenHeight);
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchBg)];
@@ -114,7 +114,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     self.goodsNum.textColor = [UIColor blackColor];
     self.goodsNum.font = [UIFont systemFontOfSize:13];
     self.chooseGoodsNum.frame = CGRectMake(self.goodsStock.frame.origin.x,self.goodsStock.frame.origin.y + self.goodsStock.frame.size.height,self.goodsStock.frame.size.width,self.goodsStock.frame.size.height);
-    self.buy.frame =CGRectMake(ScreenWidth / 4, self.chooseGoodsNum.frame.origin.y + self.chooseGoodsNum.frame.size.height + 20, ScreenWidth / 2, 44);
+    self.buy.frame =CGRectMake(ScreenWidth / 4, self.chooseGoodsNum.frame.origin.y + self.chooseGoodsNum.frame.size.height +10, ScreenWidth / 2, 44 * myDelegate.autoSizeScaleY);
     [self.buy setTitle:@"完 成" forState:UIControlStateNormal];
     [self.buy setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.buy setBackgroundColor:[UIColor orangeColor]];
@@ -157,7 +157,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     
-    return 9;
+    return 8;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -193,9 +193,6 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     }else if (indexPath.row == 7){
         
         lb.text = [NSString stringWithFormat:@"%@",self.companyModel.companyIntroduce];
-    }else if (indexPath.row == 8){
-        
-        lb.text = @"www.jiadeshi.com.cn";
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -203,7 +200,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return self.showView.frame.size.height / 9;
+    return self.showView.frame.size.height / 8;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -270,7 +267,8 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
 
 #pragma mark - 创建计数器
 -(void)creatStepView{
-    _myfield = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, self.chooseGoodsNum.frame.size.width, self.chooseGoodsNum.frame.size.height)];
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    _myfield = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, self.chooseGoodsNum.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     _myfield.text=@"1";
     //_myfield.backgroundColor=[UIColor blueColor];
     _myfield.delegate=self;
@@ -360,7 +358,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     if (_myfield == textField) //
     {
         if ([toBeString integerValue] > 5) { //如果输入框内容大于10则弹出警告
-            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"输入的数值不能超过5" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"单次购买商品数量限制5件" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
             }];
             UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {

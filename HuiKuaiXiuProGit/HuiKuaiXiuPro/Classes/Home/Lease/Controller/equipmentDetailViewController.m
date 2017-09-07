@@ -52,12 +52,12 @@
 - (void)createUI{
     
     
-    
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 5)];
     view.backgroundColor = [CommonMethod getUsualColorWithString:@"#f6f6f6"];
     [self.view addSubview:view];
     brandButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    brandButton.frame = CGRectMake(20, view.frame.origin.y + view.frame.size.height + 10, ScreenWidth - 40, 50);
+    brandButton.frame = CGRectMake(20, view.frame.origin.y + view.frame.size.height + 10, ScreenWidth - 40, 44 * myDelegate.autoSizeScaleY);
     [brandButton setTitle:[NSString stringWithFormat:@"设备型号:%@",_brandmodel] forState:UIControlStateNormal];
     brandButton.titleLabel.font = [UIFont systemFontOfSize:17];
     [brandButton.layer setBorderColor:[UIColor lightGrayColor].CGColor];
@@ -77,7 +77,7 @@
     
     
     siteTextfield = [[UITextField alloc] init];
-    siteTextfield.frame = CGRectMake(brandButton.frame.origin.x, brandButton.frame.origin.y + brandButton.frame.size.height + 10, brandButton.frame.size.width, 50);
+    siteTextfield.frame = CGRectMake(brandButton.frame.origin.x, brandButton.frame.origin.y + brandButton.frame.size.height + 10, brandButton.frame.size.width, 44 * myDelegate.autoSizeScaleY);
     [siteTextfield.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [siteTextfield.layer setBorderWidth:1];
     siteTextfield.clipsToBounds=YES;
@@ -93,7 +93,7 @@
     [self.view addSubview:siteTextfield];
     
     
-    myView1 = [[myview alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, siteTextfield.frame.origin.y + siteTextfield.frame.size.height, brandButton.frame.size.width, 50)];
+    myView1 = [[myview alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, siteTextfield.frame.origin.y + siteTextfield.frame.size.height, brandButton.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     myView1.label.text = @"是否含油";
     myView1.label.backgroundColor = [UIColor whiteColor];
     if ([[NSString stringWithFormat:@"%@",_oil]isEqualToString:@"1"]) {
@@ -115,7 +115,7 @@
     [myView1.noBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateSelected];
     [self.view addSubview:myView1];
     
-    myView2 = [[myview alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, myView1.frame.origin.y + myView1.frame.size.height, brandButton.frame.size.width, 50)];
+    myView2 = [[myview alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, myView1.frame.origin.y + myView1.frame.size.height, brandButton.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     myView2.label.text = @"是否带司机";
     myView2.label.backgroundColor = [UIColor whiteColor];
     if ([[NSString stringWithFormat:@"%@",_driver] isEqualToString:@"1"]) {
@@ -137,7 +137,7 @@
     myView2.noBtn.userInteractionEnabled = NO;
     [self.view addSubview:myView2];
     
-    costField = [[UITextField alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, myView2.frame.origin.y + myView2.frame.size.height + 10, brandButton.frame.size.width, 50)];
+    costField = [[UITextField alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, myView2.frame.origin.y + myView2.frame.size.height + 10 * myDelegate.autoSizeScaleY, brandButton.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     costField.borderStyle = UITextBorderStyleLine;
     costField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
@@ -157,7 +157,7 @@
     costField.userInteractionEnabled = NO;
     [self.view addSubview:costField];
     
-    phoneNumField = [[UITextField alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, costField.frame.origin.y + costField.frame.size.height + 10, brandButton.frame.size.width, 50)];
+    phoneNumField = [[UITextField alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, costField.frame.origin.y + costField.frame.size.height + 10 * myDelegate.autoSizeScaleY, brandButton.frame.size.width, 44 * myDelegate.autoSizeScaleY)];
     phoneNumField.text = [NSString stringWithFormat:@"联系人电话:%@",_machinephone];
     phoneNumField.keyboardType = UIKeyboardTypeNumberPad;
     phoneNumField.layer.borderColor=[[UIColor lightGrayColor]CGColor];
@@ -171,20 +171,20 @@
     phoneNumField.userInteractionEnabled = NO;
     [self.view addSubview:phoneNumField];
     
-    UILabel * pictureLb = [[UILabel alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, phoneNumField.frame.origin.y + phoneNumField.frame.size.height + 10, 50, 50)];
+    UILabel * pictureLb = [[UILabel alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, phoneNumField.frame.origin.y + phoneNumField.frame.size.height + 10 * myDelegate.autoSizeScaleY, 50, 44 * myDelegate.autoSizeScaleY)];
     pictureLb.font = [UIFont systemFontOfSize:15];
     pictureLb.text = @"照片";
     [self.view addSubview:pictureLb];
     
     pictureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    pictureBtn.frame = CGRectMake(pictureLb.frame.origin.x + pictureLb.frame.size.width, pictureLb.frame.origin.y + 20, 80, 50);
+    pictureBtn.frame = CGRectMake(pictureLb.frame.origin.x + pictureLb.frame.size.width, pictureLb.frame.origin.y + 20 * myDelegate.autoSizeScaleY, 80, 44 * myDelegate.autoSizeScaleY);
     [pictureBtn setBackgroundImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,_picture]]] ] forState:UIControlStateNormal];
     pictureBtn.userInteractionEnabled = NO;
     [self.view addSubview:pictureBtn];
     
     
     UIButton * cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancleBtn.frame = CGRectMake(brandButton.frame.origin.x, ScreenHeight - 70, ScreenWidth / 2 - brandButton.frame.origin.x * 2, 50);
+    cancleBtn.frame = CGRectMake(brandButton.frame.origin.x, ScreenHeight - 70, ScreenWidth / 2 - brandButton.frame.origin.x * 2, 44 * myDelegate.autoSizeScaleY);
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
     [cancleBtn setBackgroundColor:[UIColor brownColor]];
     cancleBtn.clipsToBounds=YES;

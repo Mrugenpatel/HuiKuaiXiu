@@ -53,7 +53,7 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor  = [UIColor whiteColor];
     AppDelegate * delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    UIView * titleView = [[UIView alloc] initWithFrame:CGRectMake(ScreenWidth / 2 - 110, 0, 220 * delegate.autoSizeScaleX, 44* delegate.autoSizeScaleY)];
+    UIView * titleView = [[UIView alloc] initWithFrame:CGRectMake(ScreenWidth / 2 - 110, 0, 220 * delegate.autoSizeScaleX, 44 * delegate.autoSizeScaleY)];
     self.navigationItem.titleView = titleView;
     
     goodsInformation = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -98,7 +98,7 @@
     [self.view addSubview:goodsInfoTableView];
     
     addShoppingCarBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    addShoppingCarBtn = [[UIButton alloc] initWithFrame:CGRectMake(goodsName.frame.origin.x, ScreenHeight - 80, ScreenWidth /2 - goodsName.frame.origin.x - 10, 50* delegate.autoSizeScaleY)];
+    addShoppingCarBtn = [[UIButton alloc] initWithFrame:CGRectMake(goodsName.frame.origin.x, ScreenHeight - 70, ScreenWidth /2 - goodsName.frame.origin.x - 10, 44* delegate.autoSizeScaleY)];
     [addShoppingCarBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
     [addShoppingCarBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     addShoppingCarBtn.layer.cornerRadius = 4;
@@ -109,7 +109,7 @@
     [self.view addSubview:addShoppingCarBtn];
     
     buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    buyBtn = [[UIButton alloc] initWithFrame:CGRectMake(addShoppingCarBtn.frame.origin.x + addShoppingCarBtn.frame.size.width + 20 , ScreenHeight - 80, addShoppingCarBtn.frame.size.width, 50 * delegate.autoSizeScaleY)];
+    buyBtn = [[UIButton alloc] initWithFrame:CGRectMake(addShoppingCarBtn.frame.origin.x + addShoppingCarBtn.frame.size.width + 20 , ScreenHeight - 70, addShoppingCarBtn.frame.size.width, 44 * delegate.autoSizeScaleY)];
     [buyBtn setTitle:@"购买" forState:UIControlStateNormal];
     [buyBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     buyBtn.layer.cornerRadius = 4;

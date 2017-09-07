@@ -35,6 +35,15 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    UIButton * rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    rightBtn.frame = CGRectMake(0, 0, 40, 40);
+    [rightBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(rightBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem * right = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    self.navigationItem.rightBarButtonItem = right;
+    
+    
     if (![CLLocationManager locationServicesEnabled])
     {
         CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:@"位置服务不可用" sure:@"确定" sureBtnClick:^{
@@ -49,7 +58,10 @@
     }
 }
 
-
+- (void)rightBtnClick:(UIButton *)rightBtn{
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
