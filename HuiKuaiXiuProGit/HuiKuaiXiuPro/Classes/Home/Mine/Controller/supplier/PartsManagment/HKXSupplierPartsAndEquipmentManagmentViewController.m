@@ -72,8 +72,7 @@
 #pragma mark - ConfigData
 - (void)loadData
 {
-    [self.infoArray removeAllObjects];
-    [self.selectArray removeAllObjects];
+    
     long userId = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userDataId"];
     [self.view showActivity];
     if (self.isParts)
@@ -81,13 +80,29 @@
         [HKXHttpRequestManager sendRequestWithUserID:[NSString stringWithFormat:@"%ld",userId] WithPageNum:@"1" WithPageSize:@"7" ToGetCurrentReleasedPartsInfo:^(id data) {
             [self.view hideActivity];
             HKXSupplierPartsManagementModel * partsModel = data;
-            
-            for (HKXSupplierPartsManagementData * partsData in partsModel.data)
+            if (partsModel.success)
             {
-                [self.infoArray addObject:partsData];
-                [self.selectArray addObject:partsData];
+                [self.infoArray removeAllObjects];
+                [self.selectArray removeAllObjects];
+                for (HKXSupplierPartsManagementData * partsData in partsModel.data)
+                {
+                    [self.infoArray addObject:partsData];
+                    [self.selectArray addObject:partsData];
+                    
+                    if (self.infoArray.count == 0)
+                    {
+                        [self showHint:partsModel.message];
+                    }
+                    
+                    [_bottomTableView reloadData];
+                }
+                
             }
-            [_bottomTableView reloadData];
+            else
+            {
+                [self showHint:partsModel.message];
+            }
+            
         }];
     }
     else
@@ -95,14 +110,27 @@
         [HKXHttpRequestManager sendRequestWithSupplierUserId:[NSString stringWithFormat:@"%ld",userId] WithPageNum:@"1" WithPageSize:@"7" ToGetSupplierAllEquipmentInfoResult:^(id data) {
             [self.view hideActivity];
             HKXSupplierEquipmentManagementModel * equipmentModel = data;
-            
-            for (HKXSupplierEquipmentManagementData * equipmentData in equipmentModel.data)
+            if (equipmentModel.success)
             {
-                [self.infoArray addObject:equipmentData];
-                [self.selectArray addObject:equipmentData];
+                [self.infoArray removeAllObjects];
+                [self.selectArray removeAllObjects];
+                for (HKXSupplierEquipmentManagementData * equipmentData in equipmentModel.data)
+                {
+                    [self.infoArray addObject:equipmentData];
+                    [self.selectArray addObject:equipmentData];
+                }
+                if (self.infoArray.count == 0)
+                {
+                    [self showHint:equipmentModel.message];
+                }
+                
+                [_bottomTableView reloadData];
+            }
+            else
+            {
+                [self showHint:equipmentModel.message];
             }
             
-            [_bottomTableView reloadData];
         }];
     }
     
@@ -120,7 +148,7 @@
         {
 //            上架配件
             HKXSupplierPartsManagementData * data = self.infoArray[indexPath];
-            data.status = 1;
+            data.status = 0;
             [HKXHttpRequestManager sendRequestWithGoodsId:[NSString stringWithFormat:@"%d",data.pId] WithGoodsStatus:@"0" ToGetUpdateReckResult:^(id data) {
                 HKXMineServeCertificateProfileModel * model = data;
                 [self showHint:model.message];
@@ -131,7 +159,7 @@
         {
 //            上架设备
             HKXSupplierEquipmentManagementData * data = self.infoArray[indexPath];
-            data.state = 1;
+            data.state = 0;
             [HKXHttpRequestManager sendRequestWithEquipmentID:[NSString stringWithFormat:@"%d",data.pmaId] WithEquipmentStatus:@"0" ToGetUpdateEquipmentReckResult:^(id data) {
                 HKXMineServeCertificateProfileModel * model = data;
                 [self showHint:model.message];
@@ -147,7 +175,7 @@
         {
             //            下架配件
             HKXSupplierPartsManagementData * data = self.infoArray[indexPath];
-            data.status = 0;
+            data.status = 1;
             [HKXHttpRequestManager sendRequestWithGoodsId:[NSString stringWithFormat:@"%d",data.pId] WithGoodsStatus:@"1" ToGetUpdateReckResult:^(id data) {
                 HKXMineServeCertificateProfileModel * model = data;
                 [self showHint:model.message];
@@ -158,7 +186,7 @@
         {
             //            下架设备
             HKXSupplierEquipmentManagementData * data = self.infoArray[indexPath];
-            data.state = 0;
+            data.state = 1;
             [HKXHttpRequestManager sendRequestWithEquipmentID:[NSString stringWithFormat:@"%d",data.pmaId] WithEquipmentStatus:@"1" ToGetUpdateEquipmentReckResult:^(id data) {
                 HKXMineServeCertificateProfileModel * model = data;
                 [self showHint:model.message];
@@ -343,11 +371,11 @@
         if (data.status == 0)
         {
 //            上架状态
-            putAwayBtn.selected = NO;
+            putAwayBtn.selected = YES;
         }
         else
         {
-            putAwayBtn.selected = YES;
+            putAwayBtn.selected = NO;
         }
         [putAwayBtn addTarget:self action:@selector(putawayOrSoldOutGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:putAwayBtn];
@@ -415,11 +443,11 @@
         if (equipmentModel.state == 0)
         {
             //            上架状态
-            putAwayBtn.selected = NO;
+            putAwayBtn.selected = YES;
         }
         else
         {
-            putAwayBtn.selected = YES;
+            putAwayBtn.selected = NO;
         }
         [putAwayBtn addTarget:self action:@selector(putawayOrSoldOutGoodsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:putAwayBtn];

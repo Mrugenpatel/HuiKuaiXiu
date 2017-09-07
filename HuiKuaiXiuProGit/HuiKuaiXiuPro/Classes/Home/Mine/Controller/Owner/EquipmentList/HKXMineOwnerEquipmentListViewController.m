@@ -1,4 +1,4 @@
-//
+  //
 //  HKXMineOwnerEquipmentListViewController.m
 //  HuiKuaiXiuPro
 //
@@ -62,13 +62,21 @@
         HKXMineOwnerEquipmentListModel * model = data;
         if (model.success)
         {
+            [self.equipmentListArray removeAllObjects];
             for (HKXMineOwnerEquipmentListData * modelData in model.data)
             {
                 [self.equipmentListArray addObject:modelData];
-                
+            }
+            if (self.equipmentListArray.count == 0)
+            {
+                [self showHint:model.message];
             }
             
             [_equipmentListTableView reloadData];
+        }
+        else
+        {
+            [self showHint:model.message];
         }
     }];
 }

@@ -68,9 +68,20 @@
         
         if (model.success)
         {
-            self.repairListArray = (NSMutableArray *)model.data;
-            
+            [self.repairListArray removeAllObjects];
+            for (HKXMineServerOrderListData * repairData in model.data)
+            {
+                [self.repairListArray addObject:repairData];
+            }
+            if (self.repairListArray.count == 0)
+            {
+                [self showHint:model.message];
+            }
             [_repairListTableView reloadData];
+        }
+        else
+        {
+            [self showHint:model.message];
         }
     }];
 }

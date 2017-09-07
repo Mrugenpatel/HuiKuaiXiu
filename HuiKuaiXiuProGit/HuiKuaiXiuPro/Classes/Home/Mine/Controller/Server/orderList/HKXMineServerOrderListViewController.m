@@ -63,33 +63,41 @@
         HKXMineServerOrderListModel * model = data;
         if (model.success)
         {
-            
-            self.orderListArray = (NSMutableArray *)model.data;
+            [self.orderListArray removeAllObjects];
+            for (HKXMineServerOrderListData * orderData in model.data)
+            {
+                [self.orderListArray addObject:orderData];
+            }
+            if (self.orderListArray.count == 0)
+            {
+                [self showHint:model.message];
+            }
             
             [_bottomOrderListTableView reloadData];
         }
         else
         {
-            CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:model.message sure:@"确定" sureBtnClick:^{
-                [self tapGestureClick];
-            } WithAlertHeight:160];
-            customAlertView.tag = 501;
-            [self.view addSubview:customAlertView];
+//            CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:model.message sure:@"确定" sureBtnClick:^{
+//                [self tapGestureClick];
+//            } WithAlertHeight:160];
+//            customAlertView.tag = 501;
+//            [self.view addSubview:customAlertView];
+            [self showHint:model.message];
         }
     }];
     
 }
 #pragma mark - Action
-- (void)tapGestureClick
-{
-    for (UIView * view in self.view.subviews)
-    {
-        if (view.tag >= 500 && view.tag <= 507 )
-        {
-            [view removeFromSuperview];
-        }
-    }
-}
+//- (void)tapGestureClick
+//{
+//    for (UIView * view in self.view.subviews)
+//    {
+//        if (view.tag >= 500 && view.tag <= 507 )
+//        {
+//            [view removeFromSuperview];
+//        }
+//    }
+//}
 #pragma mark - Private Method
 #pragma mark - Delegate & Data Source
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

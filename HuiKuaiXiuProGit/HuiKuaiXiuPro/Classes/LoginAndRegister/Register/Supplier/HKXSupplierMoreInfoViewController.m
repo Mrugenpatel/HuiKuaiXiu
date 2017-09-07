@@ -58,7 +58,19 @@
     for (int i = 0; i < placeHolderContentArray.count; i ++)
     {
         UITextField * contentTF = [[UITextField alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + 50 * i) * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
-        contentTF.text = self.companyName;
+        if (i == 0)
+        {
+            contentTF.text = self.companyName;
+        }
+        
+        if (i == 2)
+        {
+            contentTF.text = self.contactName;
+        }
+        if (i == 3)
+        {
+            contentTF.text = self.phone;
+        }
         if (i == 1)
         {
             contentTF.frame = CGRectMake(22 * myDelegate.autoSizeScaleX , (10 + 50 * i) * myDelegate.autoSizeScaleY, 96 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
@@ -85,14 +97,7 @@
         contentTF.borderStyle = UITextBorderStyleRoundedRect;
         contentTF.delegate = self;
         [_bottomView addSubview:contentTF];
-        if (i == 2)
-        {
-            contentTF.text = self.contactName;
-        }
-        if (i == 3)
-        {
-            contentTF.text = self.phone;
-        }
+        
     }
     
     UITextField * managerTF = [_bottomView viewWithTag:20006];

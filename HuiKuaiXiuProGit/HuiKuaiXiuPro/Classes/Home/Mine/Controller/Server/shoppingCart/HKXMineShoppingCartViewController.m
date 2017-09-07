@@ -131,6 +131,10 @@
                 [self.shopArray addObject:shopModel];
             }
             [_shoppingCartCollectionView reloadData];
+            if (self.shopArray.count == 0)
+            {
+                [self showHint:model.message];
+            }
         }
         else
         {

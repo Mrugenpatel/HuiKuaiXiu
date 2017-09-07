@@ -68,13 +68,15 @@
         {
             self.isCard = true;
             self.myWalletModel = [model.data firstObject];
+            
+            [_bottomTableView reloadData];
         }
         else
         {
             self.isCard = false;
-            [self showHint:model.message];
+//            [self showHint:model.message];
         }
-        [_bottomTableView reloadData];
+        
     }];
 }
 #pragma mark - Action

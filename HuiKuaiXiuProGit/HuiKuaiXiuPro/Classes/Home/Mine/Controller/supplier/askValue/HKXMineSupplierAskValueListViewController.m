@@ -61,9 +61,14 @@
         HKXMineSupplierInqiryListModel * inquiryModel = data;
         if (inquiryModel.success)
         {
+            [self.inquiryArray removeAllObjects];
             for (HKXMineSupplierInqiryListData * data in inquiryModel.data)
             {
                 [self.inquiryArray addObject:data];
+            }
+            if (self.inquiryArray.count == 0)
+            {
+                [self showHint:inquiryModel.message];
             }
              [_listTableView reloadData];
         }
