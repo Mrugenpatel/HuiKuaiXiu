@@ -48,6 +48,7 @@
 
 - (void)createUI{
     
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     tfArr = [[NSMutableArray alloc] init];
     ar = [[NSArray alloc] initWithObjects:@"设备类型",@"品牌", @"型号",@"吨位",@"设备所在地",@"工况情况",@"联系人",@"电话",nil];
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 5)];
@@ -62,7 +63,7 @@
     
     [self.view addSubview:requireLeaseTableView];
     UIButton * cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancleBtn.frame = CGRectMake(20, ScreenHeight - 70, ScreenWidth / 2 -20 * 2, 50);
+    cancleBtn.frame = CGRectMake(20, ScreenHeight - 70, ScreenWidth / 2 -20 * 2, 44 * myDelegate.autoSizeScaleY);
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
     [cancleBtn setBackgroundColor:[UIColor brownColor]];
     cancleBtn.clipsToBounds=YES;
@@ -127,6 +128,11 @@
     if (indexPath.row == 3) {
         
         _textField.keyboardType =UIKeyboardTypeDecimalPad;
+        
+    }
+    if (indexPath.row == 7) {
+        
+        _textField.keyboardType =UIKeyboardTypePhonePad;
         
     }
        [cell.contentView addSubview:_textField];

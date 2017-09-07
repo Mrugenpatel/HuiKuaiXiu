@@ -184,7 +184,12 @@
         for (int i = 100;  i < 104;  i ++) {
             
             UITextField * tf = [userInfoTableView viewWithTag:i];
-            tf.userInteractionEnabled = YES;
+            
+            if (i != 101) {
+                
+               tf.userInteractionEnabled = YES;
+            }
+            
         }
         
         
@@ -224,6 +229,8 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 [self showHint:dicts[@"message"]];
+                [self configData];
+                
             }else{
                 
                 [self showHint:dicts[@"message"]];
@@ -237,12 +244,8 @@
             
         }];
 
-        
-        
     }
-    
-    
-    
+
 }
 #pragma mark - ConfigData
 - (void)configData
@@ -603,19 +606,22 @@
         }
         if (self.supplierInfoModel.data != nil &&![self.supplierInfoModel.data.username isEqualToString:@""])
         {
-            [leftGongYingShangDetailTextArray replaceObjectAtIndex:2 withObject:self.supplierInfoModel.data.username];
+            [leftGongYingShangDetailTextArray replaceObjectAtIndex:1 withObject:self.supplierInfoModel.data.username];
         }
         if (self.supplierInfoModel.data != nil &&![self.supplierInfoModel.data.address isEqualToString:@"nullnullnullnull"])
         {
-            [leftGongYingShangDetailTextArray replaceObjectAtIndex:3 withObject:self.supplierInfoModel.data.address];
+            [leftGongYingShangDetailTextArray replaceObjectAtIndex:2 withObject:self.supplierInfoModel.data.address];
         }
         if (self.supplierInfoModel.data != nil && self.supplierInfoModel.data.companyName != nil)
         {
-            [leftGongYingShangDetailTextArray replaceObjectAtIndex:4 withObject:self.supplierInfoModel.data.companyName];
+            [leftGongYingShangDetailTextArray replaceObjectAtIndex:3 withObject:self.supplierInfoModel.data.companyName];
         }
+
         if (self.supplierInfoModel.data != nil && self.supplierInfoModel.data.recommendCode != nil)
         {
+            
             [leftGongYingShangDetailTextArray replaceObjectAtIndex:5 withObject:self.supplierInfoModel.data.recommendCode];
+            
         }
     }
 
@@ -675,7 +681,7 @@
             
             detailLeftTextLabel.userInteractionEnabled = NO;
         }
-        if(indexPath.row < 5){
+        if(indexPath.row < 6){
             
             [cell addSubview:detailLeftTextLabel];
         }
@@ -695,6 +701,7 @@
             {
                 
                 detailLeftTextLabel.text = leftGongYingShangDetailTextArray[indexPath.row];
+              
             }
         }
         

@@ -135,6 +135,27 @@
 //微信
 - (void)WechatPay{
     
+    
+    if (![WXApi isWXAppInstalled]) {
+        
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"点击确定安装微信" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            
+            NSString  *str = [NSString stringWithFormat:@"%@",[WXApi getWXAppInstallUrl]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+            
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+        return;
+    }
+    
+    
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:[_ruoId doubleValue]],@"ruoId",nil];
     NSLog(@"%@",dict);
     
@@ -177,6 +198,26 @@
 //微信
 - (void)GoodsWechatPay{
     
+    if (![WXApi isWXAppInstalled]) {
+        
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"点击确定安装微信" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            
+            NSString  *str = [NSString stringWithFormat:@"%@",[WXApi getWXAppInstallUrl]];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+            
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+        return;
+    }
+    
+
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:[_ruoId doubleValue]],@"orderId",[NSNumber numberWithInteger:self.come],@"come",nil];
     NSLog(@"%@",dict);
     
@@ -213,7 +254,7 @@
         [self showHint:@"请求失败"];
     }];
     
-    
+
 }
 
 //支付宝

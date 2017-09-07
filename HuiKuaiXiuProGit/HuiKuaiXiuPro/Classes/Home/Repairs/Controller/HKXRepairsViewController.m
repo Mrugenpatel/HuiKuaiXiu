@@ -172,6 +172,10 @@
             [address setImage:[UIImage imageNamed:@"定位"] forState:UIControlStateNormal];
             [_bottomView addSubview:address];
         }
+        if (i == 1) {
+            
+            contentTF.userInteractionEnabled = NO;
+        }
         if (i == 3) {
             
             contentTF.keyboardType = UIKeyboardTypeNumberPad;
@@ -346,8 +350,6 @@
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"id",tf.text,@"search",nil];
-    // http://192.168.1.104:8080/hkx/app/machine/brandModel.do
-    ;
     [self.view showActivity];
     [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"machine/brandModel.do"] params:dict success:^(id responseObject) {
         
@@ -365,20 +367,21 @@
             
             
         }else{
-            
-            //所有的设备ID
-            //            NSMutableArray * idArr = [[NSMutableArray alloc] init];
-            //            for (id idStr in self.brandArr) {
-            //
-            //                [idArr addObject:idStr[@"modelid"]];
-            //
-            //            }
-            
+
             self.brandArr = dicts[@"data"];
             UITextField * tf = [self.view viewWithTag:20000];
             [self.brandArr addObject:@{@"brandType":@"添加设备"}];
-            CGRect rect = CGRectMake(ScreenWidth - 100, tf.frame.origin.y + tf.frame.size.height, 80, ScreenHeight - tf.frame.origin.y - tf.frame.size.height - 44 - 64 - 40);
-            _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
+            
+            if (self.brandArr.count * 40 > ScreenHeight - tf.frame.origin.y - tf.frame.size.height - 44 - 64 - 40) {
+                
+                CGRect rect = CGRectMake(ScreenWidth - 100, tf.frame.origin.y + tf.frame.size.height, 80,ScreenHeight - tf.frame.origin.y - tf.frame.size.height - 44 - 64 - 40);
+                _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
+            }else{
+                
+                CGRect rect = CGRectMake(ScreenWidth - 100, tf.frame.origin.y + tf.frame.size.height, 80,self.brandArr.count * 40);
+                _list = [[JGDownListMenu alloc] initWithFrame:rect ListDataSource:self.brandArr rowHeight:40 view:brandButton];
+            }
+            
             _list.mark = @"保修";
             _list.delegate = self;
             [_bottomView addSubview:self.list];
@@ -396,9 +399,7 @@
                 //_msakImg.transform = CGAffineTransformRotate(_msakImg.transform, -M_PI);
             }
         }
-        
-        
-        
+  
     } failure:^(NSError *error) {
         
         NSLog(@"请求失败%@",error);
@@ -857,7 +858,7 @@
     
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:brandModel.text,@"brandModel",[NSNumber numberWithDouble:[_modleid doubleValue]],@"mId",address.text,@"address",contact.text,@"contact",telephone.text,@"telephone",workHours.text,@"workHours",faultType,@"faultType",faultInfo.text,@"faultInfo",imageDataString,@"picture",[NSNumber numberWithDouble:uId],@"uId",@"",@"appointmentTime",lon,@"lon",lat,@"lat",nil];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:brandModel.text,@"brandModel",[NSNumber numberWithDouble:[_modleid doubleValue]],@"mId",address.text,@"address",contact.text,@"contact",telephone.text,@"telephone",workHours.text,@"workHours",faultType,@"faultType",faultInfo.text,@"faultInfo",imageDataString,@"picture",[NSNumber numberWithDouble:uId],@"uId",lon,@"lon",lat,@"lat",nil];
     NSLog(@"%@",dict);
     
     [self.view showActivity];

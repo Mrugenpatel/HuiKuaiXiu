@@ -68,12 +68,6 @@
     leAndRetableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadData)];
     [leAndRetableView.mj_header beginRefreshing];
 }
-
-
-
-
-
-
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -87,21 +81,19 @@
 {
     self.view.backgroundColor = [UIColor whiteColor];
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    
     UIView * view = [[UIView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 5)];
+    
     view.backgroundColor = [CommonMethod getUsualColorWithString:@"#f6f6f6"];
     [self.view addSubview:view];
-    
     //出租/求租按钮
     leButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    leButton.frame = CGRectMake(ScreenWidth / 2 - ScreenWidth / 4, view.frame.origin.y + view.frame.size.height + 10, ScreenWidth / 4, 40);
+    leButton.frame = CGRectMake(ScreenWidth / 2 - ScreenWidth / 4, view.frame.origin.y + view.frame.size.height + 10 * myDelegate.autoSizeScaleY, ScreenWidth / 4, 40 * myDelegate.autoSizeScaleY);
     [leButton setBackgroundColor:[CommonMethod getUsualColorWithString:@"#ffa304"]];
     leButton.layer.borderWidth=1;//设置边框的宽度
     leButton.layer.borderColor=[[CommonMethod getUsualColorWithString:@"#ffa304"] CGColor];//设置边框的颜色
     leButton.clipsToBounds=YES;
     leButton.selected = YES;
-    [leButton setTitle:@"我的出租" forState:UIControlStateNormal];
+    [leButton setTitle:@"出租" forState:UIControlStateNormal];
     leButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
     [leButton setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateNormal];
     [leButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
@@ -117,12 +109,12 @@
     
     [reButton setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateNormal];
     [reButton setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
-    [reButton setTitle:@"我的求租" forState:UIControlStateNormal];
+    [reButton setTitle:@"求租" forState:UIControlStateNormal];
     reButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
     [reButton addTarget:self action:@selector(reBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:reButton];
     
-    leAndRetableView = [[UITableView alloc] initWithFrame:CGRectMake(0, reButton.frame.origin.y + reButton.frame.size.height + 10, ScreenWidth, ScreenHeight - reButton.frame.origin.y - 80) style:UITableViewStylePlain];
+    leAndRetableView = [[UITableView alloc] initWithFrame:CGRectMake(0, reButton.frame.origin.y + reButton.frame.size.height + 10 * myDelegate.autoSizeScaleY, ScreenWidth, ScreenHeight - reButton.frame.origin.y - reButton.frame.size.height - 54) style:UITableViewStylePlain];
     leAndRetableView.delegate = self;
     leAndRetableView.dataSource = self;
     leAndRetableView.backgroundColor = [UIColor whiteColor];
@@ -134,12 +126,11 @@
     
     lb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 80, 44)];
     lb.textColor = [UIColor whiteColor];
-    lb.text = @"我的租赁";
+    lb.text = @"租赁";
     lb.textAlignment = NSTextAlignmentCenter;
     lb.font = [UIFont systemFontOfSize:17];
     self.navigationItem.titleView = lb;
-    
-    
+  
 }
 -(void)refresh{
     
@@ -151,10 +142,7 @@
             
             [_dataArr removeAllObjects];
         }
-        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",
-                               @"1",@"pageNo",
-                               @"8",@"pageSize",
-                               nil];
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",@"8",@"pageSize",nil];
         [self.view showActivity];
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"leasemachine/selectByuId.do"] params:dict success:^(id responseObject) {
             
@@ -165,13 +153,12 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 _dataArr = dicts[@"data"];
-                
                 [leAndRetableView reloadData];
-                
                 
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                [leAndRetableView reloadData];
             }
             
         } failure:^(NSError *error) {
@@ -189,10 +176,7 @@
             [_dataArr removeAllObjects];
         }
         
-        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",
-                               @"1",@"pageNo",
-                               @"8",@"pageSize",
-                               nil];
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",@"8",@"pageSize",nil];
         [self.view showActivity];
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"bylease/selectByuId.do"] params:dict success:^(id responseObject) {
             
@@ -202,8 +186,6 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 _dataArr = dicts[@"data"];
-                
-                
                 [leAndRetableView reloadData];
                 [leAndRetableView.mj_header endRefreshing];
             }else{
@@ -457,6 +439,79 @@
     }
     
 }
+
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定删除本条记录?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            
+        }];
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            
+            //删除数据
+            NSLog(@"删除");
+            NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+            double uId = [defaults doubleForKey:@"userDataId"];
+            if (leButton.selected) {
+                NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:_dataArr[indexPath.row][@"machineleaseid"],@"machineleaseid",nil];
+                [self.view showActivity];
+                [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"leasemachine/dellease.do"] params:dict success:^(id responseObject) {
+                    
+                    NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                    NSLog(@"请求成功%@",dicts);
+                    [self.view hideActivity];
+                    if ([dicts[@"success"] boolValue] == YES) {
+                        
+                        [self showHint:dicts[@"message"]];
+                        [leAndRetableView.mj_header beginRefreshing];
+                    }else{
+                        
+                        [self showHint:dicts[@"message"]];
+                    }
+                    
+                } failure:^(NSError *error) {
+                    
+                    NSLog(@"请求失败%@",error);
+                    [self.view hideActivity];
+                }];
+                
+            }else{
+                
+                NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:_dataArr[indexPath.row][@"byleaseid"],@"byleaseid",nil];
+                [self.view showActivity];
+                [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"bylease/dellease.do"] params:dict success:^(id responseObject) {
+                    
+                    NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+                    NSLog(@"请求成功%@",dicts);
+                    [self.view hideActivity];
+                    if ([dicts[@"success"] boolValue] == YES) {
+                        
+                        [self showHint:dicts[@"message"]];
+                        [leAndRetableView.mj_header beginRefreshing];
+                    }else{
+                        
+                        [self showHint:dicts[@"message"]];
+                    }
+                    
+                } failure:^(NSError *error) {
+                    
+                    NSLog(@"请求失败%@",error);
+                    [self.view hideActivity];
+                }];
+            }
+ 
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+    }];
+    return @[deleteAction];
+}
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     

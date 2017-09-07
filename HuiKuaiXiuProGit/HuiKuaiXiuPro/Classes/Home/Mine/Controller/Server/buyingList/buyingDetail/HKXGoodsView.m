@@ -9,7 +9,7 @@
 #import "HKXGoodsView.h"
 
 #import "CommonMethod.h"
-
+#import "UIImageView+WebCache.h"
 @implementation HKXGoodsView
 - (instancetype)initWithFrame:(CGRect)frame{
     
@@ -36,7 +36,7 @@
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     self.goodsImg.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX,95 * myDelegate.autoSizeScaleY);
     self.goodsImg.tag = 50005;
-    self.goodsImg.image = [UIImage imageNamed:@"滑动视图示例"];
+    
     [self addSubview:self.goodsImg];
     
     self.label1.frame = CGRectMake(CGRectGetMaxX(self.goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY);
@@ -67,6 +67,7 @@
     self.label2.text = [NSString stringWithFormat:@"产品型号:%@",goods.goodBrand];
     self.label3.text = [NSString stringWithFormat:@"¥%.2f",[goods.goodPrice floatValue]];
     self.label4.text = [NSString stringWithFormat:@"数量:%@",goods.buyNumber];
+    [self.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goods.goodPicture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
 }
 
 
