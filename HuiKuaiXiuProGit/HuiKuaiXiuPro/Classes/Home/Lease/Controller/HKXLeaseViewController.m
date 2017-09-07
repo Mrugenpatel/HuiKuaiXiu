@@ -204,10 +204,7 @@
     
     if (leButton.selected) {
         //获取出租列表数据
-        if (_dataArr.count != 0) {
-            
-            [_dataArr removeAllObjects];
-        }
+    
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                @"1",@"pageNo",
                                @"8",@"pageSize",
@@ -228,7 +225,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [leAndRetableView reloadData];
+               
             }
             
         } failure:^(NSError *error) {
@@ -239,12 +236,7 @@
             [leAndRetableView.mj_header endRefreshing];
         }];
     }else{
-        
-        
-        if (_dataArr.count != 0) {
-            
-            [_dataArr removeAllObjects];
-        }
+
         
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                @"1",@"pageNo",
@@ -264,7 +256,7 @@
                
             }else{
                 [self showHint:dicts[@"message"]];
-                [leAndRetableView reloadData];
+
             }
             
         } failure:^(NSError *error) {
@@ -280,9 +272,7 @@
         
     }
     
-    
-    
-    
+
 }
 
 - (void)loadData{
@@ -300,23 +290,28 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            NSMutableArray * tempArr = [[NSMutableArray alloc] init];
+             [leAndRetableView.mj_footer endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
+                NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
-                for (int i = 0; i < tempArr.count; i ++) {
+                if (tempArr.count != 0) {
                     
-                    [_dataArr addObject:tempArr[i]];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [_dataArr addObject:tempArr[i]];
+                    }
+                    [leAndRetableView reloadData];
+                    page++;
+                    
+                }else{
+                    
+                [self showHint:dicts[@"message"]];
                 }
-                [leAndRetableView reloadData];
-                [leAndRetableView.mj_footer endRefreshing];
-                page++;
-                
+  
             }else{
                 
-                [leAndRetableView.mj_footer endRefreshing];
                 [self showHint:dicts[@"message"]];
-                
             }
             
         } failure:^(NSError *error) {
@@ -339,21 +334,27 @@
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
             [leAndRetableView.mj_header endRefreshing];
-            NSMutableArray * tempArr = [[NSMutableArray alloc] init];
+            
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                tempArr = dicts[@"data"];
-                for (int i = 0; i < tempArr.count; i ++) {
-                    
-                    [_dataArr addObject:tempArr[i]];
-                }
-                [leAndRetableView reloadData];
-                [leAndRetableView.mj_footer endRefreshing];
-                page++;
                 
+                NSMutableArray * tempArr = [[NSMutableArray alloc] init];
+                tempArr = dicts[@"data"];
+                if (tempArr.count != 0) {
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [_dataArr addObject:tempArr[i]];
+                    }
+                    [leAndRetableView reloadData];
+                   
+                    page++;
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
+                }
             }else{
                 
-                [leAndRetableView.mj_footer endRefreshing];
+               
                 [self showHint:dicts[@"message"]];
                 
             }
@@ -488,15 +489,7 @@
     //刷新表格
     
     //获取搜索的关键字
-    if (searchString.length == 0) {
-        
-        return;
-    }
-    if (_dataArr.count != 0) {
-        
-        [_dataArr removeAllObjects];
-    }
-    
+
     if (leButton.selected) {
         
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:searchString,@"search",nil];

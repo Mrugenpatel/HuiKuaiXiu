@@ -109,10 +109,6 @@
     
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
-    if (_dataArr.count != 0) {
-        
-        [_dataArr removeAllObjects];
-    }
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",
                            @"1",@"pageNo",
                            @"8",@"pageSize",
@@ -133,7 +129,7 @@
         }else{
             
             [self showHint:dicts[@"message"]];
-            [leAndRetableView reloadData];
+           
         }
         
     } failure:^(NSError *error) {
@@ -152,10 +148,7 @@
     
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
-    if (_dataArr.count != 0) {
-        
-        [_dataArr removeAllObjects];
-    }
+    
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId"
                            ,[NSString stringWithFormat:@"%d",page],@"pageNo",
                            @"8",@"pageSize",
@@ -171,17 +164,23 @@
         if ([dicts[@"success"] boolValue] == YES) {
             
             tempArr = dicts[@"data"];
-            for (int i = 0; i < tempArr.count; i ++) {
+            if (tempArr.count != 0) {
                 
-                [_dataArr addObject:tempArr[i]];
+                for (int i = 0; i < tempArr.count; i ++) {
+                    
+                    [_dataArr addObject:tempArr[i]];
+                }
+                [leAndRetableView reloadData];
+                [leAndRetableView.mj_footer endRefreshing];
+                page++;
+            }else{
+                
+                [self showHint:dicts[@"message"]];
             }
-            [leAndRetableView reloadData];
-            [leAndRetableView.mj_footer endRefreshing];
-            page++;
             
         }else{
             
-            [leAndRetableView.mj_footer endRefreshing];
+           
             [self showHint:dicts[@"message"]];
             
         }

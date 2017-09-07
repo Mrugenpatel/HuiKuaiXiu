@@ -230,11 +230,7 @@
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         
         NSLog(@"请求成功%@",dicts);
-        if (self.brandArr.count != 0) {
-            
-            [self.brandArr removeAllObjects];
-        }
-            
+
             if (_list) {
                 
                 [_list removeFromSuperview];

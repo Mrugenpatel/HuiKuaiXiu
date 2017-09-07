@@ -40,7 +40,7 @@
     
     self.view.backgroundColor  = [UIColor whiteColor];
     AppDelegate * delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    goodsImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 150)];
+    goodsImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, ScreenWidth, 200 * delegate.autoSizeScaleY)];
     goodsImgView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.equipmentModel.picture]]]];
     [self.view addSubview:goodsImgView];
     
@@ -66,9 +66,7 @@
     goodsInfoTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [goodsInfoTableView registerNib:[UINib nibWithNibName:@"goodsInfoTableViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
     [self.view addSubview:goodsInfoTableView];
-    
-    
-    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated

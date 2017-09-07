@@ -87,12 +87,6 @@
 #pragma mark - ConfigData
 - (void)configData
 {
-    
-    if (self.storeArr.count != 0) {
-        
-        [self.storeArr removeAllObjects];
-    }
-    
     page = 2;
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
@@ -132,7 +126,7 @@
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
+                           [NSNumber numberWithDouble:uId],@"uId",page,@"pageNo",
                            @"8",@"pageSize",
                            nil];
     [self.view showActivity];
@@ -145,9 +139,20 @@
         [_buyingCollectionView.mj_footer endRefreshing];
         if ([dicts[@"success"] boolValue] == YES) {
             
-            self.storeArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-            [_buyingCollectionView reloadData];
-            
+            NSMutableArray * tempArr = [[NSMutableArray alloc] init];
+            tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
+            if (tempArr.count != 0) {
+                for (int i = 0; i < tempArr.count; i ++) {
+                    
+                    [self.storeArr addObject:tempArr[i]];
+                }
+                [_buyingCollectionView reloadData];
+                page++;
+            }else{
+                
+            [self showHint:dicts[@"message"]];
+            }
+
         }else{
             
             [self showHint:dicts[@"message"]];

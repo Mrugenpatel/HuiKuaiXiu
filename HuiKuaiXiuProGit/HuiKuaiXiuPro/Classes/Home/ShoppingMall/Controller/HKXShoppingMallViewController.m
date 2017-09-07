@@ -160,6 +160,7 @@
     [partBtn setTitle:@"找配件" forState:UIControlStateNormal];
     [partBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     partBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+    [partBtn setBackgroundColor:[UIColor whiteColor]];
     [partBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateSelected];
     [partBtn addTarget:self action:@selector(seekPart:) forControlEvents:UIControlEventTouchUpInside];
     partBtn.selected = YES;
@@ -171,7 +172,7 @@
     equipmentBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [equipmentBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [equipmentBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa304"] forState:UIControlStateSelected];
-    [equipmentBtn setBackgroundColor:[UIColor whiteColor]];
+    
     [equipmentBtn addTarget:self action:@selector(seekEquipment:) forControlEvents:UIControlEventTouchUpInside];
     [checkListView addSubview:equipmentBtn];
     
@@ -195,10 +196,7 @@
 
 - (void)refresh{
     
-    if (self.goodsModelArr.count !=0) {
-        
-        [self.goodsModelArr removeAllObjects];
-    }
+    
     if (partBtn.selected) {
         //配件
         page = 2;
@@ -214,11 +212,13 @@
             [self.view hideActivity];
             [goodsTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
-                
+                if (self.goodsModelArr.count != 0) {
+                    
+                    [self .goodsModelArr removeAllObjects];
+                }
                 NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
                 for (int i = 0; i < tempArr.count; i ++) {
-                    
                     
                     PartGoodsModel * partGoods = [[PartGoodsModel alloc] initWithDict:tempArr[i]];
                     [self.goodsModelArr addObject:partGoods];
@@ -229,7 +229,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [goodsTableView reloadData];
+             
             }
             
             
@@ -258,11 +258,13 @@
             [goodsTableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
+                if (self.goodsModelArr.count != 0) {
+                    
+                    [self .goodsModelArr removeAllObjects];
+                }
                 NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
                 for (int i = 0; i < tempArr.count; i ++) {
-                    
-                    
                     EquipmentGoodsModel * equipmentGoods = [[EquipmentGoodsModel alloc] initWithDict:tempArr[i]];
                     [self.goodsModelArr addObject:equipmentGoods];
                 }
@@ -271,11 +273,9 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [goodsTableView reloadData];
+    
             }
-            
-            
-            
+
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
@@ -308,19 +308,24 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
-                for (int i = 0; i < tempArr.count; i ++) {
+                if (tempArr.count != 0) {
+                  
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        PartGoodsModel * partGoods = [[PartGoodsModel alloc] initWithDict:tempArr[i]];
+                        [self.goodsModelArr addObject:partGoods];
+                    }
+                    page++;
+                    [goodsTableView reloadData];
+                }else{
                     
-                    PartGoodsModel * partGoods = [[PartGoodsModel alloc] initWithDict:tempArr[i]];
-                    [self.goodsModelArr addObject:partGoods];
+                    [self showHint:dicts[@"message"]];
                 }
-                page++;
-                [goodsTableView reloadData];
-                NSLog(@"======%ld",self.goodsModelArr.count);
-                
+  
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [goodsTableView reloadData];
+    
             }
             
             
@@ -348,19 +353,25 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
-                for (int i = 0; i < tempArr.count; i ++) {
+                if (tempArr.count != 0) {
                     
-                    EquipmentGoodsModel * equipmentGoods = [[EquipmentGoodsModel alloc] initWithDict:tempArr[i]];
-                    [self.goodsModelArr addObject:equipmentGoods];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        EquipmentGoodsModel * equipmentGoods = [[EquipmentGoodsModel alloc] initWithDict:tempArr[i]];
+                        [self.goodsModelArr addObject:equipmentGoods];
+                    }
+                    page++;
+                    [goodsTableView reloadData];
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
                 }
-                page++;
-                [goodsTableView reloadData];
-                NSLog(@"======%ld",self.goodsModelArr.count);
+                
                 
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [goodsTableView reloadData];
+            
             }
             
             
@@ -400,16 +411,9 @@
             }
         }
     }
-    if (searchString.length == 0) {
-        
-        return;
-    }
-    if (self.goodsModelArr.count !=0) {
-        
-        [self.goodsModelArr removeAllObjects];
-    }
     page = 2;
     if (partBtn.selected) {
+        
         
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:classifyString,@"category",searchString,@"search",@"1",@"pageNo",@"8",@"pageSize",nil];
         NSLog(@"%@",dict);
@@ -419,8 +423,13 @@
             
             if ([dicts[@"success"] boolValue] == YES) {
                 
+                if (self.goodsModelArr.count != 0) {
+                    
+                    [self .goodsModelArr removeAllObjects];
+                }
                 NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
+                
                 for (int i = 0; i < tempArr.count; i ++) {
                     
                     PartGoodsModel * partGoods = [[PartGoodsModel alloc] initWithDict:tempArr[i]];
@@ -432,7 +441,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [goodsTableView reloadData];
+               
             }
             
             
@@ -454,6 +463,12 @@
             [self.view hideActivity];
             [goodsTableView.mj_footer endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
+                
+                if (self.goodsModelArr.count != 0) {
+                    
+                    [self .goodsModelArr removeAllObjects];
+                }
+                
                 NSMutableArray * tempArr = [[NSMutableArray alloc] init];
                 tempArr = dicts[@"data"];
                 for (int i = 0; i < tempArr.count; i ++) {
@@ -461,14 +476,11 @@
                     EquipmentGoodsModel * equipmentGoods = [[EquipmentGoodsModel alloc] initWithDict:tempArr[i]];
                     [self.goodsModelArr addObject:equipmentGoods];
                 }
-                page++;
                 [goodsTableView reloadData];
-                NSLog(@"======%ld",self.goodsModelArr.count);
                 
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [goodsTableView reloadData];
             }
             
             
@@ -493,7 +505,6 @@
     
     //找配件
     if (partBtn.selected) {
-        
         
         [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"category/partsList.do"] params:nil success:^(id responseObject) {
             
@@ -591,9 +602,6 @@
             //_msakImg.transform = CGAffineTransformRotate(_msakImg.transform, -M_PI);
         }
     }
-    
-    
-    
 }
 
 //选择一级
@@ -656,7 +664,8 @@
         
     }else{
         btn.selected = !btn.selected;
-        // [partBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#eeeeee"]];
+        [equipmentBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#eeeeee"]];
+        [partBtn setBackgroundColor:[UIColor whiteColor]];
         [classifyBtn setTitle:@"类别" forState:UIControlStateNormal];
     }
     
@@ -673,14 +682,15 @@
         
     }else{
         btn.selected = !btn.selected;
-        //[equipmentBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#eeeeee"]];
+        [partBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#eeeeee"]];
+        [equipmentBtn setBackgroundColor:[UIColor whiteColor]];
         [classifyBtn setTitle:@"地区" forState:UIControlStateNormal];
     }
     partBtn.selected = NO;
     classifyString = @"全国";
     [goodsTableView.mj_header beginRefreshing];
     
-    //[partBtn setBackgroundColor:[UIColor whiteColor]];
+   
 }
 
 

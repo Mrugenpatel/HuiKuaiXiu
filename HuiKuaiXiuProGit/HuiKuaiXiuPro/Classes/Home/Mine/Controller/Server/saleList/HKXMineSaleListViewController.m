@@ -188,11 +188,6 @@ static NSString * const HKXFooterId = @"footer";
     double uId = [defaults doubleForKey:@"userDataId"];
     if (_segmentControl.selectedSegmentIndex == 0) {
         
-        if (self.allDoneGoodsDataListArray.count != 0) {
-            
-            [self.allDoneGoodsDataListArray removeAllObjects];
-        }
-        
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
                                @"8",@"pageSize",
@@ -218,17 +213,12 @@ static NSString * const HKXFooterId = @"footer";
             
             NSLog(@"请求失败%@",error);
             
-            [allGoodsListTableView.mj_header endRefreshing];
             [self.view hideActivity];
             
         }];
 
     }else if (_segmentControl.selectedSegmentIndex == 1){
         
-        if (self.allDoneGoodsDataListArray.count != 0) {
-            
-            [self.allDoneGoodsDataListArray removeAllObjects];
-        }
         int i = 0;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
@@ -262,10 +252,6 @@ static NSString * const HKXFooterId = @"footer";
         }];
     }else if (_segmentControl.selectedSegmentIndex == 2){
         
-        if (self.allCanceledGoodsDataListArray.count != 0) {
-            
-            [self.allCanceledGoodsDataListArray removeAllObjects];
-        }
         int i = -1;
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                [NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",
@@ -286,6 +272,7 @@ static NSString * const HKXFooterId = @"footer";
             }else{
                 
                 [self showHint:dicts[@"message"]];
+                
             }
             
         } failure:^(NSError *error) {
@@ -322,10 +309,16 @@ static NSString * const HKXFooterId = @"footer";
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.allGoodsDataListArray addObject:tempArr];
-                page ++;
-                [allGoodsListTableView reloadData];
-                
+                if (tempArr.count !=0 ) {
+                    
+                    [self.allGoodsDataListArray addObject:tempArr];
+                    page ++;
+                    [allGoodsListTableView reloadData];
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
+                }
+   
             }else{
                 
                 [self showHint:dicts[@"message"]];
@@ -358,9 +351,16 @@ static NSString * const HKXFooterId = @"footer";
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.allDoneGoodsDataListArray addObject:tempArr];
-                page ++;
-                [allDoneGoodsListTableView reloadData];
+                if (tempArr.count != 0) {
+                    
+                    [self.allDoneGoodsDataListArray addObject:tempArr];
+                    page ++;
+                    [allDoneGoodsListTableView reloadData];
+                }else{
+                    
+                     [self showHint:dicts[@"message"]];
+                }
+                
                 
             }else{
                 
@@ -391,11 +391,18 @@ static NSString * const HKXFooterId = @"footer";
             NSMutableArray * tempArr = [NSMutableArray array];
             if ([dicts[@"success"] boolValue] == YES) {
                 
-                tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
-                [self.allCanceledGoodsDataListArray addObject:tempArr];
-                page ++;
-                [allDoneGoodsListTableView reloadData];
                 
+                tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
+                if (tempArr.count != 0) {
+                    
+                    [self.allCanceledGoodsDataListArray addObject:tempArr];
+                    page ++;
+                    [allDoneGoodsListTableView reloadData];
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
+                }
+
             }else{
                 
                 [self showHint:dicts[@"message"]];

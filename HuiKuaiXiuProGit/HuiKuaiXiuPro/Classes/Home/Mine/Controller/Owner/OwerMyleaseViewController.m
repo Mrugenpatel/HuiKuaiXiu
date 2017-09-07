@@ -138,10 +138,7 @@
     double uId = [defaults doubleForKey:@"userDataId"];
     if (leButton.selected) {
         //获取出租列表数据
-        if (_dataArr.count != 0) {
-            
-            [_dataArr removeAllObjects];
-        }
+        
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",@"8",@"pageSize",nil];
         [self.view showActivity];
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"leasemachine/selectByuId.do"] params:dict success:^(id responseObject) {
@@ -158,7 +155,7 @@
             }else{
                 
                 [self showHint:dicts[@"message"]];
-                [leAndRetableView reloadData];
+                
             }
             
         } failure:^(NSError *error) {
@@ -170,12 +167,6 @@
         }];
     }else{
         
-        
-        if (_dataArr.count != 0) {
-            
-            [_dataArr removeAllObjects];
-        }
-        
         NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:uId],@"uId",@"1",@"pageNo",@"8",@"pageSize",nil];
         [self.view showActivity];
         [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"bylease/selectByuId.do"] params:dict success:^(id responseObject) {
@@ -183,13 +174,14 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
+            [leAndRetableView.mj_header endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 _dataArr = dicts[@"data"];
                 [leAndRetableView reloadData];
-                [leAndRetableView.mj_header endRefreshing];
+                
             }else{
-                [leAndRetableView.mj_header endRefreshing];
+                
                 [self showHint:dicts[@"message"]];
             }
             
@@ -205,9 +197,6 @@
         
         
     }
-    
-    
-    
     
 }
 
@@ -233,17 +222,23 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 tempArr = dicts[@"data"];
-                for (int i = 0; i < tempArr.count; i ++) {
+                if (tempArr.count != 0) {
                     
-                    [_dataArr addObject:tempArr[i]];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [_dataArr addObject:tempArr[i]];
+                    }
+                    [leAndRetableView reloadData];
+                    [leAndRetableView.mj_footer endRefreshing];
+                    page++;
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
                 }
-                [leAndRetableView reloadData];
-                [leAndRetableView.mj_footer endRefreshing];
-                page++;
+                
                 
             }else{
                 
-                [leAndRetableView.mj_footer endRefreshing];
                 [self showHint:dicts[@"message"]];
                 
             }
@@ -272,17 +267,24 @@
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 tempArr = dicts[@"data"];
-                for (int i = 0; i < tempArr.count; i ++) {
+                if (tempArr.count != 0) {
                     
-                    [_dataArr addObject:tempArr[i]];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [_dataArr addObject:tempArr[i]];
+                    }
+                    [leAndRetableView reloadData];
+                    [leAndRetableView.mj_footer endRefreshing];
+                    page++;
+                    
+                }else{
+                    
+                    [self showHint:dicts[@"message"]];
                 }
-                [leAndRetableView reloadData];
-                [leAndRetableView.mj_footer endRefreshing];
-                page++;
                 
             }else{
                 
-                [leAndRetableView.mj_footer endRefreshing];
+                
                 [self showHint:dicts[@"message"]];
                 
             }

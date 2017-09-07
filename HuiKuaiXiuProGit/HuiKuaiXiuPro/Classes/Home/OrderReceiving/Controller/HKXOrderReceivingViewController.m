@@ -220,11 +220,7 @@
     //[NSString stringWithFormat:@"%lf",longitude]
     //[NSString stringWithFormat:@"%lf",latitude]
     page = 2;
-    if (_orderListArray.count !=0) {
-        
-        [_orderListArray removeAllObjects];
-    }
-    [_bottomTableView.mj_header beginRefreshing];
+    
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%f",longitude],@"lon",[NSString stringWithFormat:@"%f",latitude],@"lat",[NSNumber numberWithDouble:uId],@"uId",searchString,@"search",@"1",@"pageNo",@"8",@"pageSize",nil];
@@ -245,7 +241,7 @@
         }else{
             
             [self showHint:dicts[@"message"]];
-            [_bottomTableView reloadData];
+           
         }
         
         
@@ -286,17 +282,18 @@
         if ([dicts[@"success"] boolValue] == YES) {
             
             tempArr =[repairListModel ordersWithArray:dicts[@"data"]];
-            
-            for (int i = 0; i < tempArr.count; i ++) {
-                
-                [_orderListArray addObject:tempArr[i]];
-            }
-            
-            [_bottomTableView reloadData];
             if (tempArr.count != 0) {
+
+                for (int i = 0; i < tempArr.count; i ++) {
+                    
+                    [_orderListArray addObject:tempArr[i]];
+                }
                 
+                [_bottomTableView reloadData];
                 page++;
+            }else{
                 
+                [self showHint:dicts[@"message"]];
             }
         }else{
             
