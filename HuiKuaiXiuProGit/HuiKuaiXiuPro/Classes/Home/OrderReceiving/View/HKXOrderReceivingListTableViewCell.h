@@ -150,7 +150,13 @@ typedef void (^BtnClickBlock) (UIButton * btn);
 //故障图片
 @property(nonatomic ,strong)UILabel * troublePicLabel;
 //故障图片
-@property(nonatomic ,strong)UIImageView * troublePicImage;
+@property(nonatomic ,strong)UIImageView * troublePicImage1;
+//故障图片
+@property(nonatomic ,strong)UIImageView * troublePicImage2;
+//故障图片
+@property(nonatomic ,strong)UIImageView * troublePicImage3;
+//故障图片
+@property(nonatomic ,strong)UIImageView * troublePicImage4;
 //地址
 @property(nonatomic ,strong)UILabel * addressLabel;
 //地图

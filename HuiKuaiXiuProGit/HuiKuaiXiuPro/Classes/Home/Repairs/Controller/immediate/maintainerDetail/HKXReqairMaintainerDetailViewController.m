@@ -161,7 +161,7 @@
                 int y = i / 2;
                 UIImageView * certificateView = [[UIImageView alloc] initWithFrame:CGRectMake((length + (22 + 17) * myDelegate.autoSizeScaleX ) + x * 100 * myDelegate.autoSizeScaleX, CGRectGetMaxY(skillTF.frame) + 23 * myDelegate.autoSizeScaleY + y * 70 * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 61 * myDelegate.autoSizeScaleY)];
                 
-                [certificateView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.certificateProfileArray[i]]]];
+                [certificateView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.certificateProfileArray[i]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
                 [backView addSubview:certificateView];
             }
             

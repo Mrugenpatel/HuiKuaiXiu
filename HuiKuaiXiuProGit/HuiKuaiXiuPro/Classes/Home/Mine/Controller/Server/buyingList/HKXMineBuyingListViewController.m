@@ -309,7 +309,7 @@
                 else if ([[NSString stringWithFormat:@"%@",store.orderStatus] isEqualToString:@"11"]){
                     if (i == 0 ) {
                         
-                        [actionBtn setTitle:@"取消定单" forState:UIControlStateNormal];
+                        [actionBtn setTitle:@"取消订单" forState:UIControlStateNormal];
                     }else{
                         
                         [actionBtn setTitle:@"立即支付" forState:UIControlStateNormal];
@@ -388,6 +388,7 @@
     UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(30 *myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
     goodsImg.tag = 90001;
     [goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goods.goodPicture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+    [CommonMethod scanBigImageWithImageView:goodsImg];
     [cell addSubview:goodsImg];
     
     UILabel * goodsNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 18 * myDelegate.autoSizeScaleX, 10 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"哈威V30D140液压泵哈威" WithFont:16 * myDelegate.autoSizeScaleX ], 40 * myDelegate.autoSizeScaleY)];

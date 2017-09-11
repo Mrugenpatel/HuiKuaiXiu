@@ -158,7 +158,7 @@
                             [tempArr addObject:@"0"];
                         }
                     }
-                        [selectedImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,tempArr[j]]]];
+                        [selectedImageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,tempArr[j]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
                     }
                 }
            // }

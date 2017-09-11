@@ -22,7 +22,7 @@
 #import "HKXOwnerMoreInfoViewController.h"
 #import "orderMapViewController.h"
 #import "HKXMyTextView.h"
-@interface HKXRepairsViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate,DownListMenuDelegate,CLLocationManagerDelegate,UITextFieldDelegate,UITextViewDelegate>
+@interface HKXRepairsViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate,UIActionSheetDelegate,DownListMenuDelegate,CLLocationManagerDelegate,UITextFieldDelegate,UITextViewDelegate,UITabBarControllerDelegate>
 {
     UIScrollView * _bottomView;
     UIButton * brandButton;//选择设备品牌
@@ -58,14 +58,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    
-    
-    [self createUI];
+    self.tabBarController.delegate=self;
     if([CLLocationManager locationServicesEnabled])
     {
-        
-        
-        
         // 启动位置更新
         // 开启位置更新需要与服务器进行轮询所以会比较耗电，在不需要时用stopUpdatingLocation方法关闭;
         _locationManager = [[CLLocationManager alloc] init];
@@ -86,12 +81,15 @@
         NSLog(@"请开启定位功能！");
         [self showHint:@"请开启定位功能"];
     }
+
+    [self createUI];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     UIView * view = [_bottomView viewWithTag:787878];
@@ -145,6 +143,7 @@
         contentTF.leftView.backgroundColor = [UIColor clearColor];
         contentTF.leftViewMode = UITextFieldViewModeAlways;
         contentTF.borderStyle = UITextBorderStyleRoundedRect;
+        contentTF.delegate = self;
         [_bottomView addSubview:contentTF];
         if (i == 0) {
             
@@ -530,6 +529,7 @@
             
             UITextField * brandModel = [self.view viewWithTag:20000];
             brandModel.text = type;
+            _modleid = brandId;
         };
         ower.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:ower animated:YES];
@@ -738,8 +738,7 @@
         lat = nil;
         lon = nil;
         UIButton * btn = [self.view viewWithTag:8990];
-        [btn setImage:[UIImage imageNamed:@"添加"] forState:UIControlStateNormal];
-        
+        [btn setImage:[UIImage imageNamed:@"添加"] forState:UIControlStateNormal]; 
     }
     else
     {
@@ -780,6 +779,7 @@
     if (_modleid.length == 0) {
         
         [self showHint:@"请选择设备品牌/型号"];
+        brandModel.text = @"";
         return;
     }
     if (address.text.length == 0) {
@@ -874,40 +874,8 @@
             mapVC.ruoId = dicts[@"data"][@"ruoId"];
             mapVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:mapVC animated:YES];
-            
-            
-            UIButton * hydraulicPressureBtn =[self.view viewWithTag:30000];
-            hydraulicPressureBtn.selected = NO;
-            UIButton * machineryPartBtn =[self.view viewWithTag:30001];
-            machineryPartBtn.selected = NO;
-            UIButton * engineBtn =[self.view viewWithTag:30002];
-            engineBtn.selected = NO;
-            UIButton * circuitBtn =[self.view viewWithTag:30003];
-            circuitBtn.selected = NO;
-            UIButton * maintenanceBtn =[self.view viewWithTag:30004];
-            maintenanceBtn.selected = NO;
-            
-            UITextField * brandModel = [self.view viewWithTag:20000];
-            brandModel.text = @"";
-            UITextField * address = [self.view viewWithTag:20001];
-            address.text = @"";
-            UITextField * contact = [self.view viewWithTag:20002];
-            contact.text = @"";
-            UITextField * telephone = [self.view viewWithTag:20003];
-            telephone.text = @"";
-            UITextField * workHours = [self.view viewWithTag:20004];
-            workHours.text = @"";
-            HKXMyTextView * textView = [_bottomView viewWithTag:676767];
-            textView.text = @"";
-            
-            _modleid = @"";
-            equipmentImg = nil;
-            ownerAddress = @"";
-            lat = nil;
-            lon = nil;
-            UIButton * btn = [self.view viewWithTag:8990];
-            [btn setImage:[UIImage imageNamed:@"添加"] forState:UIControlStateNormal];
-            
+            [self resetInfo];
+  
             
         }else if ([dicts[@"success"] boolValue] == NO) {
             
@@ -1109,6 +1077,108 @@
     return @"ok";
 }
 
+- (void)resetInfo{
+    
+    UIButton * hydraulicPressureBtn =[self.view viewWithTag:30000];
+    hydraulicPressureBtn.selected = NO;
+    UIButton * machineryPartBtn =[self.view viewWithTag:30001];
+    machineryPartBtn.selected = NO;
+    UIButton * engineBtn =[self.view viewWithTag:30002];
+    engineBtn.selected = NO;
+    UIButton * circuitBtn =[self.view viewWithTag:30003];
+    circuitBtn.selected = NO;
+    UIButton * maintenanceBtn =[self.view viewWithTag:30004];
+    maintenanceBtn.selected = NO;
+    
+    UITextField * brandModel = [self.view viewWithTag:20000];
+    brandModel.text = @"";
+    UITextField * address = [self.view viewWithTag:20001];
+    address.text = @"";
+    UITextField * contact = [self.view viewWithTag:20002];
+    contact.text = @"";
+    UITextField * telephone = [self.view viewWithTag:20003];
+    telephone.text = @"";
+    UITextField * workHours = [self.view viewWithTag:20004];
+    workHours.text = @"";
+    HKXMyTextView * textView = [_bottomView viewWithTag:676767];
+    textView.text = @"";
+    
+    _modleid = @"";
+    equipmentImg = nil;
+    ownerAddress = @"";
+    lat = nil;
+    lon = nil;
+    UIButton * btn = [self.view viewWithTag:8990];
+    [btn setImage:[UIImage imageNamed:@"添加"] forState:UIControlStateNormal];
+}
+
+//对键盘输入的操作
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if ([string isEqualToString:@"\n"])
+    {
+        return YES;
+    }
+    NSString * toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string]; //得到输入框的内容
+    
+    if (toBeString.length > 20) { //如果输入框内容大于10则弹出警告
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"限制输入字数20位" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        }];
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return NO;
+        
+        
+    }
+    return YES;
+}
+
+
+
+//点击的时候触发的方法
+-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    if (self.tabBarController.selectedIndex==2) {
+        
+        [self resetInfo];
+        if([CLLocationManager locationServicesEnabled])
+        {
+            // 启动位置更新
+            // 开启位置更新需要与服务器进行轮询所以会比较耗电，在不需要时用stopUpdatingLocation方法关闭;
+            _locationManager = [[CLLocationManager alloc] init];
+            //设置定位的精度
+            [_locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+            _locationManager.distanceFilter = 10.0f;
+            _locationManager.delegate = self;
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] > 8.0)
+            {
+                [_locationManager requestAlwaysAuthorization];
+                [_locationManager requestWhenInUseAuthorization];
+            }
+            
+            //开始实时定位
+            [_locationManager startUpdatingLocation];
+            [self.view showActivityWithText:@"定位中"];
+        }else {
+            NSLog(@"请开启定位功能！");
+            [self showHint:@"请开启定位功能"];
+        }
+    }
+    
+}
+-(BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+    
+        UIViewController *tbselect=tabBarController.selectedViewController;
+        if([tbselect isEqual:viewController]){
+    
+            return NO;
+        }else{
+            return YES;
+        }
+}
 - (void)viewWillDisappear:(BOOL)animated{
     
     [super viewWillDisappear:animated];

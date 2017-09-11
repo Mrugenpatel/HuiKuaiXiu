@@ -252,6 +252,16 @@
             [view removeFromSuperview];
         }
     }
+    
+    UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
+    for (UIView * view in window.subviews)
+    {
+        if (view.tag == 500000 || view.tag == 500001 || view.tag == 500002)
+        {
+            [view removeFromSuperview];
+        }
+    }
+    
 }
 - (void)openPhotoLibraryBtnClick:(UIButton *)btn
 {
@@ -299,8 +309,6 @@
 #pragma mark - Private Method
 - (void)showRecommandCode
 {
-    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    CustomAlertView * submitAlertView = [CustomAlertView alertViewWithTitle:[NSString stringWithFormat:@"推荐码：%@",self.userRegisterData.recommendCode] content:@"复制上面信息发送到社交群里您会有小惊喜" cancel:@"完成" sure:@"复制" cancelBtnClick:^{
         //    TODO:此处跳转至首页
         [self createTabbar:self.userRegisterData.role];
         NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
@@ -332,41 +340,8 @@
             }];
         }
         [defaults synchronize];
-    } sureBtnClick:^{
-        //            TODO:此处添加分享部分
-        [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
-            UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
-            //设置文本
-            messageObject.text = self.userRegisterData.recommendCode;
-            // 根据获取的platformType确定所选平台进行下一步操作
-            [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
-                if (error) {
-                    UMSocialLogInfo(@"************Share fail with error %@*********",error);
-                    NSLog(@"%@",error);
-                    
-                }else{
-                    if ([data isKindOfClass:[UMSocialShareResponse class]]) {
-                        UMSocialShareResponse *resp = data;
-                        //分享结果消息
-                        UMSocialLogInfo(@"response message is %@",resp.message);
-                        //第三方原始返回的数据
-                        UMSocialLogInfo(@"response originalResponse data is %@",resp.originalResponse);
-                        
-                        
-                    }else{
-                        UMSocialLogInfo(@"response data is %@",data);
-                    }
-                }
-                
-            }];
-            
-        }];
-        [self tapGestureClick];
-    } WithAlertHeight:240 * myDelegate.autoSizeScaleY];
-    submitAlertView.tag = 502;
-    [self.view addSubview:submitAlertView];
     
-    
+
 }
 /**
  根据不同角色，布局相应首页tabbar
@@ -438,6 +413,49 @@
     window.rootViewController = tabbar;
     [window makeKeyWindow];
     
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    UIView * backGroundView = [[UIView alloc] initWithFrame:window.bounds];
+    backGroundView.backgroundColor = [UIColor darkGrayColor];
+    backGroundView.alpha = 0.3;
+    backGroundView.tag = 500000;
+    [window addSubview:backGroundView];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureClick)];
+    [backGroundView addGestureRecognizer:tap];
+    
+    CustomAlertView * submitAlertView = [CustomAlertView alertViewWithTitle:[NSString stringWithFormat:@"推荐码：%@",self.userRegisterData.recommendCode] content:@"复制上面信息发送到社交群里您会有小惊喜" cancel:@"完成" sure:@"复制" cancelBtnClick:^{
+        [self tapGestureClick];
+    } sureBtnClick:^{
+        //TODO:此处添加分享部分
+        [UMSocialUIManager showShareMenuViewInWindowWithPlatformSelectionBlock:^(UMSocialPlatformType platformType, NSDictionary *userInfo) {
+            UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+            //设置文本
+            messageObject.text = self.userRegisterData.recommendCode;
+            // 根据获取的platformType确定所选平台进行下一步操作
+            [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:self completion:^(id data, NSError *error) {
+                if (error) {
+                    UMSocialLogInfo(@"************Share fail with error %@*********",error);
+                    [self showHint:@"分享失败"];
+                    
+                }else{
+                    if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                        UMSocialShareResponse *resp = data;
+                        //分享结果消息
+                        UMSocialLogInfo(@"response message is %@",resp.message);
+                        //第三方原始返回的数据
+                        UMSocialLogInfo(@"response originalResponse data is %@",resp.originalResponse);
+                        
+                    }else{
+                        UMSocialLogInfo(@"response data is %@",data);
+                    }
+                }
+                
+            }];
+            
+        }];
+        [self tapGestureClick];
+    } WithAlertHeight:240 * myDelegate.autoSizeScaleY];
+    submitAlertView.tag = 500002;
+    [window addSubview:submitAlertView];
     
 }
 //通过图片Data数据第一个字节 来获取图片扩展名

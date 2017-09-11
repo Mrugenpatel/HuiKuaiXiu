@@ -197,7 +197,12 @@
             for (int i = 0; i < self.certificateProfileArray.count; i ++) {
                 
                // [_tempArr addObject:[UIImage imageNamed:@"挖掘机"]];
-                [_tempArr addObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.certificateProfileArray[i]]]]]];
+              
+                if (self.certificateProfileArray.count != 0) {
+                    
+                   [_tempArr addObject:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.certificateProfileArray[i]]]]]];
+                }
+                
             }
             
             return ;
@@ -625,9 +630,10 @@
 //定义展示的UICollectionViewCell的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (self.tempArr.count < 5) {
+    if (self.tempArr.count < 4) {
         
         return self.tempArr.count + 1;
+        
     }else{
         
         return self.tempArr.count;
