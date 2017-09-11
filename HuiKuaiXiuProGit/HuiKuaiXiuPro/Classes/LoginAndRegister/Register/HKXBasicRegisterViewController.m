@@ -148,23 +148,24 @@
     }
     else
     {
-        [HKXHttpRequestManager sendRequestWithUserPhoneNumber:phoneTF.text ToGetVertificationCode:^(id data) {
+        [HKXHttpRequestManager sendRequestWithUserPhoneNumber:phoneTF.text ToGetUserRegisterCodeResult:^(id data) {
             HKXUserVertificationCodeResultModel * model = data;
             if (!model.success)
             {
-                UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-                backGroundView.backgroundColor = [UIColor darkGrayColor];
-                backGroundView.alpha = 0.3;
-                backGroundView.tag = 506;
-                [self.view addSubview:backGroundView];
-                UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureClick)];
-                [backGroundView addGestureRecognizer:tap];
-                CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:model.message sure:@"确定" sureBtnClick:^{
-                    
-                    [self tapGestureClick];
-                } WithAlertHeight:160];
-                customAlertView.tag = 507;
-                [self.view addSubview:customAlertView];
+                [self showHint:model.message];
+//                UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+//                backGroundView.backgroundColor = [UIColor darkGrayColor];
+//                backGroundView.alpha = 0.3;
+//                backGroundView.tag = 506;
+//                [self.view addSubview:backGroundView];
+//                UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureClick)];
+//                [backGroundView addGestureRecognizer:tap];
+//                CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:model.message sure:@"确定" sureBtnClick:^{
+//                    
+//                    [self tapGestureClick];
+//                } WithAlertHeight:160];
+//                customAlertView.tag = 507;
+//                [self.view addSubview:customAlertView];
             }
             else
             {
@@ -177,13 +178,49 @@
                 customAlertView.tag = 507;
                 [self.view addSubview:customAlertView];
                 
-//                getVerificationCodeBtn.enabled = NO;
-//                time = 60;
-//                timer = [NSTimer scheduledTimerWithTimeInterval:1.0  target:self selector:@selector(countdown) userInfo:nil repeats:YES];
-//                [timer fire];
+                //                getVerificationCodeBtn.enabled = NO;
+                //                time = 60;
+                //                timer = [NSTimer scheduledTimerWithTimeInterval:1.0  target:self selector:@selector(countdown) userInfo:nil repeats:YES];
+                //                [timer fire];
                 
             }
         }];
+//        [HKXHttpRequestManager sendRequestWithUserPhoneNumber:phoneTF.text ToGetVertificationCode:^(id data) {
+//            HKXUserVertificationCodeResultModel * model = data;
+//            if (!model.success)
+//            {
+//                UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+//                backGroundView.backgroundColor = [UIColor darkGrayColor];
+//                backGroundView.alpha = 0.3;
+//                backGroundView.tag = 506;
+//                [self.view addSubview:backGroundView];
+//                UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureClick)];
+//                [backGroundView addGestureRecognizer:tap];
+//                CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:model.message sure:@"确定" sureBtnClick:^{
+//                    
+//                    [self tapGestureClick];
+//                } WithAlertHeight:160];
+//                customAlertView.tag = 507;
+//                [self.view addSubview:customAlertView];
+//            }
+//            else
+//            {
+//                HKXUserVertificationCodeData * data = model.data;
+//                NSLog(@"验证码%@",data.number);
+//                CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:[NSString stringWithFormat:@"验证码%@",data.number] sure:@"确定" sureBtnClick:^{
+//                    
+//                    [self tapGestureClick];
+//                } WithAlertHeight:160];
+//                customAlertView.tag = 507;
+//                [self.view addSubview:customAlertView];
+//                
+////                getVerificationCodeBtn.enabled = NO;
+////                time = 60;
+////                timer = [NSTimer scheduledTimerWithTimeInterval:1.0  target:self selector:@selector(countdown) userInfo:nil repeats:YES];
+////                [timer fire];
+//                
+//            }
+//        }];
     }
 }
 - (void)countdown{

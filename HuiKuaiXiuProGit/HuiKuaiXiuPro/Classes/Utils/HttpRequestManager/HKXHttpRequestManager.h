@@ -387,4 +387,12 @@
  */
 + (void)sendRequestWithUserId:(NSString *)userId WithUserCardNumber:(NSString *)cardNum WithUserName:(NSString *)userName WithUserCardBankAdd:(NSString *)userBank ToGetAddNewCardResult:(void (^)(id data))complete;
 
+/**
+ 根据用户手机号注册时获取的验证码信息
+
+ @param phoneNumber 用户手机号
+ @param complete 验证码信息
+ */
++ (void)sendRequestWithUserPhoneNumber:(NSString *)phoneNumber ToGetUserRegisterCodeResult:(void (^)(id data))complete;
+
 @end

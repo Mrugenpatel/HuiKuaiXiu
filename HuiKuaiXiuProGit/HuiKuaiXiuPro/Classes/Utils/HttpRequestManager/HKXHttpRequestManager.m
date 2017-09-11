@@ -1089,4 +1089,27 @@
         NSLog(@"error = %@",error.description);
     }];
 }
+
+/**
+ 根据用户手机号注册时获取的验证码信息
+ 
+ @param phoneNumber 用户手机号
+ @param complete 验证码信息
+ */
++ (void)sendRequestWithUserPhoneNumber:(NSString *)phoneNumber ToGetUserRegisterCodeResult:(void (^)(id data))complete
+{
+    AFHTTPSessionManager * manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                           phoneNumber,@"username",
+                           
+                           nil];
+    
+    [manager POST:[NSString stringWithFormat:@"%@user/registerNumber.do",kBASICURL] parameters:dict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        HKXUserVertificationCodeResultModel * model = [HKXUserVertificationCodeResultModel modelObjectWithDictionary:responseObject];
+        complete(model);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"error = %@",error.description);
+    }];
+}
 @end
