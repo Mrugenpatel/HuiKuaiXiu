@@ -530,6 +530,7 @@
         eq.oil = _dataArr[indexPath.row][@"oil"];
         eq.driver = _dataArr[indexPath.row][@"driver"];
         eq.machinephone = _dataArr[indexPath.row][@"machinephone"];
+        eq.mark = @"我的出租";
         [self.navigationController pushViewController:eq animated:YES];
         
     }else{
@@ -545,6 +546,7 @@
         eq.contact = _dataArr[indexPath.row][@"contact"];
         eq.phone = _dataArr[indexPath.row][@"phone"];
         eq.mid = _dataArr[indexPath.row][@"mid"];
+        eq.mark = @"我的求租";
         [self.navigationController pushViewController:eq animated:YES];
     }
     

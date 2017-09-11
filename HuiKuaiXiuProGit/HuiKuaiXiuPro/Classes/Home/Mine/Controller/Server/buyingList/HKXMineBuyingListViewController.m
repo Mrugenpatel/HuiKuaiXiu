@@ -126,7 +126,7 @@
     NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
     double uId = [defaults doubleForKey:@"userDataId"];
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:uId],@"uId",page,@"pageNo",
+                           [NSNumber numberWithDouble:uId],@"uId",[NSString stringWithFormat:@"%d",page],@"pageNo",
                            @"8",@"pageSize",
                            nil];
     [self.view showActivity];
@@ -509,92 +509,131 @@
 - (void)cancelOrderWithOrderId:(NSString *)orderId{
     
     
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
-                           nil];
-    [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
-        
-        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"请求成功%@",dicts);
-        [self.view hideActivity];
-        if ([dicts[@"success"] boolValue] == YES) {
-            
-            [self showHint:dicts[@"message"]];
-            [_buyingCollectionView.mj_header beginRefreshing];
-            
-        }else{
-            
-            [self showHint:dicts[@"message"]];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        NSLog(@"请求失败%@",error);
-        [self.view hideActivity];
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确认取消订单?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                               nil];
+        [self.view showActivity];
+        [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/buycallOrder.do"] params:dict success:^(id responseObject) {
+            
+            NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"请求成功%@",dicts);
+            [self.view hideActivity];
+            if ([dicts[@"success"] boolValue] == YES) {
+                
+                [self showHint:dicts[@"message"]];
+                [_buyingCollectionView.mj_header beginRefreshing];
+                
+            }else{
+                
+                [self showHint:dicts[@"message"]];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            NSLog(@"请求失败%@",error);
+            [self.view hideActivity];
+            
+        }];
+ 
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+    
     
 }
 - (void)confirmTakeGoodsWithOrderId:(NSString *)orderId{
     
     
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
-                           nil];
-    [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
-        
-        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"请求成功%@",dicts);
-        [self.view hideActivity];
-        if ([dicts[@"success"] boolValue] == YES) {
-            [self showHint:dicts[@"message"]];
-            [_buyingCollectionView.mj_header beginRefreshing];
-            
-        }else{
-            
-            [self showHint:dicts[@"message"]];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        NSLog(@"请求失败%@",error);
-        [self.view hideActivity];
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确认收货?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                               nil];
+        [self.view showActivity];
+        [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/updateTakeGood.do"] params:dict success:^(id responseObject) {
+            
+            NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"请求成功%@",dicts);
+            [self.view hideActivity];
+            if ([dicts[@"success"] boolValue] == YES) {
+                [self showHint:dicts[@"message"]];
+                [_buyingCollectionView.mj_header beginRefreshing];
+                
+            }else{
+                
+                [self showHint:dicts[@"message"]];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            NSLog(@"请求失败%@",error);
+            [self.view hideActivity];
+            
+        }];
+
+        
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+    
+    
     
 }
 
 
 - (void)delaeteOrderWithOrderId:(NSString *)orderId{
     
-
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
-                           nil];
-    [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
-        
-        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"请求成功%@",dicts);
-        [self.view hideActivity];
-        if ([dicts[@"success"] boolValue] == YES) {
-            
-            [self showHint:dicts[@"message"]];
-            [_buyingCollectionView.mj_header beginRefreshing];
-            
-        }else{
-            
-            [self showHint:dicts[@"message"]];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        NSLog(@"请求失败%@",error);
-        [self.view hideActivity];
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确认删除订单?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                               nil];
+        [self.view showActivity];
+        [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deleteOrder.do"] params:dict success:^(id responseObject) {
+            
+            NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"请求成功%@",dicts);
+            [self.view hideActivity];
+            if ([dicts[@"success"] boolValue] == YES) {
+                
+                [self showHint:dicts[@"message"]];
+                [_buyingCollectionView.mj_header beginRefreshing];
+                
+            }else{
+                
+                [self showHint:dicts[@"message"]];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            NSLog(@"请求失败%@",error);
+            [self.view hideActivity];
+            
+        }];
+
+        
+        
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    [self presentViewController:alertController animated:YES completion:nil];
     
 }
 //再来一单

@@ -201,14 +201,11 @@
             if (i == 100) {
                 
                 name = tf.text;
-            }else if (i == 101){
-                
-                telePhone = tf.text;
             }else if (i == 102){
                 
                 adress = tf.text;
-            }else if (i == 104){
-                
+            }else if (i == 103){
+               
                 company = tf.text;
             }
             tf.userInteractionEnabled = NO;

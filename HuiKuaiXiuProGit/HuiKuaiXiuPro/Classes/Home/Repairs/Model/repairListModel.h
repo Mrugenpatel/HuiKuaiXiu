@@ -44,7 +44,7 @@
 //uId	Long	报修人Id
 @property (nonatomic, assign) NSNumber *  uId;
 //createDate	Date	订单报修时间
-@property (nonatomic, strong) NSDate * createDate;
+@property (nonatomic, copy) NSString * createDate;
 //updateDate	Date	订单开始维修时间
 @property (nonatomic, strong) NSDate * updateDate;
 //remarks	String	订单备注

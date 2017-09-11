@@ -11,6 +11,8 @@
 #import "alertView.h"
 #import "JGDownListMenu.h"
 #import "CommonMethod.h"
+#import "HKXSeverCollectionViewCell.h"
+#import "UIImageView+WebCache.h"
 @interface equipmentDetailViewController (){
     
     UIButton * brandButton;//选择设备品牌
@@ -171,17 +173,21 @@
     phoneNumField.userInteractionEnabled = NO;
     [self.view addSubview:phoneNumField];
     
-    UILabel * pictureLb = [[UILabel alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, phoneNumField.frame.origin.y + phoneNumField.frame.size.height + 10 * myDelegate.autoSizeScaleY, 50, 44 * myDelegate.autoSizeScaleY)];
+    CGFloat length = [CommonMethod getLabelLengthWithString:@"照片片" WithFont:15];
+    UILabel * pictureLb = [[UILabel alloc] initWithFrame:CGRectMake(brandButton.frame.origin.x, phoneNumField.frame.origin.y + phoneNumField.frame.size.height + 10 * myDelegate.autoSizeScaleY, length, 44 * myDelegate.autoSizeScaleY)];
     pictureLb.font = [UIFont systemFontOfSize:15];
     pictureLb.text = @"照片";
     [self.view addSubview:pictureLb];
     
-    pictureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    pictureBtn.frame = CGRectMake(pictureLb.frame.origin.x + pictureLb.frame.size.width, pictureLb.frame.origin.y + 20 * myDelegate.autoSizeScaleY, 80, 44 * myDelegate.autoSizeScaleY);
-    [pictureBtn setBackgroundImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,_picture]]] ] forState:UIControlStateNormal];
-    pictureBtn.userInteractionEnabled = NO;
-    [self.view addSubview:pictureBtn];
-    
+    UICollectionViewFlowLayout *flowLayout=[[UICollectionViewFlowLayout alloc] init];
+    self.collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(CGRectGetMaxX(pictureLb.frame) + 5 * myDelegate.autoSizeScaleX, CGRectGetMaxY(phoneNumField.frame) + 23 * myDelegate.autoSizeScaleY ,ScreenWidth - pictureLb.frame.origin.x - pictureLb.frame.size.width - 5 * myDelegate.autoSizeScaleX, 90 * myDelegate.autoSizeScaleY * 2) collectionViewLayout:flowLayout];
+    //设置代理
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    [self.view addSubview:self.collectionView];
+    self.collectionView.backgroundColor = [UIColor whiteColor];
+    //注册cell和ReusableView（相当于头部）
+    [self.collectionView registerClass:[HKXSeverCollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
     
     UIButton * cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     cancleBtn.frame = CGRectMake(brandButton.frame.origin.x, ScreenHeight - 70, ScreenWidth / 2 - brandButton.frame.origin.x * 2, 44 * myDelegate.autoSizeScaleY);
@@ -199,12 +205,87 @@
     Connect.clipsToBounds=YES;
     Connect.layer.cornerRadius=4;
     [Connect addTarget:self action:@selector(immediatelyConnect:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:Connect];
+    if ([self.mark isEqualToString:@"我的出租"]) {
+        
+        
+    }else{
+        
+        [self.view addSubview:Connect];
+    }
+   
     
 }
 
 
 
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    NSArray * arr = [_picture componentsSeparatedByString:@"$"];
+    return arr.count;
+    
+}
+//定义展示的Section的个数
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+//每个UICollectionView展示的内容
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *identify = @"cell";
+    HKXSeverCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
+    [cell sizeToFit];
+    if (!cell) {
+        NSLog(@"无法创建CollectionViewCell时打印，自定义的cell就不可能进来了。");
+    }
+    
+    NSArray * arr = [_picture componentsSeparatedByString:@"$"];
+   
+    [cell.imgView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,arr[indexPath.row]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+    cell.close.hidden = YES;
+
+    return cell;
+}
+#pragma mark --UICollectionViewDelegateFlowLayout
+//定义每个UICollectionView 的大小
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    //边距占5*4=20 ，2个
+    //图片为正方形，边长：(fDeviceWidth-20)/2-5-5 所以总高(fDeviceWidth-20)/2-5-5 +20+30+5+5 label高20 btn高30 边
+    AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    // 2 * 97 * myDelegate.autoSizeScaleX, 3 * 61 * myDelegate.autoSizeScaleY
+    
+    
+    return CGSizeMake( 80 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
+}
+//定义每个UICollectionView 的间距
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(0, 0, 5, 5);
+}
+//定义每个UICollectionView 纵向的间距
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    
+    return 5;
+}
+#pragma mark --UICollectionViewDelegate
+//UICollectionView被选中时调用的方法
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    //        UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    //        cell.backgroundColor = [UIColor redColor];
+    HKXSeverCollectionViewCell * cell = (HKXSeverCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+
+   [CommonMethod scanBigImageWithImageView:cell.imgView];
+
+    NSLog(@"选择%ld",indexPath.row);
+}
+//返回这个UICollectionView是否可以被选择
+-(BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    return YES;
+}
 
 - (void)cancleClick:(UIButton *)btn{
     
@@ -216,9 +297,7 @@
     
     NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",_machinephone];
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-    
-   
-    
+
 }
 
 - (void)didReceiveMemoryWarning {

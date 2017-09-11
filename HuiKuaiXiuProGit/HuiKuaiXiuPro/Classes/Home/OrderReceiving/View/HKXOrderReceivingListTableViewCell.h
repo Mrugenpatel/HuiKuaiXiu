@@ -133,10 +133,14 @@ typedef void (^BtnClickBlock) (UIButton * btn);
 @property(nonatomic ,strong)repairListModel *repairModel;
 //维修设备
 @property(nonatomic ,strong)UILabel *equipmentNameLabel;
+//维修时间
+@property(nonatomic ,strong)UILabel *timeLabel;
 //机主电话
 @property(nonatomic ,strong)UILabel *teleLb;
 //故障类型
 @property(nonatomic ,strong)UILabel *troubleTypeLabel;
+//故障类型
+@property(nonatomic ,strong)UILabel *troubleTypeDetailLabel;
 //维修时间
 @property(nonatomic ,strong)UILabel *repairTime;
 //故障描述

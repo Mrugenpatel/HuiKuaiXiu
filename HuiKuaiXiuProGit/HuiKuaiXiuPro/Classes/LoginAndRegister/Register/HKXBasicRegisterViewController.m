@@ -16,6 +16,7 @@
 #import "HKXRegisterResultDataModels.h"
 #import "HKXUserVertificationCodeResultModelDataModels.h"
 
+#import "HKXRegistNegotiateViewController.h"
 @interface HKXBasicRegisterViewController ()<CustomDropDownDelegate , UITextFieldDelegate>{
     
     NSTimer *timer;
@@ -108,14 +109,52 @@
     [bottomView addSubview:getVerificationCodeBtn];
     
     UIButton * submitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    submitBtn.frame = CGRectMake((ScreenWidth - 274 * myDelegate.autoSizeScaleX) / 2, 10 * myDelegate.autoSizeScaleY + (10 + 40) * 4 * myDelegate.autoSizeScaleY + 40 * myDelegate.autoSizeScaleY + 376 / 2 * myDelegate.autoSizeScaleY, 274 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
+    submitBtn.frame = CGRectMake((ScreenWidth - 274 * myDelegate.autoSizeScaleX) / 2, 10 * myDelegate.autoSizeScaleY + (10 + 40) * 4 * myDelegate.autoSizeScaleY + 40 * myDelegate.autoSizeScaleY + 276 / 2 * myDelegate.autoSizeScaleY, 274 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
     submitBtn.layer.cornerRadius = 3 * myDelegate.autoSizeScaleY;
     submitBtn.clipsToBounds = YES;
     [submitBtn setTitle:@"提 交" forState:UIControlStateNormal];
     submitBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa304"];
     [submitBtn addTarget:self action:@selector(submitBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:submitBtn];
+
+    UIButton * selected = [UIButton buttonWithType:UIButtonTypeCustom];
+    selected = [[UIButton alloc] initWithFrame:CGRectMake( 105 * myDelegate.autoSizeScaleX, CGRectGetMaxY(submitBtn.frame) + 17 * myDelegate.autoSizeScaleY -3 * myDelegate.autoSizeScaleY, 16 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX)];
+    selected.tag = 99999;
+    [selected setImage:[UIImage imageNamed:@"选择1"] forState:UIControlStateNormal];
+    [selected setImage:[UIImage imageNamed:@"选择2"] forState:UIControlStateSelected];
+    selected.selected = YES;
+    [selected addTarget:self action:@selector(selectNegotiateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomView addSubview:selected];
+    float titleLabelLength = [CommonMethod getLabelLengthWithString:@"我已阅读并同意" WithFont:10 * myDelegate.autoSizeScaleX];
+    UILabel * lb = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(selected.frame) + 5 * myDelegate.autoSizeScaleX ,CGRectGetMaxY(submitBtn.frame) + 17 * myDelegate.autoSizeScaleY, titleLabelLength, 10 * myDelegate.autoSizeScaleY)];
+    lb.text = @"我已阅读并同意";
+    lb.font = [UIFont systemFontOfSize:10.0f];
+    lb.textColor = [UIColor blackColor];
+    [bottomView addSubview:lb];
+    
+    float titleLabelLength1 = [CommonMethod getLabelLengthWithString:@"慧快修注册协议 " WithFont:10 * myDelegate.autoSizeScaleX];
+    
+    UIButton * negotiateBtn  = [UIButton buttonWithType:UIButtonTypeCustom];
+    negotiateBtn.frame = CGRectMake(CGRectGetMaxX(lb.frame),lb.frame.origin.y, titleLabelLength1, 10 * myDelegate.autoSizeScaleY);
+    [negotiateBtn setTitle:@"慧快修注册协议" forState:UIControlStateNormal];
+    negotiateBtn.titleLabel.font = [UIFont systemFontOfSize:10.0f];
+    [negotiateBtn setTitleColor:[CommonMethod getUsualColorWithString:@"#ffa303"] forState:UIControlStateNormal];
+    [negotiateBtn addTarget:self action:@selector(HKXRegistNegotiate:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomView addSubview:negotiateBtn];
+    
 }
+
+- (void)HKXRegistNegotiate:(UIButton *)btn{
+    
+    HKXRegistNegotiateViewController * negotiate = [[HKXRegistNegotiateViewController alloc] init];
+    [self.navigationController pushViewController:negotiate animated:YES];
+}
+
+- (void)selectNegotiateBtnClick:(UIButton *)btn{
+    
+    btn.selected = !btn.selected;
+}
+
 #pragma mark - ConfigData
 #pragma mark - Action
 
@@ -246,10 +285,31 @@
             }
         }
     }
+    
+    UIButton * negotiateBtn = [bottomView viewWithTag:99999];
+    if (!negotiateBtn.selected) {
+        
+        UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+        backGroundView.backgroundColor = [UIColor darkGrayColor];
+        backGroundView.alpha = 0.3;
+        backGroundView.tag = 502;
+        [self.view addSubview:backGroundView];
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureClick)];
+        [backGroundView addGestureRecognizer:tap];
+        CustomSubmitView * customAlertView = [CustomSubmitView alertViewWithTitle:@"提示" content:@"请同意慧快修注册协议" sure:@"确定" sureBtnClick:^{
+            
+            [self tapGestureClick];
+        } WithAlertHeight:160];
+        customAlertView.tag = 503;
+        [self.view addSubview:customAlertView];
+        return;
+    }
+    
     NSString * roleId;
     UITextField * verificationTF = [bottomView viewWithTag:4001];
     UITextField * userNameTF = [bottomView viewWithTag:4000];
     UITextField * userPswTf = [bottomView viewWithTag:4002];
+    
     if ([self.roleName isEqualToString:@"机主"])
     {
         roleId = [NSString stringWithFormat:@"%d",0];

@@ -29,4 +29,7 @@
  @return 时间
  */
 + (NSString *)getTimeWithTimeSp:(double )date;
+
++(void)scanBigImageWithImageView:(UIImageView *)currentImageview;
+
 @end

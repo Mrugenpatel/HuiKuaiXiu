@@ -727,7 +727,6 @@
         cell.goodsAddress.text = model.parameter;
         cell.goodsCompany.text = model.compname;
         cell.goodsBrand.text = model.brand;
-        
         return cell;
     }else{
         

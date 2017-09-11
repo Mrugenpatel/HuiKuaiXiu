@@ -91,8 +91,7 @@
     
     [self.view showActivity];
     [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"repair/selectRepairInfo.do"] params:dict success:^(id responseObject) {
-        
-        
+
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",dicts);
         NSLog(@"%@",dicts[@"message"]);
@@ -110,16 +109,12 @@
             [self showHint:dicts[@"message"]];
             
         }
-        
-        
     } failure:^(NSError *error) {
         
         NSLog(@"请求失败%@",error);
         [self.view hideActivity];
         [self showHint:@"请求失败"];
     }];
-    
-    
 
 }
 #pragma mark - CreateUI

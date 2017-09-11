@@ -125,13 +125,14 @@
     
     if (indexPath.row == 0)
     {
-        label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY, 300 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
+        label1.frame = CGRectMake(30 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"订单号:1111111111111111111111" WithFont:16 * myDelegate.autoSizeScaleX], 16 * myDelegate.autoSizeScaleX);
         label1.text =[NSString stringWithFormat:@"订单号:%@",self.store.orderId];
         label1.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
         
-        label2.frame = CGRectMake(300 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"卖家待发货" WithFont:16 * myDelegate.autoSizeScaleX], 16 * myDelegate.autoSizeScaleX);
+        label2.frame = CGRectMake(CGRectGetMaxX(label1.frame), 20 * myDelegate.autoSizeScaleY, ScreenWidth - CGRectGetMaxX(label1.frame) - 10 * myDelegate.autoSizeScaleX, 16 * myDelegate.autoSizeScaleX);
         label2.text = [NSString stringWithFormat:@"%@",_store.orderMessage];
         label2.textColor = [UIColor redColor];
+        label2.textAlignment = NSTextAlignmentRight;
         label2.font = [UIFont systemFontOfSize:16 * myDelegate.autoSizeScaleX];
     }
     else if (indexPath.row == 1)
@@ -457,9 +458,7 @@
         [self.view hideActivity];
         
     }];
-    
-    
-    
+ 
 }
 
 #pragma mark - Setters & Getters

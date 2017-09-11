@@ -82,7 +82,14 @@
     connect.clipsToBounds=YES;
     connect.layer.cornerRadius=4;
     [connect addTarget:self action:@selector(immediatelyConnect:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:connect];
+    if ([self.mark isEqualToString:@"我的求租"]) {
+        
+        
+    }else{
+        
+        [self.view addSubview:connect];
+    }
+    
     
     
 }

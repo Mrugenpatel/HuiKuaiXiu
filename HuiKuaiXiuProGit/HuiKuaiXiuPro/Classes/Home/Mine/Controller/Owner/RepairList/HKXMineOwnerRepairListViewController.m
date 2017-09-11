@@ -205,7 +205,7 @@
     [cell addSubview:timeLabel];
     
     UIButton * statusBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    statusBtn.frame = CGRectMake(CGRectGetMaxX(troubleDescribeLabel.frame) + 10 * myDelegate.autoSizeScaleX, CGRectGetMaxY(timeLabel.frame) + 19 * myDelegate.autoSizeScaleY, 95 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
+    statusBtn.frame = CGRectMake(CGRectGetMaxX(troubleDescribeLabel.frame) + 10 * myDelegate.autoSizeScaleX, CGRectGetMaxY(timeLabel.frame) + 23 * myDelegate.autoSizeScaleY, 95 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY);
     statusBtn.layer.cornerRadius = 2;
     statusBtn.clipsToBounds = YES;
     statusBtn.tag = 8004 + indexPath.row;

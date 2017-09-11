@@ -691,11 +691,17 @@
 {
     //        UICollectionViewCell * cell = (UICollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     //        cell.backgroundColor = [UIColor redColor];
+    HKXSeverCollectionViewCell * cell = (HKXSeverCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     if (indexPath.row == _tempArr.count) {
         
         
         [self choosePicture];
+    }else{
+        
+        [CommonMethod scanBigImageWithImageView:cell.imgView];
     }
+    
+    
     NSLog(@"选择%ld",indexPath.row);
 }
 //返回这个UICollectionView是否可以被选择
