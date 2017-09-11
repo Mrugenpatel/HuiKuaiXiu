@@ -10,8 +10,9 @@
 #import "CommonMethod.h"
 #import "WXApi.h"
 #import <AlipaySDK/AlipaySDK.h>
-#import "HKXMineOwnerRepairListViewController.h"
+
 #import "HKXShoppingMallViewController.h"
+#import "HKXMineViewController.h"
 @interface HKXMinePayViewController ()<UITableViewDelegate , UITableViewDataSource>
 {
     UITableView * _payTableView;
@@ -41,28 +42,31 @@
 -(void)userInfoNotificationPaySuccess:(NSNotification*)notification{
     
     [self showHint:@"支付成功"];
-    [self performSelector:@selector(popViewcontroller) withObject:nil afterDelay:1.f];
-    
-    
+    for (UIView * view in self.view.subviews) {
+        
+        view.userInteractionEnabled = NO;
+    }
+    [self performSelector:@selector(popViewcontroller) withObject:nil afterDelay:0.5f];
+
 }
 -(void)userInfoNotificationPayFailed:(NSNotification*)notification{
     
     [self showHint:@"支付失败"];
-    
 }
 
 - (void)popViewcontroller{
     
-    if (self.come == 0) {
+    for (UIViewController * con in self.navigationController.viewControllers) {
         
-        HKXShoppingMallViewController * shoppingMall = [[HKXShoppingMallViewController alloc] init];
-        [self.navigationController popToViewController:shoppingMall animated:YES];
-        
-    }else{
-    
-       HKXMineOwnerRepairListViewController * list = [[HKXMineOwnerRepairListViewController alloc] init];
-       [self.navigationController popToViewController:list animated:YES];
+        if ([con isKindOfClass:[HKXShoppingMallViewController class]]) {
+            
+            [self.navigationController popToViewController:con animated:YES];
+        }else if([con isKindOfClass:[HKXMineViewController class]]){
+            
+            [self.navigationController popToViewController:con animated:YES];
+        }
     }
+   
 }
 
 #pragma mark - CreateUI
@@ -105,12 +109,14 @@
         
         [self showHint:@"请选择支付方式"];
         return;
-    }if (_WechatBtn.selected) {
+    }
+    if (_WechatBtn.selected) {
         
         if (self.come == 0 || self.come == 1) {
             
         [self GoodsWechatPay];
-        }else{
+            
+        }else if(self.come == 3){
             
         [self WechatPay];
             
@@ -122,7 +128,7 @@
         {
             
             [self GoodsAlipay];
-        }else{
+        }else if(self.come == 3){
             
             [self Alipay];
             
@@ -160,7 +166,7 @@
     NSLog(@"%@",dict);
     
     [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"app/pay/repairwxpay.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"pay/repairwxpay.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",responseObject);
@@ -264,7 +270,7 @@
     NSLog(@"%@",dict);
     
     [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"app/pay/repairAlipay.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"pay/repairAlipay.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",responseObject);
@@ -279,8 +285,16 @@
                 if ([resultDic[@"resultStatus"] isEqualToString:@"9000"]) {
                     
                     [self showHint:@"支付成功"];
-                    HKXMineOwnerRepairListViewController * list = [[HKXMineOwnerRepairListViewController alloc] init];
-                    [self.navigationController popToViewController:list animated:YES];
+                    for (UIViewController * con in self.navigationController.viewControllers) {
+                        
+                        if ([con isKindOfClass:[HKXShoppingMallViewController class]]) {
+                            
+                            [self.navigationController popToViewController:con animated:YES];
+                        }else if([con isKindOfClass:[HKXMineViewController class]]){
+                            
+                            [self.navigationController popToViewController:con animated:YES];
+                        }
+                    }
                 }else{
                     
                     [self showHint:@"支付失败"];
@@ -305,11 +319,12 @@
 }
 - (void)GoodsAlipay{
     
+
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:[_ruoId doubleValue]],@"orderId",[NSNumber numberWithInteger:self.come],@"come",nil];
     NSLog(@"%@",dict);
     
     [self.view showActivity];
-    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"app/pay/repairAlipay.do"] params:dict success:^(id responseObject) {
+    [IWHttpTool postWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"pay/shopOrderAlipay.do"] params:dict success:^(id responseObject) {
         
         NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         NSLog(@"请求成功%@",responseObject);
@@ -324,8 +339,17 @@
                 if ([resultDic[@"resultStatus"] isEqualToString:@"9000"]) {
                     
                     [self showHint:@"支付成功"];
-                    HKXMineOwnerRepairListViewController * list = [[HKXMineOwnerRepairListViewController alloc] init];
-                    [self.navigationController popToViewController:list animated:YES];
+                    for (UIViewController * con in self.navigationController.viewControllers) {
+                        
+                        if ([con isKindOfClass:[HKXShoppingMallViewController class]]) {
+                            
+                            [self.navigationController popToViewController:con animated:YES];
+                        }else if([con isKindOfClass:[HKXMineViewController class]]){
+                            
+                            [self.navigationController popToViewController:con animated:YES];
+                        }
+                    }
+                    
                 }else{
                     
                     [self showHint:@"支付失败"];

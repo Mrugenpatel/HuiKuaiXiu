@@ -73,10 +73,20 @@
             
             _appointmentTime = dic[@"appointmentTime"];
         }
-       
+        NSString *string1 = dic[@"createDate"];
+        if (![string1 isKindOfClass:[NSNull class]]) {
+            NSTimeInterval second = string1.longLongValue / 1000.0;
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:second];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"yyyy-MM-dd EEEE"];
+            NSString *strDate = [dateFormatter stringFromDate:date];
+            _createDate = strDate;
+        }else{
+            
+            _createDate = dic[@"createDate"];
+        }
         _repairStatus = dic[@"repairStatus"];
         _uId = dic[@"uId"] ;
-        _createDate = dic[@"createDate"];
         _updateDate = dic[@"updateDate"];
         _remarks = dic[@"remarks"];
         _repairexplain = dic[@"repairexplain"];

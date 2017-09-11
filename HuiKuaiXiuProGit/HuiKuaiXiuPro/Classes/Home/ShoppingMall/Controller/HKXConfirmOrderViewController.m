@@ -143,7 +143,7 @@
         if ([dicts[@"success"] boolValue] == YES) {
            
             HKXMinePayViewController * payVC = [[HKXMinePayViewController alloc] init];
-            payVC.payCount = [NSString stringWithFormat:@"实付款：¥%.1f",[self.partGood.price floatValue] * [self.partGood.number intValue]];
+            payVC.payCount = [NSString stringWithFormat:@"%.1f",[self.partGood.price floatValue] * [self.partGood.number intValue]];
             payVC.ruoId = dicts[@"data"];
             payVC.come = 0;
             payVC.navigationItem.title = @"支付";

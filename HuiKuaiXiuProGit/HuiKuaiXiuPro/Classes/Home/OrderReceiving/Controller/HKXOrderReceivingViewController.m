@@ -198,9 +198,7 @@
 
 - (void)dropDownListParame:(NSString *)aStr{
     
-    for (UIButton * btn in searchView.subviews) {
-        
-
+    for (UIButton * btn in searchView.subviews){
         searchString = aStr;
         [_bottomTableView.mj_header beginRefreshing];
     }
@@ -243,9 +241,7 @@
             [self showHint:dicts[@"message"]];
            
         }
-        
-        
-        
+
     } failure:^(NSError *error) {
         
         NSLog(@"请求失败%@",error);
@@ -401,6 +397,7 @@
     repairListModel * model = _orderListArray[indexPath.row];
     cell.repairModel = model;
     cell.tag = indexPath.row;
+    
     cell.CallTeleBlock = ^(UIGestureRecognizer *tap) {
       
         [self callTele:tap];

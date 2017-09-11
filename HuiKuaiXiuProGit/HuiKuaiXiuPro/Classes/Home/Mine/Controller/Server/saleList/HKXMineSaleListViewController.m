@@ -311,7 +311,10 @@ static NSString * const HKXFooterId = @"footer";
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 if (tempArr.count !=0 ) {
                     
-                    [self.allGoodsDataListArray addObject:tempArr];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [self.allGoodsDataListArray addObject:tempArr[i]];
+                    }
                     page ++;
                     [allGoodsListTableView reloadData];
                 }else{
@@ -353,7 +356,10 @@ static NSString * const HKXFooterId = @"footer";
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 if (tempArr.count != 0) {
                     
-                    [self.allDoneGoodsDataListArray addObject:tempArr];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [self.allDoneGoodsDataListArray addObject:tempArr[i]];
+                    }
                     page ++;
                     [allDoneGoodsListTableView reloadData];
                 }else{
@@ -395,7 +401,10 @@ static NSString * const HKXFooterId = @"footer";
                 tempArr = [HKXOrderStoreModel modelWithArray:dicts[@"data"]];
                 if (tempArr.count != 0) {
                     
-                    [self.allCanceledGoodsDataListArray addObject:tempArr];
+                    for (int i = 0; i < tempArr.count; i ++) {
+                        
+                        [self.allCanceledGoodsDataListArray addObject:tempArr[i]];
+                    }
                     page ++;
                     [allDoneGoodsListTableView reloadData];
                 }else{
@@ -745,124 +754,160 @@ static NSString * const HKXFooterId = @"footer";
 - (void)cancelOrderWithOrderId:(NSString *)orderId{
     
     
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
-                           nil];
-    [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/sellerCallOrder.do"] params:dict success:^(id responseObject) {
-        
-        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"请求成功%@",dicts);
-        [self.view hideActivity];
-        if ([dicts[@"success"] boolValue] == YES) {
-            
-            [self showHint:dicts[@"message"]];
-            if (_segmentControl.selectedSegmentIndex == 0) {
-                
-                [allGoodsListTableView.mj_header beginRefreshing];
-            }else if (_segmentControl.selectedSegmentIndex == 1){
-                
-                [allDoneGoodsListTableView.mj_header beginRefreshing];
-            }else if (_segmentControl.selectedSegmentIndex == 2){
-                
-                [allCanceledGoodsTableView.mj_header beginRefreshing];
-            }
-        
-        }else{
-            
-            [self showHint:dicts[@"message"]];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        NSLog(@"请求失败%@",error);
-        [self.view hideActivity];
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确认取消订单?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                               nil];
+        [self.view showActivity];
+        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/sellerCallOrder.do"] params:dict success:^(id responseObject) {
+            
+            NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"请求成功%@",dicts);
+            [self.view hideActivity];
+            if ([dicts[@"success"] boolValue] == YES) {
+                
+                [self showHint:dicts[@"message"]];
+                if (_segmentControl.selectedSegmentIndex == 0) {
+                    
+                    [allGoodsListTableView.mj_header beginRefreshing];
+                }else if (_segmentControl.selectedSegmentIndex == 1){
+                    
+                    [allDoneGoodsListTableView.mj_header beginRefreshing];
+                }else if (_segmentControl.selectedSegmentIndex == 2){
+                    
+                    [allCanceledGoodsTableView.mj_header beginRefreshing];
+                }
+                
+            }else{
+                
+                [self showHint:dicts[@"message"]];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            NSLog(@"请求失败%@",error);
+            [self.view hideActivity];
+            
+        }];
+
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+    
     
 }
 
 - (void)confirmDispatchGoodsWithOrderId:(NSString *)orderId{
     
     
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
-                           nil];
-    [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deliverGood.do"] params:dict success:^(id responseObject) {
-        
-        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"请求成功%@",dicts);
-        [self.view hideActivity];
-        if ([dicts[@"success"] boolValue] == YES) {
-            
-            [self showHint:dicts[@"message"]];
-            
-            if (_segmentControl.selectedSegmentIndex == 0) {
-                
-                [allGoodsListTableView.mj_header beginRefreshing];
-            }else if (_segmentControl.selectedSegmentIndex == 1){
-                
-                [allDoneGoodsListTableView.mj_header beginRefreshing];
-            }else if (_segmentControl.selectedSegmentIndex == 2){
-                
-                [allCanceledGoodsTableView.mj_header beginRefreshing];
-            }
-            
-        }else{
-            
-            [self showHint:dicts[@"message"]];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        NSLog(@"请求失败%@",error);
-        [self.view hideActivity];
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确认发货?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
-    
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                               nil];
+        [self.view showActivity];
+        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/deliverGood.do"] params:dict success:^(id responseObject) {
+            
+            NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"请求成功%@",dicts);
+            [self.view hideActivity];
+            if ([dicts[@"success"] boolValue] == YES) {
+                
+                [self showHint:dicts[@"message"]];
+                
+                if (_segmentControl.selectedSegmentIndex == 0) {
+                    
+                    [allGoodsListTableView.mj_header beginRefreshing];
+                }else if (_segmentControl.selectedSegmentIndex == 1){
+                    
+                    [allDoneGoodsListTableView.mj_header beginRefreshing];
+                }else if (_segmentControl.selectedSegmentIndex == 2){
+                    
+                    [allCanceledGoodsTableView.mj_header beginRefreshing];
+                }
+                
+            }else{
+                
+                [self showHint:dicts[@"message"]];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            NSLog(@"请求失败%@",error);
+            [self.view hideActivity];
+            
+        }];
+
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    [self presentViewController:alertController animated:YES completion:nil];
+ 
 }
 
 - (void)delaeteOrderWithOrderId:(NSString *)orderId{
     
     
-    NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                           [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
-                           nil];
-    [self.view showActivity];
-    [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/sellerDelOrder.do"] params:dict success:^(id responseObject) {
-        
-        NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"请求成功%@",dicts);
-        [self.view hideActivity];
-        if ([dicts[@"success"] boolValue] == YES) {
-            
-            [self showHint:dicts[@"message"]];
-            if (_segmentControl.selectedSegmentIndex == 0) {
-                
-                [allGoodsListTableView.mj_header beginRefreshing];
-            }else if (_segmentControl.selectedSegmentIndex == 1){
-                
-                [allDoneGoodsListTableView.mj_header beginRefreshing];
-            }else if (_segmentControl.selectedSegmentIndex == 2){
-                
-                [allCanceledGoodsTableView.mj_header beginRefreshing];
-            }
-            
-        }else{
-            
-            [self showHint:dicts[@"message"]];
-        }
-        
-    } failure:^(NSError *error) {
-        
-        NSLog(@"请求失败%@",error);
-        [self.view hideActivity];
+    UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"确认删除订单?" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         
     }];
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        
+        
+        NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                               [NSNumber numberWithDouble:[orderId doubleValue]],@"orderId",
+                               nil];
+        [self.view showActivity];
+        [IWHttpTool getWithUrl:[NSString stringWithFormat:@"%@%@",kBASICURL,@"userOrder/sellerDelOrder.do"] params:dict success:^(id responseObject) {
+            
+            NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+            NSLog(@"请求成功%@",dicts);
+            [self.view hideActivity];
+            if ([dicts[@"success"] boolValue] == YES) {
+                
+                [self showHint:dicts[@"message"]];
+                if (_segmentControl.selectedSegmentIndex == 0) {
+                    
+                    [allGoodsListTableView.mj_header beginRefreshing];
+                }else if (_segmentControl.selectedSegmentIndex == 1){
+                    
+                    [allDoneGoodsListTableView.mj_header beginRefreshing];
+                }else if (_segmentControl.selectedSegmentIndex == 2){
+                    
+                    [allCanceledGoodsTableView.mj_header beginRefreshing];
+                }
+                
+            }else{
+                
+                [self showHint:dicts[@"message"]];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            NSLog(@"请求失败%@",error);
+            [self.view hideActivity];
+            
+        }];
+        
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    [self presentViewController:alertController animated:YES completion:nil];
     
 }
-
 
 #pragma mark - Setters & Getters
 - (NSMutableArray *)segementTitleArray

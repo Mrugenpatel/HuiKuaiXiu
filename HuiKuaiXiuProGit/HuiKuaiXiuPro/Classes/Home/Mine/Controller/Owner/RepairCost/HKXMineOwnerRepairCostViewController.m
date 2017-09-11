@@ -112,6 +112,7 @@
     
     HKXMinePayViewController * payVC = [[HKXMinePayViewController alloc] init];
     payVC.navigationItem.title = @"支付方式";
+    payVC.come = 3;
     payVC.ruoId = _ruoID;
     payVC.payCount = _payCount;
     [self.navigationController pushViewController:payVC animated:YES];

@@ -676,6 +676,7 @@
         leaseTableViewCell * cell = [leAndRetableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath ];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = [UIColor whiteColor];
+        
         if ([_dataArr[indexPath.row][@"machinetype"] isKindOfClass:[NSNull class]]) {
             
             cell.brandName.text = @"";
@@ -698,20 +699,20 @@
             
             cell.modelName.text = _dataArr[indexPath.row][@"modeltype"];
         }
-        
-        
-        
-        
-        // NSLog(@"%@",[NSString   stringWithFormat:@"%@%@",kPictureUrl,_dataArr[indexPath.row][@"picture"]]);
         if ([[NSString stringWithFormat:@"%@%@",kIMAGEURL,_dataArr[indexPath.row][@"picture"]] isKindOfClass:[NSNull class]]) {
             
             
             
         }else{
             
-            [cell.equipmentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,_dataArr[indexPath.row][@"picture"]]] placeholderImage:nil];
+            NSArray * picArr = [_dataArr[indexPath.row][@"picture"] componentsSeparatedByString:@"$"];
+            [cell.equipmentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,picArr[0]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+            
+            
         }
-        
+        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(BigImage:)];
+        cell.equipmentImg.userInteractionEnabled = YES;
+        [cell.equipmentImg addGestureRecognizer:tap];
         return cell;
         
     }else{
@@ -743,10 +744,17 @@
             
             cell.modelName.text = _dataArr[indexPath.row][@"model"];
         }
+        
         return cell;
     }
     
 }
+
+- (void)BigImage:(UITapGestureRecognizer *)tap{
+    
+    [CommonMethod scanBigImageWithImageView:(UIImageView *)tap.view];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     

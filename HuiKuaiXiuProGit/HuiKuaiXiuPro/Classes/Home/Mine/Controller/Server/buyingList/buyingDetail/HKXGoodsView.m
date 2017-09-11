@@ -55,7 +55,7 @@
     self.label3.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
     
     
-    self.label4.frame = CGRectMake(CGRectGetMaxX(self.goodsImg.frame) + 175 * myDelegate.autoSizeScaleX, CGRectGetMaxY(self.label2.frame) + 13 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"数量：2" WithFont:12 * myDelegate.autoSizeScaleX], 12 * myDelegate.autoSizeScaleX);
+    self.label4.frame = CGRectMake(CGRectGetMaxX(self.goodsImg.frame) + 175 * myDelegate.autoSizeScaleX, CGRectGetMaxY(self.label2.frame) + 13 * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"   数量：2" WithFont:12 * myDelegate.autoSizeScaleX], 12 * myDelegate.autoSizeScaleX);
     self.label4.textColor = [CommonMethod getUsualColorWithString:@"#666666"];
     self.label4.font = [UIFont systemFontOfSize:12 * myDelegate.autoSizeScaleX];
 }
