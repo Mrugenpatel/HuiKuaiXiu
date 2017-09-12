@@ -63,7 +63,7 @@
     {
         float width ;
         
-        width = ([CommonMethod getLabelLengthWithString:self.contentArray[i] WithFont:17 * myDelegate.autoSizeScaleX] >= [CommonMethod getLabelLengthWithString:@"十九字十九字十九字十九字十九字十九字十" WithFont:17 * myDelegate.autoSizeScaleX]) ? [CommonMethod getLabelLengthWithString:@"十九字十九字十九字十九字十九字十九字十" WithFont:17 * myDelegate.autoSizeScaleX] : [CommonMethod getLabelLengthWithString:self.contentArray[i] WithFont:17 * myDelegate.autoSizeScaleX];
+        width = ([CommonMethod getLabelLengthWithString:self.contentArray[i] WithFont:17 * myDelegate.autoSizeScaleX] >= [CommonMethod getLabelLengthWithString:@"十九字十八字十九字十九字十九字十九字十" WithFont:17 * myDelegate.autoSizeScaleX]) ? [CommonMethod getLabelLengthWithString:@"十九字十九字十九字十九字十九字十九字十" WithFont:17 * myDelegate.autoSizeScaleX] : [CommonMethod getLabelLengthWithString:self.contentArray[i] WithFont:17 * myDelegate.autoSizeScaleX];
         UILabel * contentLabel = [[UILabel alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, 27 * myDelegate.autoSizeScaleY + (17 + 24) * i * myDelegate.autoSizeScaleY, width, 17 * myDelegate.autoSizeScaleY)];
         
         contentLabel.text = self.contentArray[i];
@@ -98,7 +98,7 @@
         }
         if (i >= 4)
         {
-            contentLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, 27 * myDelegate.autoSizeScaleY + (17 + 24) * i * myDelegate.autoSizeScaleY + (31 + 114) * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:self.contentArray[i] WithFont:17 * myDelegate.autoSizeScaleX], 17 * myDelegate.autoSizeScaleY);
+            contentLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, 27 * myDelegate.autoSizeScaleY + (17 + 24) * i * myDelegate.autoSizeScaleY + (31 + 114) * myDelegate.autoSizeScaleY, [CommonMethod getLabelLengthWithString:@"十四字十四字十四字十四字十四" WithFont:17 * myDelegate.autoSizeScaleX], 17 * myDelegate.autoSizeScaleY);
         }
     }
 }

@@ -139,7 +139,7 @@
     [_bottomScrollView addSubview:submitBtn];
     
     float length = [CommonMethod getLabelLengthWithString:@"设备照片" WithFont:17 * myDelegate.autoSizeScaleY];
-    for (int i = 0; i < 5; i ++)
+    for (int i = 0; i < 4; i ++)
     {
         int x = i % 2;
         int y = i / 2;
@@ -506,7 +506,7 @@
 #pragma mark - <CTAssetsPickerControllerDelegate>
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(PHAsset *)asset
 {
-    NSInteger max = 5;
+    NSInteger max = 4;
     if (picker.selectedAssets.count >= max)
     {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"提示" message:[NSString stringWithFormat:@"最多选择%ld张图片",(long)max] preferredStyle:UIAlertControllerStyleAlert];
@@ -528,7 +528,7 @@
     //    改变因图片选择而影响底层view的frame
     _bottomScrollView.contentSize = CGSizeMake(ScreenWidth , ScreenHeight - 20 * myDelegate.autoSizeScaleY - 64 + YPosition * (122 + 40)/ 2 * myDelegate.autoSizeScaleY);
     UIButton * addImageBtn = [_bottomScrollView viewWithTag:700];
-    if (assets.count < 5)
+    if (assets.count < 4)
     {
         float length = [CommonMethod getLabelLengthWithString:@"设备照片" WithFont:17 * myDelegate.autoSizeScaleY];
         

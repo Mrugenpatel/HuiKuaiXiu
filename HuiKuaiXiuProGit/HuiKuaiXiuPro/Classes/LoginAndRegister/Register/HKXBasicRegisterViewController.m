@@ -17,6 +17,8 @@
 #import "HKXUserVertificationCodeResultModelDataModels.h"
 
 #import "HKXRegistNegotiateViewController.h"
+
+#import "ViewController.h"//登录界面
 @interface HKXBasicRegisterViewController ()<CustomDropDownDelegate , UITextFieldDelegate>{
     
     NSTimer *timer;
@@ -55,8 +57,12 @@
     self.view.backgroundColor = [UIColor colorWithRed:233 / 255.0 green:233 / 255.0 blue:233 / 255.0 alpha:1];
     self.navigationItem.title = @"加盟注册";
     
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem = item;
+    UIButton * backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backBtn setImage:[UIImage imageNamed:@"back-arrow"] forState:UIControlStateNormal];
+    [backBtn addTarget:self action:@selector(goBackToLoginVC) forControlEvents:UIControlEventTouchUpInside];
+    backBtn.frame = CGRectMake(20 * myDelegate.autoSizeScaleX, 11.5 * myDelegate.autoSizeScaleY, 12.5 * myDelegate.autoSizeScaleX, 21 * myDelegate.autoSizeScaleY);
+    UIBarButtonItem * item = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+    self.navigationItem.leftBarButtonItem = item;
     
     UIView * bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, 20 + 40 + 10 * myDelegate.autoSizeScaleY, ScreenWidth, ScreenHeight - 20 - 60 - 10 * myDelegate.autoSizeScaleY)];
     bottomView.backgroundColor = [UIColor whiteColor];
@@ -157,6 +163,17 @@
 
 #pragma mark - ConfigData
 #pragma mark - Action
+
+/**
+ 返回登录界面
+ */
+- (void)goBackToLoginVC
+{
+    UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
+    ViewController * loginVC = [[ViewController alloc] init];
+    window.rootViewController = loginVC;
+    [window makeKeyWindow];
+}
 
 /**
 获得注册手机对应的验证码信息

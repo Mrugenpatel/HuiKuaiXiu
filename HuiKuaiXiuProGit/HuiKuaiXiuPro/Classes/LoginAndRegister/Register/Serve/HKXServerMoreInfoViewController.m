@@ -170,7 +170,7 @@
     [_bottomView addSubview:confirmBtn];
     
     float length = [CommonMethod getLabelLengthWithString:@"主修资料" WithFont:17 * myDelegate.autoSizeScaleY];
-    for (int i = 0; i < 5; i ++)
+    for (int i = 0; i < 4; i ++)
     {
         int x = i % 2;
         int y = i / 2;
@@ -542,7 +542,7 @@
 #pragma mark - <CTAssetsPickerControllerDelegate>
 - (BOOL)assetsPickerController:(CTAssetsPickerController *)picker shouldSelectAsset:(PHAsset *)asset
 {
-    NSInteger max = 5;
+    NSInteger max = 4;
     if (picker.view.tag == 888)
     {
         max = 1;
@@ -567,9 +567,9 @@
         //    改变因图片选择而影响底层view的frame
         _bottomView.contentSize = CGSizeMake(ScreenWidth , ScreenHeight - 20 * myDelegate.autoSizeScaleY - 64 + YPosition * (122 + 40)/ 2 * myDelegate.autoSizeScaleY);
         UIButton * addImageBtn = [_bottomView viewWithTag:80001];
-        if (assets.count < 5)
+        if (assets.count < 4)
         {
-            float length = [CommonMethod getLabelLengthWithString:@"设备照片" WithFont:17 * myDelegate.autoSizeScaleY];
+            float length = [CommonMethod getLabelLengthWithString:@"设备照片                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 " WithFont:17 * myDelegate.autoSizeScaleY];
             
             addImageBtn.frame = CGRectMake((length + (22 + 17) * myDelegate.autoSizeScaleX ) + XPosition * 100 * myDelegate.autoSizeScaleX, 345 * myDelegate.autoSizeScaleY + YPosition * 70 * myDelegate.autoSizeScaleY, 194 / 2 * myDelegate.autoSizeScaleX , 122 / 2 * myDelegate.autoSizeScaleY);
         }

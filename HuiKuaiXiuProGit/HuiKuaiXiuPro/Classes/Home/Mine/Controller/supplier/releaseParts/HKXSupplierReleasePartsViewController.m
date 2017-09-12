@@ -69,10 +69,10 @@
     for (int i = 0; i < 10 ; i ++)
     {
         UITextField * contentTF = [[UITextField alloc] initWithFrame:CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + (40 + 10) * i) * myDelegate.autoSizeScaleY, 331 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
-        if (i == 4) {
-            
-            contentTF.keyboardType =UIKeyboardTypeDecimalPad;
-        }
+//        if (i == 4) {
+//            
+////            contentTF.keyboardType =UIKeyboardTypeDecimalPad;
+//        }
         if (i == 9)
         {
             contentTF.frame = CGRectMake(22 * myDelegate.autoSizeScaleX, (10 + (40 + 10) * i) * myDelegate.autoSizeScaleY, 331 * myDelegate.autoSizeScaleX, 106 * myDelegate.autoSizeScaleY);
@@ -356,7 +356,7 @@
 
 - (BOOL)validateNumber:(NSString*)number {
     BOOL res = YES;
-    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+    NSCharacterSet* tmpSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
     int i = 0;
     while (i < number.length) {
         NSString * string = [number substringWithRange:NSMakeRange(i, 1)];
