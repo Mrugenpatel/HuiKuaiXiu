@@ -646,6 +646,7 @@ static NSString * const HKXFooterId = @"footer";
     UIImageView * goodsImg = [[UIImageView alloc] initWithFrame:CGRectMake(16 * myDelegate.autoSizeScaleX,20 * myDelegate.autoSizeScaleY, 102 * myDelegate.autoSizeScaleX, 95 * myDelegate.autoSizeScaleY)];
     goodsImg.tag = 90001;
     [goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goods.goodPicture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+    [CommonMethod scanBigImageWithImageView:goodsImg];
     [cell addSubview:goodsImg];
     
     UILabel * goodsNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(goodsImg.frame) + 15 * myDelegate.autoSizeScaleX, 20 * myDelegate.autoSizeScaleY , [CommonMethod getLabelLengthWithString:@"慧快修 工程机械专用液压油" WithFont:13 * myDelegate.autoSizeScaleX ], 13 * myDelegate.autoSizeScaleX)];

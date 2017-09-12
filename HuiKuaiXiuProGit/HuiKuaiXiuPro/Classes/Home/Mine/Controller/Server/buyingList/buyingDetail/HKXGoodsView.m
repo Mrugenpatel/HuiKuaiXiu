@@ -68,6 +68,7 @@
     self.label3.text = [NSString stringWithFormat:@"¥%.2f",[goods.goodPrice floatValue]];
     self.label4.text = [NSString stringWithFormat:@"数量:%@",goods.buyNumber];
     [self.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,goods.goodPicture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+    [CommonMethod scanBigImageWithImageView:self.goodsImg];
 }
 
 

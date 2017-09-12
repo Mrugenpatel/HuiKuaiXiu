@@ -333,8 +333,7 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            [leAndRetableView.mj_header endRefreshing];
-            
+            [leAndRetableView.mj_footer endRefreshing];
             if ([dicts[@"success"] boolValue] == YES) {
                 
                 
@@ -707,8 +706,7 @@
             
             NSArray * picArr = [_dataArr[indexPath.row][@"picture"] componentsSeparatedByString:@"$"];
             [cell.equipmentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,picArr[0]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
-            
-            
+ 
         }
         UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(BigImage:)];
         cell.equipmentImg.userInteractionEnabled = YES;

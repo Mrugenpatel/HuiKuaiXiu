@@ -10,7 +10,7 @@
 #import "requireLeaseTableViewCell.h"
 #import "alertView.h"
 #import "CommonMethod.h"
-@interface requireLeaseViewController ()<UITableViewDelegate,UITableViewDataSource>{
+@interface requireLeaseViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>{
     
     NSArray * ar ;//cell表格
     UITableView * requireLeaseTableView;
@@ -119,6 +119,7 @@
         _textField.layer.borderWidth= 1.0f;
         _textField.layer.cornerRadius = 3;
         _textField.layer.masksToBounds = YES;
+        _textField.delegate = self;
         _textField.tag = 10000 + indexPath.row;
         UIView * leView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, _textField.frame.size.height)];
         _textField.leftView=leView;
@@ -215,6 +216,11 @@
         [self showHint:@"请填写设备吨位"];
         return;
     }
+    if ([size intValue] > 99999){
+        
+        [self showHint:@"请填写合理设备吨位"];
+        return;
+    }
     if (address.length == 0){
         
         [self showHint:@"请填写设备所在地"];
@@ -301,6 +307,30 @@
         }
     }
     return @"ok";
+}
+
+//对键盘输入的操作
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if ([string isEqualToString:@"\n"])
+    {
+        return YES;
+    }
+    NSString * toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string]; //得到输入框的内容
+    
+    if (toBeString.length > 20) { //如果输入框内容大于10则弹出警告
+        UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"限制输入字数20位" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        }];
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+        return NO;
+        
+        
+    }
+    return YES;
 }
 
 - (void)didReceiveMemoryWarning {

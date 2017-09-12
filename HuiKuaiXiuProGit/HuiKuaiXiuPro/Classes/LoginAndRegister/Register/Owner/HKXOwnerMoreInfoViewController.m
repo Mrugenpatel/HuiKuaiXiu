@@ -87,7 +87,6 @@
         pswTF.leftView.backgroundColor = [UIColor clearColor];
         pswTF.leftViewMode = UITextFieldViewModeAlways;
         pswTF.borderStyle = UITextBorderStyleRoundedRect;
-        
         pswTF.tag = 4000 + i;
         pswTF.layer.borderColor = [[CommonMethod getUsualColorWithString:@"#a0a0a0"] CGColor];
         [_bottomScrollView addSubview:pswTF];
@@ -210,8 +209,6 @@
         HKXMineConfirmOrderResultModel * model = data;
         if (model.success)
         {
-           
-            
             AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
             UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];
             backGroundView.backgroundColor = [UIColor darkGrayColor];
@@ -232,8 +229,9 @@
                             [view removeFromSuperview];
                         }
                     }
-                    UITextField * tf = [_bottomScrollView viewWithTag:4001];
-                    self.returnBrandBlock(tf.text, [NSString stringWithFormat:@"%ld",(long)model.data]);
+                    UITextField * tf1 = [_bottomScrollView viewWithTag:4002];
+                    UITextField * tf2 = [_bottomScrollView viewWithTag:4003];
+                    self.returnBrandBlock([NSString stringWithFormat:@"%@%@",tf1.text,tf2.text], [NSString stringWithFormat:@"%ld",(long)model.data]);
                     [self.navigationController popViewControllerAnimated:YES];
                     
                 }else{
@@ -420,7 +418,7 @@
     {
         imag.image = NULL;
     }
-    self.machineModel.category = nil;
+    self.machineModel.category = @"";
     [self tapGestureClick];
 //    改变因图片选择而影响底层view的frame
     float length = [CommonMethod getLabelLengthWithString:@"设备照片" WithFont:17 * myDelegate.autoSizeScaleY];

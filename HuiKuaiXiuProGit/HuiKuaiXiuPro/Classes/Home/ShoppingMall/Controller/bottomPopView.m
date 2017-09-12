@@ -89,7 +89,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     
     
     self.goodsImage.frame =CGRectMake(20, ScreenHeight / 2 - 30, 90, 80);
-    [self.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.partGoodsModel.picture[0]]] placeholderImage:nil];
+    [self.goodsImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.partGoodsModel.picture[0]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
     self.titleLb.frame = CGRectMake(ScreenWidth / 2 - (ScreenWidth - self.goodsImage.frame.origin.x - self.goodsImage.frame.size.width) / 2, 0, ScreenWidth - self.goodsImage.frame.origin.x - self.goodsImage.frame.size.width, 30);
     self.titleLb.textAlignment = NSTextAlignmentCenter;
     self.titleLb.text = @"选择规格数量";
@@ -345,7 +345,7 @@ static NSString * const bottomPopViewCellId = @"bottomPopViewCellId";
     }else{
         _deleteBtn.enabled = YES;
     }if ([textField.text integerValue] > 5) {
-        _myfield.text = @"10";
+        _myfield.text = @"5";
     }
 }
 //对键盘输入的操作

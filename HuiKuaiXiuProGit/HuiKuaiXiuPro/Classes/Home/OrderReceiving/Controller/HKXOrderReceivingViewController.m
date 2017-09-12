@@ -384,8 +384,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    
     static NSString * cellIdentifier = @"cell";
     HKXOrderReceivingListTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -452,9 +450,7 @@
                 
                 [self showHint:dicts[@"message"]];
             }
-            
-            
-            
+
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
@@ -479,11 +475,10 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             if ([dicts[@"success"] boolValue] == YES) {
-                
-                
+ 
                 HKXOrderDetailViewController * orderDetailVC = [[HKXOrderDetailViewController alloc] init];
                 orderDetailVC.hidesBottomBarWhenPushed = YES;
-                orderDetailVC.repairListModel = _orderListArray[btn.tag - 4011];
+                orderDetailVC.repairListModel = _orderListArray[btn.tag - 1000];
                 [self.navigationController pushViewController:orderDetailVC animated:YES];
                 
             }else if ([dicts[@"success"] boolValue] == NO) {
@@ -491,9 +486,7 @@
                 [_bottomTableView.mj_header beginRefreshing];
                 [self showHint:dicts[@"message"]];
             }
-            
-            
-            
+
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);
@@ -520,9 +513,7 @@
                 
                 [self showHint:dicts[@"message"]];
             }
-            
-            
-            
+ 
         } failure:^(NSError *error) {
             
             NSLog(@"请求失败%@",error);

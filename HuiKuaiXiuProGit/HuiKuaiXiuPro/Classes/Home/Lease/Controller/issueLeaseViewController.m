@@ -11,7 +11,7 @@
 #import "alertView.h"
 #import "JGDownListMenu.h"
 #import "CommonMethod.h"
-@interface issueLeaseViewController ()<DownListMenuDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
+@interface issueLeaseViewController ()<DownListMenuDelegate,UIActionSheetDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITextFieldDelegate>{
     
     UITextField * brandTf;//输入关键字
     UIButton * brandButton;//选择设备品牌
@@ -67,6 +67,7 @@
     brandTf.leftView = lefView;
     brandTf.leftViewMode=UITextFieldViewModeAlways;
     brandTf.placeholder = @"设备品牌/型号";
+    brandTf.delegate = self;
     brandTf.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"设备品牌/型号" attributes:@{NSForegroundColorAttributeName:[CommonMethod getUsualColorWithString:@"#999999"]}];
     //[siteButton setImage:[UIImage imageNamed:@"箭头"] forState:UIControlStateNormal];
     brandTf.backgroundColor = [UIColor whiteColor];
@@ -91,6 +92,7 @@
     [siteTextfield.layer setBorderWidth:1];
     siteTextfield.clipsToBounds=YES;
     siteTextfield.layer.cornerRadius=4;
+    siteTextfield.delegate = self;
     UIView * lefView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, siteTextfield.frame.size.height)];
     siteTextfield.leftView = lefView1;
     siteTextfield.leftViewMode=UITextFieldViewModeAlways;
@@ -139,6 +141,7 @@
     //  costField.layer.masksToBounds=YES;
     costField.layer.borderColor=[[UIColor lightGrayColor]CGColor];
     costField.layer.borderWidth= 1.0f;
+    costField.delegate = self;
     costField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"台班费" attributes:@{NSForegroundColorAttributeName:[CommonMethod getUsualColorWithString:@"#999999"]}];
     costField.keyboardType = UIKeyboardTypeNumberPad;
     costField.layer.cornerRadius = 5;
@@ -158,6 +161,7 @@
     phoneNumField.layer.masksToBounds = YES;
     UIView * leView1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, phoneNumField.frame.size.height)];
     phoneNumField.leftView=leView1;
+    phoneNumField.delegate = self;
     phoneNumField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
     phoneNumField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     [self.view addSubview:phoneNumField];
@@ -651,6 +655,30 @@
         }
     }
     return @"ok";
+}
+
+//对键盘输入的操作
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    if ([string isEqualToString:@"\n"])
+    {
+        return YES;
+    }
+    NSString * toBeString = [textField.text stringByReplacingCharactersInRange:range withString:string]; //得到输入框的内容
+    
+        if (toBeString.length > 20) { //如果输入框内容大于10则弹出警告
+            UIAlertController * alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"限制输入字数20位" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            }];
+            UIAlertAction *otherAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+            }];
+            [alertController addAction:cancelAction];
+            [alertController addAction:otherAction];
+            [self presentViewController:alertController animated:YES completion:nil];
+            return NO;
+        
+        
+    }
+    return YES;
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

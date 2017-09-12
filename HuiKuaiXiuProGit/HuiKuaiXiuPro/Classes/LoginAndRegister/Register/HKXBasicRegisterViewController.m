@@ -320,6 +320,13 @@
             
             UITextField * userPswTf = [bottomView viewWithTag:4002];
             UITextField * reUserPswTf = [bottomView viewWithTag:4003];
+            
+            if (userPswTf.text.length < 6 || userPswTf.text.length > 15) {
+                
+                [self showHint:@"密码限制6-15位"];
+                return;
+            }
+            
             if (![userPswTf.text isEqualToString:reUserPswTf.text])
             {
                 UIView * backGroundView = [[UIView alloc] initWithFrame:self.view.bounds];

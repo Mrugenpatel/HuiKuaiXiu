@@ -41,8 +41,14 @@
         [self addSubview:self.troubleDetailLabel];
         self.troublePicLabel = [[UILabel alloc] init];
         [self addSubview:self.troublePicLabel];
-        self.troublePicImage = [[UIImageView alloc] init];
-        [self addSubview:self.troublePicImage];
+        self.troublePicImage1 = [[UIImageView alloc] init];
+        [self addSubview:self.troublePicImage1];
+        self.troublePicImage2 = [[UIImageView alloc] init];
+        [self addSubview:self.troublePicImage2];
+        self.troublePicImage3 = [[UIImageView alloc] init];
+        [self addSubview:self.troublePicImage3];
+        self.troublePicImage4 = [[UIImageView alloc] init];
+        [self addSubview:self.troublePicImage4];
         self.addressLabel = [[UILabel alloc] init];
         [self addSubview:self.addressLabel];
         self.addressBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -82,15 +88,16 @@
     self.timeLabel.text = [NSString stringWithFormat:@"%@",self.repairModel.createDate];
     self.timeLabel.font = [UIFont systemFontOfSize:13 * myDelegate.autoSizeScaleX];
     //机主电话
+    float titleLabelLength22 = [CommonMethod getLabelLengthWithString:[NSString stringWithFormat:@"维修设备:"] WithFont:17 * myDelegate.autoSizeScaleX];
         if ([self.repairModel.repairStatus doubleValue] != 2) {
         
         self.teleLb.frame= CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleY);
-        self.troubleTypeLabel.frame=CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.teleLb.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleY);
+        self.troubleTypeLabel.frame=CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.teleLb.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength22, 17 * myDelegate.autoSizeScaleY);
         
     }else{
         
         self.teleLb.frame= CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 0);
-        self.troubleTypeLabel.frame=CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleY);
+        self.troubleTypeLabel.frame=CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.equipmentNameLabel.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength22, 17 * myDelegate.autoSizeScaleY);
     }
     self.teleLb.userInteractionEnabled = YES;
     [self.teleLb addGestureRecognizer:tap];
@@ -101,8 +108,7 @@
     self.troubleTypeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleY];
     self.troubleTypeDetailLabel.frame = CGRectMake(CGRectGetMaxX(self.troubleTypeLabel.frame) + 5 * myDelegate.autoSizeScaleX, self.troubleTypeLabel.frame.origin.y, ScreenWidth - CGRectGetMaxX(self.troubleTypeLabel.frame) - 10 * myDelegate.autoSizeScaleX, self.troubleTypeLabel.frame.size.height);
     self.troubleTypeDetailLabel.text = self.repairModel.fault;
-    self.troubleTypeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleY];
-    self.troubleTypeDetailLabel.adjustsFontSizeToFitWidth = YES;
+    self.troubleTypeDetailLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleY];
     //维修时间
      float titleLabelLength = [CommonMethod getLabelLengthWithString:@"故障描述:" WithFont:17 * myDelegate.autoSizeScaleX];
     if([self.repairModel.appointmentTime isKindOfClass:[NSNull class]] || self.repairModel.appointmentTime.length == 0){
@@ -111,7 +117,7 @@
         
         self.troubleDescribeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.troubleTypeLabel.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleY);
         
-        self.troubleDetailLabel.frame = CGRectMake(CGRectGetMaxX(self.troubleDescribeLabel.frame),CGRectGetMaxY(self.troubleTypeLabel.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX - titleLabelLength, 48 * myDelegate.autoSizeScaleY);
+        self.troubleDetailLabel.frame = CGRectMake(CGRectGetMaxX(self.troubleDescribeLabel.frame),CGRectGetMaxY(self.troubleTypeLabel.frame)+ 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleX - titleLabelLength, 48 * myDelegate.autoSizeScaleY);
         
         
     }else{
@@ -120,7 +126,7 @@
         
         self.troubleDescribeLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.repairTime.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleY);
         
-        self.troubleDetailLabel.frame = CGRectMake(CGRectGetMaxX(self.troubleDescribeLabel.frame),CGRectGetMaxY(self.repairTime.frame) + 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleY - titleLabelLength, 48 * myDelegate.autoSizeScaleY);
+        self.troubleDetailLabel.frame = CGRectMake(CGRectGetMaxX(self.troubleDescribeLabel.frame),CGRectGetMaxY(self.repairTime.frame)+ 24 * myDelegate.autoSizeScaleY, ScreenWidth - 44 * myDelegate.autoSizeScaleY - titleLabelLength, 48 * myDelegate.autoSizeScaleY);
         
         
     }
@@ -140,8 +146,7 @@
     self.troubleDescribeLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
     self.troubleDetailLabel.text = [NSString stringWithFormat:@"%@",self.repairModel.faultInfo];
     self.troubleDetailLabel.numberOfLines = 2;
-    self.troubleDetailLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
-    self.troubleDetailLabel.adjustsFontSizeToFitWidth = YES;
+    self.troubleDetailLabel.font = [UIFont systemFontOfSize:15 * myDelegate.autoSizeScaleX];
     //    故障图片
     self.troublePicLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.troubleDetailLabel.frame) + 24 * myDelegate.autoSizeScaleY, titleLabelLength, 17 * myDelegate.autoSizeScaleY);
     self.troublePicLabel.text = [NSString stringWithFormat:@"故障图片"];
@@ -158,46 +163,80 @@
         }
     }
     
+    
+    
     for (int i = 0; i < 4; i ++)
     {
+        
         int X = i % 2;
         int Y = i / 2;
-        self.troublePicImage.frame = CGRectMake(CGRectGetMaxX(self.troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(self.troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY);
         
-        [self.troublePicImage sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.repairModel.picture[i]]] placeholderImage:[UIImage imageNamed:@""]];
-        UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bigImage:)];
-        self.troublePicImage.userInteractionEnabled = YES;
-        [self.troublePicImage addGestureRecognizer:tap];
-        [self addSubview:self.troublePicImage];
-        
-        if (i == 2)
-        {
-            //            地址
-            self.addressLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.troublePicImage.frame) + 17 * myDelegate.autoSizeScaleY, ScreenWidth - 78 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
-            self.addressLabel.tag = 4009;
-            self.addressLabel.text = [NSString stringWithFormat:@"地址：%@",self.repairModel.address];
-            self.addressLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
+        if (i == 0) {
             
-            //            定位
+            self.troublePicImage1.frame = CGRectMake(CGRectGetMaxX(self.troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(self.troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY);
             
-            self.addressBtn.tag = self.tag;
-            self.addressBtn.frame = CGRectMake(CGRectGetMaxX(self.addressLabel.frame) + 19 * myDelegate.autoSizeScaleX, self.addressLabel.frame.origin.y - 2.5 * myDelegate.autoSizeScaleY, 15 * myDelegate.autoSizeScaleX, 22 * myDelegate.autoSizeScaleY);
-            [self.addressBtn setImage:[UIImage imageNamed:@"定位"] forState:UIControlStateNormal];
-            [self.addressBtn addTarget:self action:@selector(showMapAddressBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            [self.troublePicImage1 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.repairModel.picture[i]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
             
-            //            抢单按钮
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bigImage:)];
+            self.troublePicImage1.userInteractionEnabled = YES;
+            [self.troublePicImage1 addGestureRecognizer:tap];
             
-            self.actionBtn.tag = self.tag + 1000;
-            self.actionBtn.frame = CGRectMake(203 * myDelegate.autoSizeScaleX, CGRectGetMaxY(self.addressLabel.frame) + 19 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
-            [self.actionBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#ffa304"]];
-            [self.actionBtn setTitle:self.repairModel.repairexplain forState:UIControlStateNormal];
-            [self.actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [self.actionBtn addTarget:self action:@selector(orderStateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-            self.actionBtn.layer.cornerRadius = 2;
-            self.actionBtn.clipsToBounds = YES;
+            
+        }else if (i ==1){
+            
+            self.troublePicImage2.frame = CGRectMake(CGRectGetMaxX(self.troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(self.troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY);
+            
+            [self.troublePicImage2 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.repairModel.picture[i]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+            
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bigImage:)];
+            self.troublePicImage2.userInteractionEnabled = YES;
+            [self.troublePicImage2 addGestureRecognizer:tap];
+        }else if (i ==2){
+            
+            self.troublePicImage3.frame = CGRectMake(CGRectGetMaxX(self.troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(self.troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY);
+            
+            [self.troublePicImage3 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.repairModel.picture[i]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+            
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bigImage:)];
+            self.troublePicImage3.userInteractionEnabled = YES;
+            [self.troublePicImage3 addGestureRecognizer:tap];
+        }else if (i ==3){
+            
+            self.troublePicImage4.frame = CGRectMake(CGRectGetMaxX(self.troublePicLabel.frame) + (17 + 100 * X) * myDelegate.autoSizeScaleX , CGRectGetMaxY(self.troubleDetailLabel.frame) + (24 + 73 * Y) * myDelegate.autoSizeScaleY, 97 * myDelegate.autoSizeScaleX, 64 * myDelegate.autoSizeScaleY);
+            
+            [self.troublePicImage4 sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,self.repairModel.picture[i]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
+            
+            UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bigImage:)];
+            self.troublePicImage4.userInteractionEnabled = YES;
+            [self.troublePicImage4 addGestureRecognizer:tap];
+            
         }
-    
+
     }
+    
+    //            地址
+    self.addressLabel.frame = CGRectMake(22 * myDelegate.autoSizeScaleX,CGRectGetMaxY(self.troublePicImage4.frame) + 17 * myDelegate.autoSizeScaleY, ScreenWidth - 78 * myDelegate.autoSizeScaleX, 17 * myDelegate.autoSizeScaleX);
+    self.addressLabel.tag = 4009;
+    self.addressLabel.text = [NSString stringWithFormat:@"地址：%@",self.repairModel.address];
+    self.addressLabel.font = [UIFont systemFontOfSize:17 * myDelegate.autoSizeScaleX];
+    
+    //            定位
+    
+    self.addressBtn.tag = self.tag;
+    self.addressBtn.frame = CGRectMake(CGRectGetMaxX(self.addressLabel.frame) + 19 * myDelegate.autoSizeScaleX, self.addressLabel.frame.origin.y - 2.5 * myDelegate.autoSizeScaleY, 15 * myDelegate.autoSizeScaleX, 22 * myDelegate.autoSizeScaleY);
+    [self.addressBtn setImage:[UIImage imageNamed:@"定位"] forState:UIControlStateNormal];
+    [self.addressBtn addTarget:self action:@selector(showMapAddressBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    //            抢单按钮
+    
+    self.actionBtn.tag = self.tag + 1000;
+    self.actionBtn.frame = CGRectMake(203 * myDelegate.autoSizeScaleX, CGRectGetMaxY(self.addressLabel.frame) + 19 * myDelegate.autoSizeScaleY, 150 * myDelegate.autoSizeScaleX, 44 * myDelegate.autoSizeScaleY);
+    [self.actionBtn setBackgroundColor:[CommonMethod getUsualColorWithString:@"#ffa304"]];
+    [self.actionBtn setTitle:self.repairModel.repairexplain forState:UIControlStateNormal];
+    [self.actionBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.actionBtn addTarget:self action:@selector(orderStateBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    self.actionBtn.layer.cornerRadius = 2;
+    self.actionBtn.clipsToBounds = YES;
 }
 
 -(void)callTele:(UITapGestureRecognizer *)tap{

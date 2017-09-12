@@ -217,7 +217,7 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            [leAndRetableView.mj_header endRefreshing];
+            [leAndRetableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [[NSMutableArray alloc] init];
             if ([dicts[@"success"] boolValue] == YES) {
                 
@@ -229,7 +229,6 @@
                         [_dataArr addObject:tempArr[i]];
                     }
                     [leAndRetableView reloadData];
-                    [leAndRetableView.mj_footer endRefreshing];
                     page++;
                 }else{
                     
@@ -262,7 +261,7 @@
             NSDictionary *dicts =[NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             NSLog(@"请求成功%@",dicts);
             [self.view hideActivity];
-            [leAndRetableView.mj_header endRefreshing];
+            [leAndRetableView.mj_footer endRefreshing];
             NSMutableArray * tempArr = [[NSMutableArray alloc] init];
             if ([dicts[@"success"] boolValue] == YES) {
                 
@@ -274,7 +273,6 @@
                         [_dataArr addObject:tempArr[i]];
                     }
                     [leAndRetableView reloadData];
-                    [leAndRetableView.mj_footer endRefreshing];
                     page++;
                     
                 }else{
@@ -403,7 +401,7 @@
             
         }else{
             
-            [cell.equipmentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,_dataArr[indexPath.row][@"picture"]]] placeholderImage:nil];
+            [cell.equipmentImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,_dataArr[indexPath.row][@"picture"]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
         }
         
         return cell;

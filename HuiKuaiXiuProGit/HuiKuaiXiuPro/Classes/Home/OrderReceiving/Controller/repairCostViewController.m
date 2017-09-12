@@ -139,6 +139,12 @@
 //点击确定按钮事件
 - (void)sureClick:(UIButton *)btn{
     
+    if ([totalCost.text floatValue] == 0) {
+        
+        [self showHint:@"请输入维修费用"];
+        return;
+    }
+
     NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:[self.repairId doubleValue]],@"ruoId",_hourCost,@"hourCost",_partsCost,@"partsCost",nil];
     NSLog(@"%@",dict);
     [self.view showActivity];

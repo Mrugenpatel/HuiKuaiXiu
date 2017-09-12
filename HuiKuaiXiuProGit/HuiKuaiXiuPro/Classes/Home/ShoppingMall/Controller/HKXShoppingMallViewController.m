@@ -710,7 +710,7 @@
     
     if (partBtn.selected) {
         PartGoodsModel * model = self.goodsModelArr[indexPath.row];
-        [cell.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture[0]]] placeholderImage:nil];
+        [cell.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture[0]]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
         cell.goodsPrice.text = [NSString stringWithFormat:@"¥%@",model.price];
         cell.goodsPrice.textColor = [UIColor redColor];
         cell.goodsAddress.text = model.address;
@@ -721,7 +721,7 @@
     }else if (equipmentBtn.selected){
         
         EquipmentGoodsModel * model = self.goodsModelArr[indexPath.row];
-        [cell.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture]] placeholderImage:nil];
+        [cell.goodsImg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@",kIMAGEURL,model.picture]] placeholderImage:[UIImage imageNamed:@"滑动视图示例"]];
         cell.goodsPrice.text = model.modelnum;
         cell.goodsPrice.textColor = [UIColor blackColor];
         cell.goodsAddress.text = model.parameter;
