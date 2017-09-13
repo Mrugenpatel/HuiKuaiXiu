@@ -120,7 +120,7 @@
     
 //    添加pageControl
     _pageControl = [[UIPageControl alloc] init];
-    _pageControl.center = CGPointMake(ScreenWidth / 2,  170);
+    _pageControl.center = CGPointMake(ScreenWidth / 2,  170 * myDelegate.autoSizeScaleY);
     _pageControl.bounds = CGRectMake(0, 0, 100, 80);
     _pageControl.numberOfPages = self.scrollNewArray.count;
     _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
@@ -146,7 +146,7 @@
         registerBtn.frame = CGRectMake(7 * myDelegate.autoSizeScaleX + (234 + 14) / 2 * i * myDelegate.autoSizeScaleX, 5 * myDelegate.autoSizeScaleY, 234 / 2 * myDelegate.autoSizeScaleX, 190 / 2 * myDelegate.autoSizeScaleY);
         [registerBtn setImage:[UIImage imageNamed:registerButtonTitleArray[i]] forState:UIControlStateNormal];
         [registerBottomView addSubview:registerBtn];
-        
+        NSLog(@"---%f",registerBtn.frame.size.width);
         UILabel * registerBtnTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(7 * myDelegate.autoSizeScaleX + (234 + 14) / 2 * i * myDelegate.autoSizeScaleX, CGRectGetMaxY(registerBtn.frame) + 9 * myDelegate.autoSizeScaleY, 234 / 2 * myDelegate.autoSizeScaleX, 12 * myDelegate.autoSizeScaleX )];
         registerBtnTitleLabel.textAlignment = NSTextAlignmentCenter;
         registerBtnTitleLabel.font = [UIFont systemFontOfSize:12 * myDelegate.autoSizeScaleX];

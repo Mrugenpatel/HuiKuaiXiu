@@ -32,17 +32,18 @@
     
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    if(ScreenHeight == 568)
+    if(ScreenHeight != 667)
     {
-        myDelegate.autoSizeScaleX = ScreenWidth / 320;
-        myDelegate.autoSizeScaleY = ScreenHeight/ 568.0;
+        myDelegate.autoSizeScaleX = ScreenWidth / 375;
+        myDelegate.autoSizeScaleY = ScreenHeight/ 667.0;
+        
     }
     else
     {
         myDelegate.autoSizeScaleX = 1.0;
         myDelegate.autoSizeScaleY = 1.0;
     }
-    
+    NSLog(@"--***%f---%f==***%f=%f",ScreenWidth,myDelegate.autoSizeScaleX,ScreenHeight,myDelegate.autoSizeScaleY);
 #pragma mark 引导页
     
     NSUserDefaults * userDef = [NSUserDefaults standardUserDefaults];

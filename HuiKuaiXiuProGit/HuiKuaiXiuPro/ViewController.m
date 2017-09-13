@@ -62,6 +62,7 @@
     
 //    logoImageView
     AppDelegate * myDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
     float XPosition = ( ScreenWidth - 479 * myDelegate.autoSizeScaleX / 2 ) / 2  ;
     float YPosition = 166 / 2 * myDelegate.autoSizeScaleY + 20 ;
     UIImageView * logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(XPosition, YPosition, 479 / 2 * myDelegate.autoSizeScaleX, 126 / 2 * myDelegate.autoSizeScaleY)];
@@ -78,6 +79,8 @@
     for (int i = 0; i < 2; i ++)
     {
         UITextField * userInfoTF = [[UITextField alloc] initWithFrame:CGRectMake(98 / 2 * myDelegate.autoSizeScaleX, CGRectGetMaxY(logoImageView.frame) + 156 / 2 * myDelegate.autoSizeScaleY + i * (40 + 16) * myDelegate.autoSizeScaleY , 554 / 2 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
+//        UITextField * userInfoTF = [[UITextField alloc] initWithFrame:CGRectMake(98 / 2 * myDelegate.autoSizeScaleX, CGRectGetMaxY(logoImageView.frame) + 156 / 2 * myDelegate.autoSizeScaleY + i * (40 + 16) * myDelegate.autoSizeScaleY , ScreenWidth - 98 * myDelegate.autoSizeScaleX, 40 * myDelegate.autoSizeScaleY)];
+
         [self.view addSubview:userInfoTF];
         
         userInfoTF.font = [UIFont systemFontOfSize: 16 * myDelegate.autoSizeScaleX];
@@ -138,6 +141,7 @@
     UITextField * userPswTF = [self.view viewWithTag:901];
     UIButton * loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     loginBtn.frame = CGRectMake(98 / 2 * myDelegate.autoSizeScaleX , CGRectGetMaxY(userPswTF.frame) + 44 * myDelegate.autoSizeScaleY, 554 / 2 * myDelegate.autoSizeScaleX , 87 / 2 * myDelegate.autoSizeScaleY);
+//    loginBtn.frame = CGRectMake(98 / 2 * myDelegate.autoSizeScaleX , CGRectGetMaxY(userPswTF.frame) + 44 * myDelegate.autoSizeScaleY, ScreenWidth - 98 * myDelegate.autoSizeScaleX , 87 / 2 * myDelegate.autoSizeScaleY);
     [loginBtn setTitle:@"登 录" forState:UIControlStateNormal];
     loginBtn.titleLabel.font = [UIFont systemFontOfSize:20 * myDelegate.autoSizeScaleX];
     loginBtn.backgroundColor = [CommonMethod getUsualColorWithString:@"#ffa304"];
@@ -153,7 +157,7 @@
     for (int i = 0; i < 2; i ++)
     {
         UIButton * otherFunctionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        otherFunctionBtn.frame = CGRectMake(98 / 2 * myDelegate.autoSizeScaleX + i * (btnTitleLength + 376 / 2 * myDelegate.autoSizeScaleX), CGRectGetMaxY(loginBtn.frame) + 17 * myDelegate.autoSizeScaleY, btnTitleLength, 11 * myDelegate.autoSizeScaleY);
+        otherFunctionBtn.frame = CGRectMake(98 / 2 * myDelegate.autoSizeScaleX + i * (loginBtn.frame.size.width - btnTitleLength ), CGRectGetMaxY(loginBtn.frame) + 17 * myDelegate.autoSizeScaleY, btnTitleLength, 11 * myDelegate.autoSizeScaleY);
         [otherFunctionBtn setTitle:btnTitleArray[i] forState:UIControlStateNormal];
         [otherFunctionBtn setTitleColor:[CommonMethod getUsualColorWithString:btnTitleColorArray[i]] forState:UIControlStateNormal];
         otherFunctionBtn.titleLabel.font = [UIFont systemFontOfSize:11 * myDelegate.autoSizeScaleX];
